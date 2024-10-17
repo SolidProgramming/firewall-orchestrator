@@ -5,6 +5,7 @@ using FWO.GlobalConstants;
 using FWO.Api.Data;
 using FWO.Config.Api;
 using System.Text.Json;
+using System.Reactive.Subjects;
 
 
 namespace FWO.Middleware.Server
@@ -33,55 +34,65 @@ namespace FWO.Middleware.Server
             {
                 Log.WriteInfo("Import Area Subnet Data", $"Script {globalConfig.ImportSubnetDataPath}.py failed but trying to import from existing file.");
             }
-            ReadFile(globalConfig.ImportSubnetDataPath + ".json");
 
             int successCounter = 0;
             int failCounter = 0;
             int deleteCounter = 0;
             int deleteFailCounter = 0;
-            try
+
+            List<string> importfilePathAndNames = JsonSerializer.Deserialize<List<string>>(globalConfig.ImportSubnetDataPath) ?? throw new Exception("Config Data could not be deserialized.");
+
+            foreach (string file in importfilePathAndNames)
             {
-                ModellingImportNwData? importedNwData = JsonSerializer.Deserialize<ModellingImportNwData>(importFile) ?? throw new Exception("File could not be parsed.");
-                if(importedNwData != null && importedNwData.Areas != null)
+                try
                 {
-                    importedAreas = importedNwData.Areas;
-                    existingAreas = await apiConnection.SendQueryAsync<List<ModellingNetworkArea>>(ModellingQueries.getAreas);
-                    foreach(var incomingArea in importedAreas)
+                    importFile = "{\r\n   \"areas\": [\r\n      {\r\n         \"name\": \"MGT\",\r\n         \"id_string\": \"NA91\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"1.2.3.0/24\",\r\n               \"name\": \"Netz1\"\r\n            },\r\n            {\r\n               \"ip\": \"2.2.2.2\",\r\n               \"name\": \"Net2\"\r\n            },\r\n            {\r\n               \"ip\": \"3.3.3.3-3.3.3.4\",\r\n               \"name\": \"Netz3\"\r\n            }\r\n         ]\r\n      },\r\n      {\r\n         \"name\": \"DC\",\r\n         \"id_string\": \"NA50\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"10.121.254.128/27\",\r\n               \"name\": \"Netz5\"\r\n            },\r\n            {\r\n               \"ip\": \"10.121.254.192/27\",\r\n               \"name\": \"Netz1\"\r\n            },\r\n            {\r\n               \"ip\": \"10.129.254.224/27\",\r\n               \"name\": \"Netz1\"\r\n            },\r\n            {\r\n               \"ip\": \"10.122.28.1/23\",\r\n               \"name\": \"Console\"\r\n            }\r\n         ]\r\n      },\r\n      {\r\n         \"name\": \"Area172\",\r\n         \"id_string\": \"NAxx\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"172.0.0.0/7\",\r\n               \"name\": \"all172\"\r\n            }\r\n         ]\r\n      },\r\n      {\r\n         \"name\": \"Area10\",\r\n         \"id_string\": \"NA10\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"10.0.0.0/7\",\r\n               \"name\": \"all10\"\r\n            }\r\n         ]\r\n      }\r\n   ]\r\n}\r\n";
+                    
+                    //ReadFile(globalConfig.ImportSubnetDataPath + ".json");
+
+                    ModellingImportNwData? importedNwData = JsonSerializer.Deserialize<ModellingImportNwData>(importFile) ?? throw new Exception("File could not be parsed.");
+
+                    if (importedNwData != null && importedNwData.Areas != null)
                     {
-                        if(await SaveArea(incomingArea))
+                        importedAreas = importedNwData.Areas;
+                        existingAreas = await apiConnection.SendQueryAsync<List<ModellingNetworkArea>>(ModellingQueries.getAreas);
+                        foreach (var incomingArea in importedAreas)
                         {
-                            ++successCounter;
-                        }
-                        else
-                        {
-                            ++failCounter;
-                        }
-                    }
-                    foreach(var existingArea in existingAreas)
-                    {
-                        if(importedAreas.FirstOrDefault(x => x.Name == existingArea.Name) == null)
-                        {
-                            if(await DeleteArea(existingArea))
+                            if (await SaveArea(incomingArea))
                             {
-                                ++deleteCounter;
+                                ++successCounter;
                             }
                             else
                             {
-                                ++deleteFailCounter;
+                                ++failCounter;
+                            }
+                        }
+                        foreach (var existingArea in existingAreas)
+                        {
+                            if (importedAreas.FirstOrDefault(x => x.Name == existingArea.Name) == null)
+                            {
+                                if (await DeleteArea(existingArea))
+                                {
+                                    ++deleteCounter;
+                                }
+                                else
+                                {
+                                    ++deleteFailCounter;
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        Log.WriteInfo("Import Area Subnet Data", $"No Area Data found in {importFile} No changes done. ");
+                    }
                 }
-                else
+                catch (Exception exc)
                 {
-                    Log.WriteInfo("Import Area Subnet Data", $"No Area Data found in {importFile} No changes done. ");
+                    Log.WriteError("Import Area Subnet Data", $"File could not be processed.", exc);
                 }
             }
-            catch (Exception exc)
-            {
-                Log.WriteError("Import Area Subnet Data", $"File could not be processed.", exc);
-                return false;
-            }
+
             Log.WriteInfo("Import Area Subnet Data", $"Imported {successCounter} areas, {failCounter} failed. Deleted {deleteCounter} areas, {deleteFailCounter} failed.");
             return true;
         }
@@ -121,11 +132,16 @@ namespace FWO.Middleware.Server
             {
                 foreach(var subnet in incomingArea.Subnets)
                 {
+                    subnet.Ip = GlobalFunc.IpOperations.SanitizeIp(subnet.Ip);
+
+                    (string Start, string End) ip = GlobalFunc.IpOperations.CidrToRangeString(subnet.Ip);
+                    subnet.IpEnd = GlobalFunc.IpOperations.SanitizeIp(ip.End);
+
                     var SubnetVar = new
                     {
                         name = subnet.Name,
                         ip = subnet.Ip,
-                        ipEnd = subnet.IpEnd != "" ? subnet.IpEnd : subnet.Ip,
+                        ipEnd = subnet.IpEnd,
                         importSource = GlobalConst.kImportAreaSubnetData
                     };
                     ReturnId[]? subnetIds= (await apiConnection.SendQueryAsync<NewReturning>(ModellingQueries.newAreaSubnet, SubnetVar)).ReturnIds;
@@ -154,7 +170,7 @@ namespace FWO.Middleware.Server
             {
                 foreach(var incomingSubnet in incomingArea.Subnets)
                 {
-                    if(incomingSubnet.Name == existingSubnet.Content.Name && incomingSubnet.Ip == existingSubnet.Content.Ip && 
+                    if (incomingSubnet.Name == existingSubnet.Content.Name && incomingSubnet.Ip == existingSubnet.Content.Ip && 
                         (incomingSubnet.IpEnd == existingSubnet.Content.IpEnd) || (incomingSubnet.IpEnd == "" && existingSubnet.Content.Ip == existingSubnet.Content.IpEnd))
                     {
                         subnetsToAdd.Remove(incomingSubnet);
@@ -168,11 +184,16 @@ namespace FWO.Middleware.Server
             }
             foreach(var subnet in subnetsToAdd)
             {
+                subnet.Ip = GlobalFunc.IpOperations.SanitizeIp(subnet.Ip);
+
+                (string Start, string End) ip = GlobalFunc.IpOperations.CidrToRangeString(subnet.Ip);
+                subnet.IpEnd = GlobalFunc.IpOperations.SanitizeIp(ip.End);
+
                 var SubnetVar = new
                 {
                     name = subnet.Name,
                     ip = subnet.Ip,
-                    ipEnd = subnet.IpEnd != "" ? subnet.IpEnd : subnet.Ip,
+                    ipEnd = subnet.IpEnd,
                     importSource = GlobalConst.kImportAreaSubnetData
                 };
                 ReturnId[]? subnetIds= (await apiConnection.SendQueryAsync<NewReturning>(ModellingQueries.newAreaSubnet, SubnetVar)).ReturnIds;
