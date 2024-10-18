@@ -116,13 +116,13 @@
                 };
 
 
-            if(appServer.AppIPRangeStart.TryGetNetmask(out string netmask))
+            if(appServer.AppIPRangeStart.TryGetNetmask(out _))
             {
                 (string Start, string End) ip = GlobalConstants.GlobalFunc.IpOperations.CidrToRangeString(appServer.AppIPRangeStart);
                 appServer.AppIPRangeStart = ip.Start;
                 appServer.AppIPRangeEnd = ip.End;
             }
-            else if (appServer.AppIPRangeStart.TrySplit('-', 1, out string ipEnd) && IPAddressRange.TryParse(appServer.AppIPRangeStart, out IPAddressRange ipRange))
+            else if (appServer.AppIPRangeStart.TrySplit('-', 1, out _) && IPAddressRange.TryParse(appServer.AppIPRangeStart, out IPAddressRange ipRange))
             {
                 appServer.AppIPRangeStart = ipRange.Begin.ToString();
                 appServer.AppIPRangeEnd = ipRange.End.ToString();

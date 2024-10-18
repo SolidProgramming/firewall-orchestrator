@@ -87,25 +87,30 @@ namespace FWO.Ui.Services
         {
             try
             {
-                if (ActAppServer.Ip.TrySplit('-', 1, out string ipEnd))
+                ActAppServer.Ip = ActAppServer.Ip.Trim();
+
+                if (ActAppServer.Ip.TryGetNetmask(out _))
                 {
-                    ActAppServer.Ip = ActAppServer.Ip.Split('-')[0];
-                    ActAppServer.IpEnd = ipEnd;
+                    (string Start, string End) ip = GlobalFunc.IpOperations.CidrToRangeString(ActAppServer.Ip);
+                    ActAppServer.Ip = ip.Start;
+                    ActAppServer.IpEnd = ip.End;
                 }
-
-                if (!ActAppServer.Ip.TrySplit('/', 1, out string? subnet))
+                else if (ActAppServer.Ip.TrySplit('-', 1, out _) && IPAddressRange.TryParse(ActAppServer.Ip, out IPAddressRange ipRange))
                 {
-                    ActAppServer.Ip += "/32";
-                }              
-
-                (string Start, string End) ip = ip = GlobalFunc.IpOperations.CidrToRangeString(ActAppServer.Ip);
+                    ActAppServer.Ip = ipRange.Begin.ToString();
+                    ActAppServer.IpEnd = ipRange.End.ToString();
+                }
+                else
+                {
+                    ActAppServer.IpEnd = ActAppServer.Ip;
+                }
 
                 var Variables = new
                 {
                     name = ActAppServer.Name,
                     appId = Application.Id,
-                    ip = ip.Start,
-                    ipEnd = ip.End,
+                    ip = ActAppServer.Ip,
+                    ipEnd = ActAppServer.IpEnd,
                     importSource = GlobalConst.kManual,  // todo
                     customType = ActAppServer.CustomType
                 };
@@ -137,12 +142,29 @@ namespace FWO.Ui.Services
         {
             try
             {
+                if (ActAppServer.Ip.TryGetNetmask(out _))
+                {
+                    (string Start, string End) ip = GlobalFunc.IpOperations.CidrToRangeString(ActAppServer.Ip);
+                    ActAppServer.Ip = ip.Start;
+                    ActAppServer.IpEnd = ip.End;
+                }
+                else if (ActAppServer.Ip.TrySplit('-', 1, out _) && IPAddressRange.TryParse(ActAppServer.Ip, out IPAddressRange ipRange))
+                {
+                    ActAppServer.Ip = ipRange.Begin.ToString();
+                    ActAppServer.IpEnd = ipRange.End.ToString();
+                }
+                else
+                {
+                    ActAppServer.IpEnd = ActAppServer.Ip;
+                }
+
                 var Variables = new
                 {
                     id = ActAppServer.Id,
                     name = ActAppServer.Name,
                     appId = Application.Id,
-                    ip = IPAddressRange.Parse(ActAppServer.Ip).ToCidrString(),   // todo ?
+                    ip = ActAppServer.Ip,
+                    ipEnd = ActAppServer.IpEnd,
                     importSource = GlobalConst.kManual,  // todo
                     customType = ActAppServer.CustomType
                 };

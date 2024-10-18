@@ -5,6 +5,8 @@ using FWO.GlobalConstants;
 using FWO.Api.Data;
 using FWO.Config.Api;
 using System.Text.Json;
+using NetTools;
+using System.Reactive.Subjects;
 
 
 namespace FWO.Middleware.Server
@@ -33,8 +35,29 @@ namespace FWO.Middleware.Server
             {
                 Log.WriteInfo("Import Area Subnet Data", $"Script {globalConfig.ImportSubnetDataPath}.py failed but trying to import from existing file.");
             }
-            ReadFile(globalConfig.ImportSubnetDataPath + ".json");
 
+            try
+            {
+                List<string> importfilePathAndNames = JsonSerializer.Deserialize<List<string>>(globalConfig.ImportSubnetDataPath) ?? throw new Exception("Config Data could not be deserialized.");
+
+                foreach (var importfilePathAndName in importfilePathAndNames)
+                {
+                    //ReadFile(importfilePathAndName + ".json");
+                    importFile = "{\r\n   \"areas\": [\r\n      {\r\n         \"name\": \"MGT\",\r\n         \"id_string\": \"NA91\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"2001:db8::/64\",\r\n               \"name\": \"Netz1\"\r\n            },\r\n            {\r\n               \"ip\": \"2001:db8::54f3:dd6b:1\",\r\n               \"name\": \"Net2\"\r\n            },\r\n            {\r\n               \"ip\": \"2001:db8::1-2001:db8::4\",\r\n               \"name\": \"Netz3\"\r\n            },\r\n\t\t\t{\r\n               \"ip\": \"1.2.3.0/24\",\r\n               \"name\": \"Netz4\"\r\n            },\r\n\t\t\t{\r\n               \"ip\": \"1.2.4.0/24\",\r\n               \"name\": \"Netz5\"\r\n            },\r\n\t\t\t{\r\n               \"ip\": \"2.2.2.2\",\r\n               \"name\": \"Netz6\"\r\n            },\r\n\t\t\t{\r\n               \"ip\": \"3.3.3.3-3.3.3.4\",\r\n               \"name\": \"Netz7\"\r\n            }\r\n         ]\r\n      },\r\n      {\r\n         \"name\": \"DC\",\r\n         \"id_string\": \"NA50\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"10.121.254.128/27\",\r\n               \"name\": \"Netz5\"\r\n            },\r\n            {\r\n               \"ip\": \"10.121.254.192/27\",\r\n               \"name\": \"Netz1\"\r\n            },\r\n            {\r\n               \"ip\": \"10.129.254.224/27\",\r\n               \"name\": \"Netz1\"\r\n            },\r\n            {\r\n               \"ip\": \"10.122.28.1/23\",\r\n               \"name\": \"Console\"\r\n            }\r\n         ]\r\n      },\r\n      {\r\n         \"name\": \"Area172\",\r\n         \"id_string\": \"NAxx\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"172.0.0.0/7\",\r\n               \"name\": \"all172\"\r\n            }\r\n         ]\r\n      },\r\n      {\r\n         \"name\": \"Area10\",\r\n         \"id_string\": \"NA10\",\r\n         \"subnets\": [\r\n            {\r\n               \"ip\": \"10.0.0.0/7\",\r\n               \"name\": \"all10\"\r\n            }\r\n         ]\r\n      }\r\n   ]\r\n}\r\n";
+                    await Import();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError("Import Subnet Data", $"Import could not be processed.", ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<bool> Import()
+        {
             int successCounter = 0;
             int failCounter = 0;
             int deleteCounter = 0;
@@ -42,13 +65,13 @@ namespace FWO.Middleware.Server
             try
             {
                 ModellingImportNwData? importedNwData = JsonSerializer.Deserialize<ModellingImportNwData>(importFile) ?? throw new Exception("File could not be parsed.");
-                if(importedNwData != null && importedNwData.Areas != null)
+                if (importedNwData != null && importedNwData.Areas != null)
                 {
                     importedAreas = importedNwData.Areas;
                     existingAreas = await apiConnection.SendQueryAsync<List<ModellingNetworkArea>>(ModellingQueries.getAreas);
-                    foreach(var incomingArea in importedAreas)
+                    foreach (var incomingArea in importedAreas)
                     {
-                        if(await SaveArea(incomingArea))
+                        if (await SaveArea(incomingArea))
                         {
                             ++successCounter;
                         }
@@ -57,11 +80,11 @@ namespace FWO.Middleware.Server
                             ++failCounter;
                         }
                     }
-                    foreach(var existingArea in existingAreas)
+                    foreach (var existingArea in existingAreas)
                     {
-                        if(importedAreas.FirstOrDefault(x => x.Name == existingArea.Name) == null)
+                        if (importedAreas.FirstOrDefault(x => x.Name == existingArea.Name) == null)
                         {
-                            if(await DeleteArea(existingArea))
+                            if (await DeleteArea(existingArea))
                             {
                                 ++deleteCounter;
                             }
@@ -121,13 +144,16 @@ namespace FWO.Middleware.Server
             {
                 foreach(var subnet in incomingArea.Subnets)
                 {
+                    ModellingImportAreaSubnets parsedSubnet = ParseModellingImportAreaSubnet(subnet);
+
                     var SubnetVar = new
                     {
-                        name = subnet.Name,
-                        ip = subnet.Ip,
-                        ipEnd = subnet.IpEnd != "" ? subnet.IpEnd : subnet.Ip,
+                        name = parsedSubnet.Name,
+                        ip = parsedSubnet.Ip,
+                        ipEnd = parsedSubnet.IpEnd,
                         importSource = GlobalConst.kImportAreaSubnetData
                     };
+
                     ReturnId[]? subnetIds= (await apiConnection.SendQueryAsync<NewReturning>(ModellingQueries.newAreaSubnet, SubnetVar)).ReturnIds;
                     if (subnetIds != null)
                     {
@@ -152,10 +178,14 @@ namespace FWO.Middleware.Server
             List<NetworkSubnetWrapper> subnetsToDelete = new (existingArea.Subnets);
             foreach(var existingSubnet in existingArea.Subnets)
             {
-                foreach(var incomingSubnet in incomingArea.Subnets)
+                NetworkSubnetWrapper parsedExistingSubnet = ParseNetworkSubnetWrapper(existingSubnet);
+
+                foreach (var incomingSubnet in incomingArea.Subnets)
                 {
-                    if(incomingSubnet.Name == existingSubnet.Content.Name && incomingSubnet.Ip == existingSubnet.Content.Ip && 
-                        (incomingSubnet.IpEnd == existingSubnet.Content.IpEnd) || (incomingSubnet.IpEnd == "" && existingSubnet.Content.Ip == existingSubnet.Content.IpEnd))
+                    ModellingImportAreaSubnets parsedIncomingSubnet = ParseModellingImportAreaSubnet(incomingSubnet);
+
+                    if (parsedIncomingSubnet.Ip == parsedExistingSubnet.Content.Ip && 
+                        ( parsedIncomingSubnet.IpEnd == parsedExistingSubnet.Content.IpEnd) || ( parsedExistingSubnet.Content.IpEnd == "" && parsedExistingSubnet.Content.Ip == parsedExistingSubnet.Content.IpEnd))
                     {
                         subnetsToAdd.Remove(incomingSubnet);
                         subnetsToDelete.Remove(existingSubnet);
@@ -168,11 +198,13 @@ namespace FWO.Middleware.Server
             }
             foreach(var subnet in subnetsToAdd)
             {
+                ModellingImportAreaSubnets parsedSubnet = ParseModellingImportAreaSubnet(subnet);
+
                 var SubnetVar = new
                 {
-                    name = subnet.Name,
-                    ip = subnet.Ip,
-                    ipEnd = subnet.IpEnd != "" ? subnet.IpEnd : subnet.Ip,
+                    name = parsedSubnet.Name,
+                    ip = parsedSubnet.Ip,
+                    ipEnd = parsedSubnet.IpEnd,
                     importSource = GlobalConst.kImportAreaSubnetData
                 };
                 ReturnId[]? subnetIds= (await apiConnection.SendQueryAsync<NewReturning>(ModellingQueries.newAreaSubnet, SubnetVar)).ReturnIds;
@@ -186,6 +218,48 @@ namespace FWO.Middleware.Server
                     await apiConnection.SendQueryAsync<ReturnId>(ModellingQueries.addNwObjectToNwGroup, Vars);
                 }
             }
+        }
+
+        private ModellingImportAreaSubnets ParseModellingImportAreaSubnet(ModellingImportAreaSubnets importAreaSubnet)
+        {
+            if (importAreaSubnet.Ip.TryGetNetmask(out _))
+            {
+                (string Start, string End) ip = GlobalFunc.IpOperations.CidrToRangeString(importAreaSubnet.Ip);
+                importAreaSubnet.Ip = ip.Start;
+                importAreaSubnet.IpEnd = ip.End;
+            }
+            else if (importAreaSubnet.Ip.TrySplit('-', 1, out _) && IPAddressRange.TryParse(importAreaSubnet.Ip, out IPAddressRange ipRange))
+            {
+                importAreaSubnet.Ip = ipRange.Begin.ToString();
+                importAreaSubnet.IpEnd = ipRange.End.ToString();
+            }
+            else
+            {
+                importAreaSubnet.IpEnd = importAreaSubnet.Ip;
+            }
+
+            return importAreaSubnet;
+        }
+
+        private NetworkSubnetWrapper ParseNetworkSubnetWrapper(NetworkSubnetWrapper networkSubnet)
+        {
+            if (networkSubnet.Content.Ip.TryGetNetmask(out _))
+            {
+                (string Start, string End) ip = GlobalFunc.IpOperations.CidrToRangeString(networkSubnet.Content.Ip);
+                networkSubnet.Content.Ip = ip.Start;
+                networkSubnet.Content.IpEnd = ip.End;
+            }
+            else if (networkSubnet.Content.Ip.TrySplit('-', 1, out _) && IPAddressRange.TryParse(networkSubnet.Content.Ip, out IPAddressRange ipRange))
+            {
+                networkSubnet.Content.Ip = ipRange.Begin.ToString();
+                networkSubnet.Content.IpEnd = ipRange.End.ToString();
+            }
+            else
+            {
+                networkSubnet.Content.IpEnd = networkSubnet.Content.Ip;
+            }
+
+            return networkSubnet;
         }
 
         private async Task<bool> DeleteArea(ModellingNetworkArea area)
