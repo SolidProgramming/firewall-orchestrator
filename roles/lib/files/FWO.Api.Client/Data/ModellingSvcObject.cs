@@ -5,10 +5,10 @@ namespace FWO.Api.Data
 {
     public class ModellingSvcObject: ModellingObject
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("is_global"), JsonPropertyName("is_global")]
+        [JsonProperty("is_global")]
         public bool IsGlobal { get; set; } = false;
 
 

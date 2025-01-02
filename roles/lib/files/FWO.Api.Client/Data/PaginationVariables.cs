@@ -9,18 +9,18 @@ namespace FWO.Api.Data
 {
     public class PaginationVariables
     {
-        [JsonProperty("management_id", DefaultValueHandling = DefaultValueHandling.Ignore), JsonPropertyName("management_id")]
+        [JsonProperty("management_id", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int ManagementId { get; set; }
 
-        [JsonProperty("device_id", DefaultValueHandling = DefaultValueHandling.Ignore), JsonPropertyName("device_id")]
+        [JsonProperty("device_id", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int DeviceId { get; set; }
 
-        [JsonProperty("limit"), JsonPropertyName("limit")]
+        [JsonProperty("limit")]
         public int Limit { get; set; }
 
-        [JsonProperty("offset"), JsonPropertyName("offset")]
+        [JsonProperty("offset")]
         public int Offset { get; set; }
     }
 }

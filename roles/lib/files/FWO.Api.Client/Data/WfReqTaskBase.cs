@@ -24,22 +24,22 @@ namespace FWO.Api.Data
 
     public class WfReqTaskBase : WfTaskBase
     {
-        [JsonProperty("request_action"), JsonPropertyName("request_action")]
+        [JsonProperty("request_action")]
         public string RequestAction { get; set; } = Data.RequestAction.create.ToString();
 
-        [JsonProperty("reason"), JsonPropertyName("reason")]
+        [JsonProperty("reason")]
         public string? Reason { get; set; }
 
-        [JsonProperty("additional_info"), JsonPropertyName("additional_info")]
+        [JsonProperty("additional_info")]
         public string? AdditionalInfo { get; set; }
 
-        [JsonProperty("last_recert_date"), JsonPropertyName("last_recert_date")]
+        [JsonProperty("last_recert_date")]
         public DateTime? LastRecertDate { get; set; }
 
-        [JsonProperty("mgm_id"), JsonPropertyName("mgm_id")]
+        [JsonProperty("mgm_id")]
         public int? ManagementId { get; set; }
 
-        [JsonProperty("devices"), JsonPropertyName("devices")]
+        [JsonProperty("devices")]
         public string SelectedDevices 
         {  
             get => System.Text.Json.JsonSerializer.Serialize<List<int>>(DeviceList) ?? throw new Exception("DeviceList could not be parsed.");

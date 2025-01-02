@@ -9,7 +9,7 @@ namespace FWO.Api.Data
     {
         private string name = "";
         
-        [JsonProperty("ldap_name"), JsonPropertyName("ldap_name")]
+        [JsonProperty("ldap_name")]
         public string Name 
         { 
             get

@@ -8,28 +8,28 @@ namespace FWO.Api.Data
 {
     public class Tenant
     {
-        [JsonProperty("tenant_id"), JsonPropertyName("tenant_id")]
+        [JsonProperty("tenant_id")]
         public int Id { get; set; }
 
-        [JsonProperty("tenant_name"), JsonPropertyName("tenant_name")]
+        [JsonProperty("tenant_name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("tenant_comment"), JsonPropertyName("tenant_comment")]
+        [JsonProperty("tenant_comment")]
         public string? Comment { get; set; }
 
-        [JsonProperty("tenant_projekt"), JsonPropertyName("tenant_projekt")]
+        [JsonProperty("tenant_projekt")]
         public string? Project { get; set; }
 
-        [JsonProperty("tenant_can_view_all_devices"), JsonPropertyName("tenant_can_view_all_devices")]
+        [JsonProperty("tenant_can_view_all_devices")]
         public bool ViewAllDevices { get; set; }
 
-        [JsonProperty("tenant_is_superadmin"), JsonPropertyName("tenant_is_superadmin")]
+        [JsonProperty("tenant_is_superadmin")]
         public bool Superadmin { get; set; } // curently not in use
 
-        [JsonProperty("tenant_to_devices"), JsonPropertyName("tenant_to_devices")]
+        [JsonProperty("tenant_to_devices")]
         public TenantGateway[] TenantGateways { get; set; } // TODO: Replace with Device[] (probably not possible)
 
-        [JsonProperty("tenant_to_managements"), JsonPropertyName("tenant_to_managements")]
+        [JsonProperty("tenant_to_managements")]
         public TenantManagement[] TenantManagements { get; set; }
 
         public int[] VisibleGatewayIds { get; set; } = [];
@@ -190,19 +190,19 @@ namespace FWO.Api.Data
 
     public class TenantGateway
     {
-        [JsonProperty("device"), JsonPropertyName("device")]
+        [JsonProperty("device")]
         public Device VisibleGateway { get; set; } = new Device();
 
-        [JsonProperty("shared"), JsonPropertyName("shared")]
+        [JsonProperty("shared")]
         public bool Shared { get; set; } = false;
     }
 
     public class TenantManagement
     {
-        [JsonProperty("management"), JsonPropertyName("management")]
+        [JsonProperty("management")]
         public Management VisibleManagement { get; set; } = new Management();
 
-        [JsonProperty("shared"), JsonPropertyName("shared")]
+        [JsonProperty("shared")]
         public bool Shared { get; set; } = false;
     }
 

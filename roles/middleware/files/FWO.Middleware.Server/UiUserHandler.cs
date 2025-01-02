@@ -17,7 +17,7 @@ namespace FWO.Middleware.Server
 		/// <summary>
 		/// config value for expiration time
 		/// </summary>
-		[JsonProperty("config_value"), JsonPropertyName("config_value")]
+		[JsonProperty("config_value")]
 		public int ExpirationValue { get; set; }
 	}
 

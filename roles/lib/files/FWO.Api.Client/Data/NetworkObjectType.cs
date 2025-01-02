@@ -5,7 +5,7 @@ namespace FWO.Api.Data
 {
     public class NetworkObjectType
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
     }
 }

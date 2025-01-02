@@ -6,16 +6,16 @@ namespace FWO.Api.Data
 {
     public class ModellingAppRole : ModellingNwGroup
     {
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string? Comment { get; set; }
 
-        [JsonProperty("creator"), JsonPropertyName("creator")]
+        [JsonProperty("creator")]
         public string? Creator { get; set; }
 
-        [JsonProperty("creation_date"), JsonPropertyName("creation_date")]
+        [JsonProperty("creation_date")]
         public DateTime? CreationDate { get; set; }
 
-        [JsonProperty("nwobjects"), JsonPropertyName("nwobjects")]
+        [JsonProperty("nwobjects")]
         public List<ModellingAppServerWrapper> AppServers { get; set; } = [];
 
         public ModellingNetworkArea? Area { get; set; } = new();
@@ -96,7 +96,7 @@ namespace FWO.Api.Data
     
     public class ModellingAppRoleWrapper
     {
-        [JsonProperty("nwgroup"), JsonPropertyName("nwgroup")]
+        [JsonProperty("nwgroup")]
         public ModellingAppRole Content { get; set; } = new();
 
         public static ModellingAppRole[] Resolve(List<ModellingAppRoleWrapper> wrappedList)

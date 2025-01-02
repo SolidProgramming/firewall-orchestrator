@@ -5,10 +5,10 @@ namespace FWO.Api.Data
 {
     public class NetworkLocation : IComparable
     {
-        [JsonProperty("object"), JsonPropertyName("object")]
+        [JsonProperty("object")]
         public NetworkObject Object { get; set; } = new NetworkObject() { };
 
-        [JsonProperty("usr"), JsonPropertyName("usr")]
+        [JsonProperty("usr")]
         public NetworkUser User { get; set; } = new NetworkUser() { };
 
         public NetworkLocation(NetworkUser user, NetworkObject network)

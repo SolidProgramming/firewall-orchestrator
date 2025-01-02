@@ -9,7 +9,7 @@ namespace FWO.Api.Data
 {
     public class ChangeImport
     {
-        [JsonProperty("time"), JsonPropertyName("time")]
+        [JsonProperty("time")]
         public DateTime Time { get; set; }
 
         public ChangeImport() {}

@@ -5,10 +5,10 @@ namespace FWO.Api.Data
 {
     public class Recertification : RecertificationBase
     {
-        [JsonProperty("owner"), JsonPropertyName("owner")]
+        [JsonProperty("owner")]
         public FwoOwner? FwoOwner { get; set; } = new FwoOwner();
 
-        [JsonProperty("user_dn"), JsonPropertyName("user_dn")]
+        [JsonProperty("user_dn")]
         public string UserDn { get; set; }  = "";
     }
 }

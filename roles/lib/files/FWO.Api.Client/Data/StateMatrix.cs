@@ -18,22 +18,22 @@ namespace FWO.Api.Client
 
     public class StateMatrix
     {
-        [JsonProperty("matrix"), JsonPropertyName("matrix")]
+        [JsonProperty("matrix")]
         public Dictionary<int, List<int>> Matrix { get; set; } = [];
 
-        [JsonProperty("derived_states"), JsonPropertyName("derived_states")]
+        [JsonProperty("derived_states")]
         public Dictionary<int, int> DerivedStates { get; set; } = [];
 
-        [JsonProperty("lowest_input_state"), JsonPropertyName("lowest_input_state")]
+        [JsonProperty("lowest_input_state")]
         public int LowestInputState { get; set; }
 
-        [JsonProperty("lowest_start_state"), JsonPropertyName("lowest_start_state")]
+        [JsonProperty("lowest_start_state")]
         public int LowestStartedState { get; set; }
 
-        [JsonProperty("lowest_end_state"), JsonPropertyName("lowest_end_state")]
+        [JsonProperty("lowest_end_state")]
         public int LowestEndState { get; set; }
 
-        [JsonProperty("active"), JsonPropertyName("active")]
+        [JsonProperty("active")]
         public bool Active { get; set; }
 
         public Dictionary<WorkflowPhases, bool> PhaseActive = [];
@@ -160,7 +160,7 @@ namespace FWO.Api.Client
 
     public class GlobalStateMatrix
     {
-        [JsonProperty("config_value"), JsonPropertyName("config_value")]
+        [JsonProperty("config_value")]
         public Dictionary<WorkflowPhases, StateMatrix> GlobalMatrix { get; set; } = [];
 
 
@@ -193,7 +193,7 @@ namespace FWO.Api.Client
 
     public class GlobalStateMatrixHelper
     {
-        [JsonProperty("config_value"), JsonPropertyName("config_value")]
+        [JsonProperty("config_value")]
         public string ConfData = "";
     }
 

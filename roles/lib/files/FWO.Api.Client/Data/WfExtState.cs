@@ -6,13 +6,13 @@ namespace FWO.Api.Data
 {
     public class WfExtState
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int? Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("state_id"), JsonPropertyName("state_id")]
+        [JsonProperty("state_id")]
         public int? StateId { get; set; }
     }
 }

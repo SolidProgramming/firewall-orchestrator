@@ -5,7 +5,7 @@ namespace FWO.Api.Data
 {
     public class WfOwnerWriter
     {
-        [JsonProperty("owner_id"), JsonPropertyName("owner_id")]
+        [JsonProperty("owner_id")]
         public int? OwnerId { get; set; }
 
         public WfOwnerWriter()

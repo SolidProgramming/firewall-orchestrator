@@ -5,16 +5,16 @@ namespace FWO.Api.Data
 {
     public class ModellingService : ModellingSvcObject
     {
-        [JsonProperty("port"), JsonPropertyName("port")]
+        [JsonProperty("port")]
         public int? Port { get; set; }
 
-        [JsonProperty("port_end"), JsonPropertyName("port_end")]
+        [JsonProperty("port_end")]
         public int? PortEnd { get; set; }
 
-        [JsonProperty("proto_id"), JsonPropertyName("proto_id")]
+        [JsonProperty("proto_id")]
         public int? ProtoId { get; set; }
 
-        [JsonProperty("protocol"), JsonPropertyName("protocol")]
+        [JsonProperty("protocol")]
         public NetworkProtocol? Protocol { get; set; } = new();
 
 
@@ -56,7 +56,7 @@ namespace FWO.Api.Data
 
     public class ModellingServiceWrapper
     {
-        [JsonProperty("service"), JsonPropertyName("service")]
+        [JsonProperty("service")]
         public ModellingService Content { get; set; } = new();
 
         public static ModellingService[] Resolve(List<ModellingServiceWrapper> wrappedList)

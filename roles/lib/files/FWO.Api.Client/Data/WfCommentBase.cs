@@ -5,19 +5,19 @@ namespace FWO.Api.Data
 {
     public class WfCommentBase
     {
-        [JsonProperty("ref_id"), JsonPropertyName("ref_id")]
+        [JsonProperty("ref_id")]
         public long? RefId { get; set; }
 
-        [JsonProperty("scope"), JsonPropertyName("scope")]
+        [JsonProperty("scope")]
         public string Scope { get; set; } = "";
 
-        [JsonProperty("creation_date"), JsonPropertyName("creation_date")]
+        [JsonProperty("creation_date")]
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
-        [JsonProperty("creator"), JsonPropertyName("creator")]
+        [JsonProperty("creator")]
         public UiUser Creator { get; set; } = new UiUser();
 
-        [JsonProperty("comment_text"), JsonPropertyName("comment_text")]
+        [JsonProperty("comment_text")]
         public string CommentText { get; set; } = "";
 
 

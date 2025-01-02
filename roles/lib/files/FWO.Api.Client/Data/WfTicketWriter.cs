@@ -6,7 +6,7 @@ namespace FWO.Api.Data
     public class WfTicketWriter
     {
 
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<WfReqTaskWriter> Tasks { get; set; } = [];
 
 

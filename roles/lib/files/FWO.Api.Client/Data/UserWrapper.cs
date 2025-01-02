@@ -5,7 +5,7 @@ namespace FWO.Api.Data
 {
     public class UserWrapper
     {
-        [JsonProperty("usr"), JsonPropertyName("usr")]
+        [JsonProperty("usr")]
         public NetworkUser Content { get; set; } = new NetworkUser();
     }
 }

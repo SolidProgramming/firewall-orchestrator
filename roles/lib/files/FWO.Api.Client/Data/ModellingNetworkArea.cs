@@ -6,7 +6,7 @@ namespace FWO.Api.Data
 {
     public class ModellingNetworkArea : ModellingNwGroup
     {
-        [JsonProperty("ip_data"), JsonPropertyName("ip_data")]
+        [JsonProperty("ip_data")]
         public List<NetworkDataWrapper> IpData { get; set; } = [];
 
         public int MemberCount = 0;
@@ -56,7 +56,7 @@ namespace FWO.Api.Data
 
     public class ModellingNetworkAreaWrapper
     {
-        [JsonProperty("nwgroup"), JsonPropertyName("nwgroup")]
+        [JsonProperty("nwgroup")]
         public ModellingNetworkArea Content { get; set; } = new();
 
         public static ModellingNetworkArea[] Resolve(List<ModellingNetworkAreaWrapper> wrappedList)
@@ -68,17 +68,17 @@ namespace FWO.Api.Data
 
     public class NetworkSubnet
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; } = 0;
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
         // -> cidr
-        [JsonProperty("ip"), JsonPropertyName("ip")]
+        [JsonProperty("ip")]
         public string? Ip { get; set; }
 
-       [JsonProperty("ip_end"), JsonPropertyName("ip_end")]
+       [JsonProperty("ip_end")]
         public string? IpEnd { get; set; }
 
         public static NetworkObject ToNetworkObject(NetworkSubnet subnet)
@@ -104,7 +104,7 @@ namespace FWO.Api.Data
 
     public class NetworkDataWrapper
     {
-        [JsonProperty("owner_network"), JsonPropertyName("owner_network")]
+        [JsonProperty("owner_network")]
         public NetworkSubnet Content { get; set; } = new();
 
         public static NetworkSubnet[] Resolve(List<NetworkDataWrapper> wrappedList)

@@ -5,46 +5,46 @@ namespace FWO.Api.Data
 {
     public class RuleMetadata
     {
-        [JsonProperty("rule_metadata_id"), JsonPropertyName("rule_metadata_id")]
+        [JsonProperty("rule_metadata_id")]
         public long Id { get; set; }
 
-        [JsonProperty("rule_created"), JsonPropertyName("rule_created")]
+        [JsonProperty("rule_created")]
         public DateTime? Created { get; set; }
 
-        [JsonProperty("rule_last_modified"), JsonPropertyName("rule_last_modified")]
+        [JsonProperty("rule_last_modified")]
         public DateTime? LastModified { get; set; }
 
-        [JsonProperty("rule_first_hit"), JsonPropertyName("rule_first_hit")]
+        [JsonProperty("rule_first_hit")]
         public DateTime? FirstHit { get; set; }
 
-        [JsonProperty("rule_last_hit"), JsonPropertyName("rule_last_hit")]
+        [JsonProperty("rule_last_hit")]
         public DateTime? LastHit { get; set; }
 
-        [JsonProperty("rule_last_certified"), JsonPropertyName("rule_last_certified")]
+        [JsonProperty("rule_last_certified")]
         public DateTime? LastCertified { get; set; }
 
-        [JsonProperty("rule_last_certifier_dn"), JsonPropertyName("rule_last_certifier_dn")]
+        [JsonProperty("rule_last_certifier_dn")]
         public string LastCertifierDn { get; set; } = "";
 
-        [JsonProperty("rule_to_be_removed"), JsonPropertyName("rule_to_be_removed")]
+        [JsonProperty("rule_to_be_removed")]
         public bool ToBeRemoved { get; set; }
 
-        [JsonProperty("rule_decert_date"), JsonPropertyName("rule_decert_date")]
+        [JsonProperty("rule_decert_date")]
         public DateTime? DecertificationDate { get; set; }
 
-        [JsonProperty("rule_recertification_comment"), JsonPropertyName("rule_recertification_comment")]
+        [JsonProperty("rule_recertification_comment")]
         public string Comment { get; set; } = "";
 
-        [JsonProperty("recertification"), JsonPropertyName("recertification")]
+        [JsonProperty("recertification")]
         public List<Recertification> RuleRecertification { get; set; } = new List<Recertification>();
 
-        [JsonProperty("recert_history"), JsonPropertyName("recert_history")]
+        [JsonProperty("recert_history")]
         public List<Recertification> RecertHistory { get; set; } = new List<Recertification>();
 
-        [JsonProperty("dev_id"), JsonPropertyName("dev_id")]
+        [JsonProperty("dev_id")]
         public int DeviceId { get; set; }
 
-        [JsonProperty("rule_uid"), JsonPropertyName("rule_uid")]
+        [JsonProperty("rule_uid")]
         public string? Uid { get; set; } = "";
 
         public DateTime NextRecert { get; set; }

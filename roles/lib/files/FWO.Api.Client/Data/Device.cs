@@ -5,34 +5,34 @@ namespace FWO.Api.Data
 {
     public class Device
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
-        [JsonProperty("deviceType"), JsonPropertyName("deviceType")]
+        [JsonProperty("deviceType")]
         public DeviceType DeviceType { get; set; } = new DeviceType();
 
-        [JsonProperty("management"), JsonPropertyName("management")]
+        [JsonProperty("management")]
         public Management Management { get; set; } = new Management();
 
-        [JsonProperty("local_rulebase_name"), JsonPropertyName("local_rulebase_name")]
+        [JsonProperty("local_rulebase_name")]
         public string? LocalRulebase { get; set; }
 
-        [JsonProperty("global_rulebase_name"), JsonPropertyName("global_rulebase_name")]
+        [JsonProperty("global_rulebase_name")]
         public string? GlobalRulebase { get; set; }
 
-        [JsonProperty("package_name"), JsonPropertyName("package_name")]
+        [JsonProperty("package_name")]
         public string? Package { get; set; }
 
-        [JsonProperty("importDisabled"), JsonPropertyName("importDisabled")]
+        [JsonProperty("importDisabled")]
         public bool ImportDisabled { get; set; }
 
-        [JsonProperty("hideInUi"), JsonPropertyName("hideInUi")]
+        [JsonProperty("hideInUi")]
         public bool HideInUi { get; set; }
 
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string? Comment { get; set; }
 
         public bool Selected { get; set; } = false;

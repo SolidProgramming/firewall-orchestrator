@@ -18,7 +18,7 @@ namespace FWO.Services
 
     public class PathAnalysisActionParams
     {
-        [JsonProperty("option"), JsonPropertyName("option")]
+        [JsonProperty("option")]
         public PathAnalysisOptions Option { get; set; } = PathAnalysisOptions.DisplayFoundDevices;
     }
 

@@ -10,7 +10,7 @@ namespace FWO.Tufin.SecureChange
 {
 	public class ExternalTicket
 	{
-		[JsonProperty("ticketText"), JsonPropertyName("ticketText")]
+		[JsonProperty("ticketText")]
 		public string TicketText { get; set; } = "";
 
 		public string? TicketId { get; set; } = "";

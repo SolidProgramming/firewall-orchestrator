@@ -8,14 +8,14 @@ namespace FWO.Config.Api.Data
     /// </summary>
     public class Language
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("culture_info"), JsonPropertyName("culture_info")]
+        [JsonProperty("culture_info")]
         public string CultureInfo { get; set; } = "";
 
         // might later also add the full culture name, if needed:
-        // [JsonProperty("culture_name_english"), JsonPropertyName("culture_name_english")]
+        // [JsonProperty("culture_name_english")]
         // public string CultureNameEnglish { get; set; }
 
     }

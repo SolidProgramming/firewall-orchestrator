@@ -10,7 +10,7 @@ namespace FWO.Api.Data
 {
     public class TimeWrapper
     {
-        [JsonProperty("time"), JsonPropertyName("time")]
+        [JsonProperty("time")]
         public DateTime Time { get; set; }
     }
 }

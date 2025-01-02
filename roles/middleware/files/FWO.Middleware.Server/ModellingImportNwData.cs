@@ -12,7 +12,7 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// List of all Areas
         /// </summary>
-        // [JsonProperty("areas"), JsonPropertyName("areas")]
+        // [JsonProperty("areas")]
         [JsonPropertyName("areas")]
         public List<ModellingImportAreaData> Areas { get; set; } = [];
     }

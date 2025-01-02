@@ -5,12 +5,12 @@ namespace FWO.Api.Data
 {
     public class ServiceWrapper
     {
-        [JsonProperty("service"), JsonPropertyName("service")]
+        [JsonProperty("service")]
         public NetworkService Content { get; set; } = new NetworkService();
     }
     // public class ServiceObjectRecursiveWrapper
     // {
-    //     [JsonProperty("service"), JsonPropertyName("service")]
+    //     [JsonProperty("service")]
     //     public ServiceObjectRecursiveFlatsWrapper Content { get; set; }
     // }
 }

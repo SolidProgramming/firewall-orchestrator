@@ -7,13 +7,13 @@ namespace FWO.Config.Api.Data
 {
     public class CommonAreaConfig
     {
-        [JsonProperty("area_id"), JsonPropertyName("area_id")]
+        [JsonProperty("area_id")]
         public long AreaId { get; set; } = 0;
 
-        [JsonProperty("use_in_src"), JsonPropertyName("use_in_src")]
+        [JsonProperty("use_in_src")]
         public bool UseInSrc { get; set; } = true;
 
-        [JsonProperty("use_in_dst"), JsonPropertyName("use_in_dst")]
+        [JsonProperty("use_in_dst")]
         public bool UseInDst { get; set; } = true;
     }
 

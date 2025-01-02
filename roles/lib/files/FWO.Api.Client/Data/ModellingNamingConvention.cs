@@ -5,28 +5,28 @@ namespace FWO.Api.Data
 {
     public class ModellingNamingConvention
     {
-        [JsonProperty("networkAreaRequired"), JsonPropertyName("networkAreaRequired")]
+        [JsonProperty("networkAreaRequired")]
         public bool NetworkAreaRequired { get; set; } = false;
 
-        [JsonProperty("useAppPart"), JsonPropertyName("useAppPart")]
+        [JsonProperty("useAppPart")]
         public bool UseAppPart { get; set; } = false;
 
-        [JsonProperty("fixedPartLength"), JsonPropertyName("fixedPartLength")]
+        [JsonProperty("fixedPartLength")]
         public int FixedPartLength { get; set; }
 
-        [JsonProperty("freePartLength"), JsonPropertyName("freePartLength")]
+        [JsonProperty("freePartLength")]
         public int FreePartLength { get; set; }
 
-        [JsonProperty("networkAreaPattern"), JsonPropertyName("networkAreaPattern")]
+        [JsonProperty("networkAreaPattern")]
         public string NetworkAreaPattern { get; set; } = "";
 
-        [JsonProperty("appRolePattern"), JsonPropertyName("appRolePattern")]
+        [JsonProperty("appRolePattern")]
         public string AppRolePattern { get; set; } = "";
 
-        [JsonProperty("applicationZone"), JsonPropertyName("applicationZone")]
+        [JsonProperty("applicationZone")]
         public string AppZone { get; set; } = "";
         
-        [JsonProperty("appServerPrefix"), JsonPropertyName("appServerPrefix")]
+        [JsonProperty("appServerPrefix")]
         public string? AppServerPrefix { get; set; } = "";
     }
 }

@@ -6,10 +6,10 @@ namespace FWO.Api.Data
 {
     public class ModellingNwGroup : ModellingNwObject
     {
-        [JsonProperty("group_type"), JsonPropertyName("group_type")]
+        [JsonProperty("group_type")]
         public int GroupType { get; set; }
 
-        [JsonProperty("id_string"), JsonPropertyName("id_string")]
+        [JsonProperty("id_string")]
         public string IdString
         {
             get { return ManagedIdString.Whole; }
@@ -82,7 +82,7 @@ namespace FWO.Api.Data
     
     public class ModellingNwGroupWrapper
     {
-        [JsonProperty("nwgroup"), JsonPropertyName("nwgroup")]
+        [JsonProperty("nwgroup")]
         public virtual ModellingNwGroup Content { get; set; } = new();
 
         public static ModellingNwGroup[] Resolve(List<ModellingNwGroupWrapper> wrappedList)

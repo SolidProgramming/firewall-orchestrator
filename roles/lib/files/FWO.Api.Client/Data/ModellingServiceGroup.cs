@@ -6,16 +6,16 @@ namespace FWO.Api.Data
 {
     public class ModellingServiceGroup : ModellingSvcObject
     {
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string? Comment { get; set; }
 
-        [JsonProperty("creator"), JsonPropertyName("creator")]
+        [JsonProperty("creator")]
         public string? Creator { get; set; }
 
-        [JsonProperty("creation_date"), JsonPropertyName("creation_date")]
+        [JsonProperty("creation_date")]
         public DateTime? CreationDate { get; set; }
 
-        [JsonProperty("services"), JsonPropertyName("services")]
+        [JsonProperty("services")]
         public List<ModellingServiceWrapper> Services { get; set; } = [];
 
 
@@ -60,7 +60,7 @@ namespace FWO.Api.Data
 
     public class ModellingServiceGroupWrapper
     {
-        [JsonProperty("service_group"), JsonPropertyName("service_group")]
+        [JsonProperty("service_group")]
         public ModellingServiceGroup Content { get; set; } = new();
 
         public static ModellingServiceGroup[] Resolve(List<ModellingServiceGroupWrapper> wrappedList)

@@ -19,82 +19,82 @@ namespace FWO.Api.Data
 
     public class ModellingConnection
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("app_id"), JsonPropertyName("app_id")]
+        [JsonProperty("app_id")]
         public int? AppId { get; set; }
 
-        [JsonProperty("proposed_app_id"), JsonPropertyName("proposed_app_id")]
+        [JsonProperty("proposed_app_id")]
         public int? ProposedAppId { get; set; }
 
-        [JsonProperty("owner"), JsonPropertyName("owner")]
+        [JsonProperty("owner")]
         public FwoOwner App { get; set; } = new();
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; } = "";
 
-        [JsonProperty("reason"), JsonPropertyName("reason")]
+        [JsonProperty("reason")]
         public string? Reason { get; set; } = "";
 
-        [JsonProperty("is_interface"), JsonPropertyName("is_interface")]
+        [JsonProperty("is_interface")]
         public bool IsInterface { get; set; } = false;
 
-        [JsonProperty("used_interface_id"), JsonPropertyName("used_interface_id")]
+        [JsonProperty("used_interface_id")]
         public long? UsedInterfaceId { get; set; }
 
-        [JsonProperty("is_requested"), JsonPropertyName("is_requested")]
+        [JsonProperty("is_requested")]
         public bool IsRequested { get; set; } = false;
 
-        [JsonProperty("is_published"), JsonPropertyName("is_published")]
+        [JsonProperty("is_published")]
         public bool IsPublished { get; set; } = false;
 
-        [JsonProperty("ticket_id"), JsonPropertyName("ticket_id")]
+        [JsonProperty("ticket_id")]
         public long? TicketId { get; set; }
 
-        [JsonProperty("common_service"), JsonPropertyName("common_service")]
+        [JsonProperty("common_service")]
         public bool IsCommonService { get; set; } = false;
 
-        [JsonProperty("creator"), JsonPropertyName("creator")]
+        [JsonProperty("creator")]
         public string? Creator { get; set; }
 
-        [JsonProperty("creation_date"), JsonPropertyName("creation_date")]
+        [JsonProperty("creation_date")]
         public DateTime? CreationDate { get; set; }
 
-        [JsonProperty("conn_prop"), JsonPropertyName("conn_prop")]
+        [JsonProperty("conn_prop")]
         public string? Properties { get; set; } = "";
 
-        [JsonProperty("extra_params"), JsonPropertyName("extra_params")]
+        [JsonProperty("extra_params")]
         public string? ExtraParams { get; set; } = "";
 
-        [JsonProperty("services"), JsonPropertyName("services")]
+        [JsonProperty("services")]
         public List<ModellingServiceWrapper> Services { get; set; } = [];
 
-        [JsonProperty("service_groups"), JsonPropertyName("service_groups")]
+        [JsonProperty("service_groups")]
         public List<ModellingServiceGroupWrapper> ServiceGroups { get; set; } = [];
 
-        [JsonProperty("source_nwobjects"), JsonPropertyName("source_nwobjects")]
+        [JsonProperty("source_nwobjects")]
         public List<ModellingAppServerWrapper> SourceAppServers { get; set; } = [];
 
-        [JsonProperty("source_approles"), JsonPropertyName("source_approles")]
+        [JsonProperty("source_approles")]
         public List<ModellingAppRoleWrapper> SourceAppRoles { get; set; } = [];
 
-        [JsonProperty("destination_nwobjects"), JsonPropertyName("destination_nwobjects")]
+        [JsonProperty("destination_nwobjects")]
         public List<ModellingAppServerWrapper> DestinationAppServers { get; set; } = [];
 
-        [JsonProperty("destination_approles"), JsonPropertyName("destination_approles")]
+        [JsonProperty("destination_approles")]
         public List<ModellingAppRoleWrapper> DestinationAppRoles { get; set; } = [];
 
-        [JsonProperty("source_areas"), JsonPropertyName("source_areas")]
+        [JsonProperty("source_areas")]
         public List<ModellingNetworkAreaWrapper> SourceAreas { get; set; } = [];
 
-        [JsonProperty("destination_areas"), JsonPropertyName("destination_areas")]
+        [JsonProperty("destination_areas")]
         public List<ModellingNetworkAreaWrapper> DestinationAreas { get; set; } = [];
 
-        [JsonProperty("source_other_groups"), JsonPropertyName("source_other_groups")]
+        [JsonProperty("source_other_groups")]
         public List<ModellingNwGroupWrapper> SourceOtherGroups { get; set; } = [];
 
-        [JsonProperty("destination_other_groups"), JsonPropertyName("destination_other_groups")]
+        [JsonProperty("destination_other_groups")]
         public List<ModellingNwGroupWrapper> DestinationOtherGroups { get; set; } = [];
 
         
@@ -389,7 +389,7 @@ namespace FWO.Api.Data
 
     public class ModellingConnectionWrapper
     {
-        [JsonProperty("connection"), JsonPropertyName("connection")]
+        [JsonProperty("connection")]
         public ModellingConnection Content { get; set; } = new();
 
         public static ModellingConnection[] Resolve(List<ModellingConnectionWrapper> wrappedList)

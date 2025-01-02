@@ -5,13 +5,13 @@ namespace FWO.Config.Api.Data
 {
     public class ConfigItem
     {
-        [JsonProperty("config_key"), JsonPropertyName("config_key")]
+        [JsonProperty("config_key")]
         public string Key { get; set; } = "";
 
-        [JsonProperty("config_value"), JsonPropertyName("config_value")]
+        [JsonProperty("config_value")]
         public string? Value { get; set; }
 
-        [JsonProperty("config_user"), JsonPropertyName("config_user")]
+        [JsonProperty("config_user")]
         public int User { get; set; }
     }
 }

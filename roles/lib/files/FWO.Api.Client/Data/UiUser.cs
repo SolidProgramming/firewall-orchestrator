@@ -6,42 +6,42 @@ namespace FWO.Api.Data
 {
     public class UiUser
     {
-        [JsonProperty("uiuser_username"), JsonPropertyName("uiuser_username")]
+        [JsonProperty("uiuser_username")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("uiuser_id"), JsonPropertyName("uiuser_id")]
+        [JsonProperty("uiuser_id")]
         public int DbId { get; set; }
 
-        [JsonProperty("uuid"), JsonPropertyName("uuid")]
+        [JsonProperty("uuid")]
         public string Dn { get; set; } = "";
 
         public string Password { get; set; } = "";
 
-        [JsonProperty("uiuser_email"), JsonPropertyName("uiuser_email")]
+        [JsonProperty("uiuser_email")]
         public string? Email { get; set; }
 
-        [JsonProperty("uiuser_first_name"), JsonPropertyName("uiuser_first_name")]
+        [JsonProperty("uiuser_first_name")]
         public string? Firstname { get; set; }
 
-        [JsonProperty("uiuser_last_name"), JsonPropertyName("uiuser_last_name")]
+        [JsonProperty("uiuser_last_name")]
         public string? Lastname { get; set; }
 
-        [JsonProperty("tenant"), JsonPropertyName("tenant")]
+        [JsonProperty("tenant")]
         public Tenant? Tenant { get; set;}
 
-        [JsonProperty("uiuser_language"), JsonPropertyName("uiuser_language")]
+        [JsonProperty("uiuser_language")]
         public string? Language { get; set; }
 
-        [JsonProperty("uiuser_last_login"), JsonPropertyName("uiuser_last_login")]
+        [JsonProperty("uiuser_last_login")]
         public DateTime? LastLogin { get; set; }
 
-        [JsonProperty("uiuser_last_password_change"), JsonPropertyName("uiuser_last_password_change")]
+        [JsonProperty("uiuser_last_password_change")]
         public DateTime? LastPasswordChange { get; set; }
 
-        [JsonProperty("uiuser_password_must_be_changed"), JsonPropertyName("uiuser_password_must_be_changed")]
+        [JsonProperty("uiuser_password_must_be_changed")]
         public bool PasswordMustBeChanged { get; set; }
 
-        [JsonProperty("ldap_connection"), JsonPropertyName("ldap_connection")]
+        [JsonProperty("ldap_connection")]
         public UiLdapConnection LdapConnection { get; set;} = new ();
 
         public string Jwt { get; set; } = "";

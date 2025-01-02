@@ -6,10 +6,10 @@ namespace FWO.Api.Data
 {
     public class TenantFilter
     {
-        [JsonProperty("is_active"), JsonPropertyName("is_active")]
+        [JsonProperty("is_active")]
         public bool IsActive { get; set; } = false;
 
-        [JsonProperty("tenant_id"), JsonPropertyName("tenant_id")]
+        [JsonProperty("tenant_id")]
         public int TenantId { get; set; }
 
         public TenantFilter()

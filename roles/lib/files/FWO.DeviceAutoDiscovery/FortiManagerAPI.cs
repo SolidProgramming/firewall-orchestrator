@@ -129,47 +129,47 @@ namespace FWO.Rest.Client
 
     public class SessionAuthInfo
     {
-        [JsonProperty("session"), JsonPropertyName("session")]
+        [JsonProperty("session")]
         public string SessionId { get; set; } = "";
     }
 
     public class FmApiStatus
     {
-        [JsonProperty("code"), JsonPropertyName("code")]
+        [JsonProperty("code")]
         public int Code { get; set; }
 
-        [JsonProperty("message"), JsonPropertyName("message")]
+        [JsonProperty("message")]
         public string Message { get; set; } = "";
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     public class FmApiTopLevelHelper
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("status"), JsonPropertyName("status")]
+        [JsonProperty("status")]
         public FmApiStatus Status { get; set; } = new FmApiStatus();
 
-        [JsonProperty("result"), JsonPropertyName("result")]
+        [JsonProperty("result")]
         public List<FmApiDataHelper> Result { get; set; } = new List<FmApiDataHelper>();
     }
 
     public class FmApiDataHelper
     {
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<Adom> AdomList { get; set; } = new List<Adom>();
     }
 
     public class Adom
     {
-        [JsonProperty("oid"), JsonPropertyName("oid")]
+        [JsonProperty("oid")]
         public int Oid { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("uuid"), JsonPropertyName("uuid")]
+        [JsonProperty("uuid")]
         public string Uid { get; set; } = "";
 
         // public List<Package> Packages = new List<Package>();
@@ -180,55 +180,55 @@ namespace FWO.Rest.Client
 
     public class FmApiTopLevelHelperDev
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("status"), JsonPropertyName("status")]
+        [JsonProperty("status")]
         public FmApiStatus Status { get; set; } = new FmApiStatus();
 
-        [JsonProperty("result"), JsonPropertyName("result")]
+        [JsonProperty("result")]
         public List<FmApiDataHelperDev> Result { get; set; } = new List<FmApiDataHelperDev>();
     }
 
     public class FmApiDataHelperDev
     {
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<FortiGate> DeviceList { get; set; } = new List<FortiGate>();
     }
     public class FortiGate
     {
-        [JsonProperty("oid"), JsonPropertyName("oid")]
+        [JsonProperty("oid")]
         public int Oid { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("hostname"), JsonPropertyName("hostname")]
+        [JsonProperty("hostname")]
         public string Hostname { get; set; } = "";
 
-        // [JsonProperty("ip"), JsonPropertyName("ip")]
+        // [JsonProperty("ip")]
         // public string Ip { get; set; } = "";
 
-        [JsonProperty("mgt_vdom"), JsonPropertyName("mgt_vdom")]
+        [JsonProperty("mgt_vdom")]
         public string MgtVdom { get; set; } = "";
         
-        // [JsonProperty("os_ver"), JsonPropertyName("os_ver")]
+        // [JsonProperty("os_ver")]
         // public string OsVer { get; set; } = "";
         
-        // [JsonProperty("dev_status"), JsonPropertyName("dev_status")]
+        // [JsonProperty("dev_status")]
         // public string DevStatus { get; set; } = "";
         
-        [JsonProperty("vdom"), JsonPropertyName("vdom")]
+        [JsonProperty("vdom")]
         public List<Vdom> VdomList { get; set; } = new List<Vdom>();
 
         // "name", "desc", "hostname", "vdom", "ip", "mgmt_id", "mgt_vdom", "os_type", "os_ver", "platform_str", "dev_status" 
     }
    public class Vdom
     {
-        [JsonProperty("oid"), JsonPropertyName("oid")]
+        [JsonProperty("oid")]
         public int Oid { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
     }
 
@@ -236,33 +236,33 @@ namespace FWO.Rest.Client
 
     public class FmApiTopLevelHelperAssign
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("status"), JsonPropertyName("status")]
+        [JsonProperty("status")]
         public FmApiStatus Status { get; set; } = new FmApiStatus();
 
-        [JsonProperty("result"), JsonPropertyName("result")]
+        [JsonProperty("result")]
         public List<FmApiDataHelperAssign> Result { get; set; } = new List<FmApiDataHelperAssign>();
     }
 
     public class FmApiDataHelperAssign
     {
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<Assignment> AssignmentList { get; set; } = new List<Assignment>();
     }
     public class Assignment
     {
-        [JsonProperty("oid"), JsonPropertyName("oid")]
+        [JsonProperty("oid")]
         public int Oid { get; set; }
 
-        [JsonProperty("dev"), JsonPropertyName("dev")]
+        [JsonProperty("dev")]
         public string DeviceName { get; set; } = "";
 
-        [JsonProperty("vdom"), JsonPropertyName("vdom")]
+        [JsonProperty("vdom")]
         public string VdomName { get; set; } = "";
 
-        [JsonProperty("pkg"), JsonPropertyName("pkg")]
+        [JsonProperty("pkg")]
         public string PackageName { get; set; } = "";
     }
 }
