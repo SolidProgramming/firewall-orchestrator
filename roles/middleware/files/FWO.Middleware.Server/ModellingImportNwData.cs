@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-// using Newtonsoft.Json;
-
+﻿using Newtonsoft.Json;
 
 namespace FWO.Middleware.Server
 {
@@ -12,8 +10,8 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// List of all Areas
         /// </summary>
-        // [JsonProperty("areas"), JsonPropertyName("areas")]
-        [JsonPropertyName("areas")]
+        // [JsonProperty("areas")]
+        
         public List<ModellingImportAreaData> Areas { get; set; } = [];
     }
 
@@ -25,19 +23,19 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// Area Name
         /// </summary>
-        [JsonPropertyName("name")]
+        
         public string Name { get; set; } = "";
 
         /// <summary>
         /// Area Id String
         /// </summary>
-        [JsonPropertyName("id_string")]
+        
         public string IdString { get; set; } = "";
 
         /// <summary>
         /// List of all associated ip data
         /// </summary>
-        [JsonPropertyName("subnets")]
+        
         public List<ModellingImportAreaIpData> IpData { get; set; } = [];
 
 
@@ -68,19 +66,19 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// Area Subnet Name
         /// </summary>
-        [JsonPropertyName("name")]
+        
         public string Name { get; set; } = "";
 
         /// <summary>
         /// Area Subnet Network Start IP (in cidr notation)
         /// </summary>
-        [JsonPropertyName("ip")]
+        
         public string Ip { get; set; } = "";
 
         /// <summary>
         /// Area Subnet Network End IP (in cidr notation)
         /// </summary>
-        [JsonPropertyName("ip_end")]
+        
         public string? IpEnd { get; set; } = "";
 
 

@@ -1,26 +1,26 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfImplTask: WfTaskBase
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("reqtask_id"), JsonPropertyName("reqtask_id")]
+        [JsonProperty("reqtask_id")]
         public long ReqTaskId { get; set; }
 
-        [JsonProperty("device_id"), JsonPropertyName("device_id")]
+        [JsonProperty("device_id")]
         public int? DeviceId { get; set; }
 
-        [JsonProperty("implementation_action"), JsonPropertyName("implementation_action")]
+        [JsonProperty("implementation_action")]
         public string ImplAction { get; set; } = RequestAction.create.ToString();
 
-        [JsonProperty("elements"), JsonPropertyName("elements")]
+        [JsonProperty("elements")]
         public List<WfImplElement> ImplElements { get; set; } = [];
 
-        [JsonProperty("comments"), JsonPropertyName("comments")]
+        [JsonProperty("comments")]
         public List<WfCommentDataHelper> Comments { get; set; } = [];
 
 

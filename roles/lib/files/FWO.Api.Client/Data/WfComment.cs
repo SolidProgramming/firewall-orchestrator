@@ -1,11 +1,11 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfComment : WfCommentBase
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
 
@@ -20,7 +20,7 @@ namespace FWO.Api.Data
 
     public class WfCommentDataHelper
     {
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public WfComment Comment { get; set; } = new ();
 
 

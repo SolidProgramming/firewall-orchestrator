@@ -3,7 +3,7 @@ using FWO.Api.Client;
 using FWO.Api.Client.Queries;
 using FWO.Logging;
 using NetTools;
-using System.Text.Json.Serialization; 
+ 
 using Newtonsoft.Json;
 
 
@@ -17,7 +17,7 @@ namespace FWO.Services
 
     public class PathAnalysisActionParams
     {
-        [JsonProperty("option"), JsonPropertyName("option")]
+        [JsonProperty("option")]
         public PathAnalysisOptions Option { get; set; } = PathAnalysisOptions.DisplayFoundDevices;
     }
 

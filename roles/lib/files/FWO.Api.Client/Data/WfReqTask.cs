@@ -1,32 +1,32 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfReqTask : WfReqTaskBase
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("ticket_id"), JsonPropertyName("ticket_id")]
+        [JsonProperty("ticket_id")]
         public long TicketId { get; set; }
 
-        [JsonProperty("elements"), JsonPropertyName("elements")]
+        [JsonProperty("elements")]
         public List<WfReqElement> Elements { get; set; } = [];
 
-        [JsonProperty("implementation_tasks"), JsonPropertyName("implementation_tasks")]
+        [JsonProperty("implementation_tasks")]
         public List<WfImplTask> ImplementationTasks { get; set; } = [];
 
-        [JsonProperty("request_approvals"), JsonPropertyName("request_approvals")]
+        [JsonProperty("request_approvals")]
         public List<WfApproval> Approvals { get; set; } = [];
 
-        [JsonProperty("owners"), JsonPropertyName("owners")]
+        [JsonProperty("owners")]
         public List<FwoOwnerDataHelper> Owners { get; set; } = [];
 
-        [JsonProperty("comments"), JsonPropertyName("comments")]
+        [JsonProperty("comments")]
         public List<WfCommentDataHelper> Comments { get; set; } = [];
 
-        [JsonProperty("on_management"), JsonPropertyName("on_management")]
+        [JsonProperty("on_management")]
         public Management? OnManagement { get; set; }
 
         public List<WfReqElement> RemovedElements { get; set; } = [];

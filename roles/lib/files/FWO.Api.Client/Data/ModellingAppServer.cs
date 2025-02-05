@@ -1,20 +1,20 @@
-using System.Text.Json.Serialization; 
+ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class ModellingAppServer : ModellingNwObject
     {
-        [JsonProperty("ip"), JsonPropertyName("ip")]
+        [JsonProperty("ip")]
         public string Ip { get; set; } = "";
 
-        [JsonProperty("ip_end"), JsonPropertyName("ip_end")]
+        [JsonProperty("ip_end")]
         public string IpEnd { get; set; } = "";
 
-        [JsonProperty("import_source"), JsonPropertyName("import_source")]
+        [JsonProperty("import_source")]
         public string ImportSource { get; set; } = "";
 
-        [JsonProperty("custom_type"), JsonPropertyName("custom_type")]
+        [JsonProperty("custom_type")]
         public int? CustomType { get; set; }
 
         public bool InUse { get; set; } = true;
@@ -95,7 +95,7 @@ namespace FWO.Api.Data
 
     public class ModellingAppServerWrapper
     {
-        [JsonProperty("owner_network"), JsonPropertyName("owner_network")]
+        [JsonProperty("owner_network")]
         public ModellingAppServer Content { get; set; } = new();
 
         public static ModellingAppServer[] Resolve(List<ModellingAppServerWrapper> wrappedList)

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
@@ -27,43 +27,43 @@ namespace FWO.Api.Data
 
     public class WfTaskBase : WfStatefulObject
     {
-        [JsonProperty("title"), JsonPropertyName("title")]
+        [JsonProperty("title")]
         public string Title { get; set; } = "";
 
-        [JsonProperty("task_number"), JsonPropertyName("task_number")]
+        [JsonProperty("task_number")]
         public int TaskNumber { get; set; }
 
-        [JsonProperty("task_type"), JsonPropertyName("task_type")]
+        [JsonProperty("task_type")]
         public string TaskType { get; set; } = WfTaskType.access.ToString();
 
-        [JsonProperty("rule_action"), JsonPropertyName("rule_action")]
+        [JsonProperty("rule_action")]
         public int? RuleAction { get; set; }
 
-        [JsonProperty("rule_tracking"), JsonPropertyName("rule_tracking")]
+        [JsonProperty("rule_tracking")]
         public int? Tracking { get; set; }
 
-        [JsonProperty("start"), JsonPropertyName("start")]
+        [JsonProperty("start")]
         public DateTime? Start { get; set; }
 
-        [JsonProperty("stop"), JsonPropertyName("stop")]
+        [JsonProperty("stop")]
         public DateTime? Stop { get; set; }
 
-        [JsonProperty("svc_grp_id"), JsonPropertyName("svc_grp_id")]
+        [JsonProperty("svc_grp_id")]
         public int? ServiceGroupId { get; set; }
 
-        [JsonProperty("nw_obj_grp_id"), JsonPropertyName("nw_obj_grp_id")]
+        [JsonProperty("nw_obj_grp_id")]
         public int? NetworkGroupId { get; set; }
 
-        [JsonProperty("user_grp_id"), JsonPropertyName("user_grp_id")]
+        [JsonProperty("user_grp_id")]
         public int? UserGroupId { get; set; }
 
-        [JsonProperty("free_text"), JsonPropertyName("free_text")]
+        [JsonProperty("free_text")]
         public string? FreeText { get; set; }
 
-        [JsonProperty("target_begin_date"), JsonPropertyName("target_begin_date")]
+        [JsonProperty("target_begin_date")]
         public DateTime? TargetBeginDate { get; set; }
 
-        [JsonProperty("target_end_date"), JsonPropertyName("target_end_date")]
+        [JsonProperty("target_end_date")]
         public DateTime? TargetEndDate { get; set; }
 
 

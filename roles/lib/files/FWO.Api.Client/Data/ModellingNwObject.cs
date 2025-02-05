@@ -1,14 +1,14 @@
-using System.Text.Json.Serialization; 
+ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class ModellingNwObject: ModellingObject
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("is_deleted"), JsonPropertyName("is_deleted")]
+        [JsonProperty("is_deleted")]
         public bool IsDeleted { get; set; }
 
 

@@ -7,6 +7,8 @@ using FWO.Api.Data;
 using FWO.Api.Client.Queries;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
 
 namespace FWO.Config.Api
 {
@@ -65,7 +67,7 @@ namespace FWO.Config.Api
 
             // Exclude all properties from update that belong to the user config
             ConfigItem[] relevantChangedItems = changedItems.Where(configItem =>
-                !properties.Any(prop => ((JsonPropertyNameAttribute)prop.GetCustomAttribute(typeof(JsonPropertyNameAttribute))!).Name == configItem.Key)).ToArray();
+                !properties.Any(prop => ((JsonPropertyAttribute)prop.GetCustomAttribute(typeof(JsonPropertyAttribute))!).PropertyName == configItem.Key)).ToArray();
 
             Update(relevantChangedItems);
             InvokeOnChange(this, changedItems);

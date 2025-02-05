@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 using NetTools;
 
@@ -6,10 +6,10 @@ namespace FWO.Api.Data
 {
     public class NwObjectElement
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public long ElemId { get; set; }
 
-        [JsonProperty("ip"), JsonPropertyName("ip")]
+        [JsonProperty("ip")]
         public string IpString
         {
             get { return Cidr.CidrString; }
@@ -17,7 +17,7 @@ namespace FWO.Api.Data
         }
         public Cidr Cidr { get; set; } = new();
 
-        [JsonProperty("ip_end"), JsonPropertyName("ip_end")]
+        [JsonProperty("ip_end")]
         public string IpEndString
         {
             get { return CidrEnd.CidrString; } // ?? Cidr.CidrString; }
@@ -25,10 +25,10 @@ namespace FWO.Api.Data
         }
         public Cidr CidrEnd { get; set; } = new();
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string? Comment { get; set; }
 
         public long TaskId { get; set; }

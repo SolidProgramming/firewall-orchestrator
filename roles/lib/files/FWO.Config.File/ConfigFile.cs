@@ -1,10 +1,6 @@
 ﻿using FWO.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace FWO.Config.File
 {
@@ -34,22 +30,22 @@ namespace FWO.Config.File
             /// <summary>
             /// Uri of the middleware server (http)
             /// </summary>
-            [JsonPropertyName("middleware_native_uri")]
+            [JsonProperty("middleware_native_uri")]
             public string? MiddlewareServerNativeUri { get; set; }
 
             /// <summary>
             /// Uri of the middleware server reverse proxy (https)
             /// </summary>
-            [JsonPropertyName("middleware_uri")]
+            [JsonProperty("middleware_uri")]
             public string? MiddlewareServerUri { get; set; }
 
-            [JsonPropertyName("api_uri")]
+            [JsonProperty("api_uri")]
             public string? ApiServerUri { get; set; }
 
-            [JsonPropertyName("remote_addresses")]
+            [JsonProperty("remote_addresses")]
             public string[]? RemoteAddresses { get; set; }
 
-            [JsonPropertyName("product_version")]
+            [JsonProperty("product_version")]
             public string? ProductVersion { get; set; }
         }
 
@@ -129,7 +125,7 @@ namespace FWO.Config.File
                 string configFile = System.IO.File.ReadAllText(configFilePath).TrimEnd();
 
                 // Deserialize config to dictionary
-                Data = JsonSerializer.Deserialize<ConfigFileData>(configFile) ?? throw new Exception("Config file could not be parsed.");
+                Data = JsonConvert.DeserializeObject<ConfigFileData>(configFile) ?? throw new Exception("Config file could not be parsed.");
 
                 // Errors can be ignored. If a configuration value that could not be loaded is requested from outside this class, an excpetion is thrown. See CriticalConfigValueLoaded()
 

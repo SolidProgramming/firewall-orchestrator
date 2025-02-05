@@ -2,9 +2,10 @@
 using FWO.Api.Client.Queries;
 using FWO.Config.Api.Data;
 using FWO.Logging;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text.Json.Serialization;
+
 
 namespace FWO.Config.Api
 {
@@ -74,9 +75,9 @@ namespace FWO.Config.Api
             foreach (PropertyInfo property in GetType().GetProperties())
             {
                 // Is the property storing a config value (marked by JsonPropertyName Attribute)?
-                if (property.GetCustomAttribute<JsonPropertyNameAttribute>() != null)
+                if (property.GetCustomAttribute<JsonPropertyAttribute>() != null)
                 {
-                    string key = property.GetCustomAttribute<JsonPropertyNameAttribute>()!.Name;
+                    string key = property.GetCustomAttribute<JsonPropertyAttribute>()!.PropertyName;
                     ConfigItem? configItem = configItems.FirstOrDefault(configItem => configItem.Key == key);
 
                     if (configItem != null)
@@ -111,12 +112,12 @@ namespace FWO.Config.Api
                 foreach (PropertyInfo property in GetType().GetProperties())
                 {
                     // Is Property storing config value?
-                    if (property.GetCustomAttribute<JsonPropertyNameAttribute>() != null)
+                    if (property.GetCustomAttribute<JsonPropertyAttribute>() != null)
                     {
                         // Was config value changed?
                         if (!Equals(property.GetValue(this), property.GetValue(editedData)))
                         {
-                            string key = property.GetCustomAttribute<JsonPropertyNameAttribute>()!.Name;
+                            string key = property.GetCustomAttribute<JsonPropertyAttribute>()!.PropertyName;
 
                             try
                             {

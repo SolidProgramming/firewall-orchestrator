@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
@@ -6,28 +6,28 @@ namespace FWO.Api.Data
     public class RecertificationBase
     {
 
-        [JsonProperty("recert_date"), JsonPropertyName("recert_date")]
+        [JsonProperty("recert_date")]
         public DateTime? RecertDate { get; set; }
 
-        [JsonProperty("recertified"), JsonPropertyName("recertified")]
+        [JsonProperty("recertified")]
         public bool Recertified { get; set; } = false;
 
-        [JsonProperty("ip_match"), JsonPropertyName("ip_match")]
+        [JsonProperty("ip_match")]
         public string IpMatch { get; set; } = "";
 
-        [JsonProperty("next_recert_date"), JsonPropertyName("next_recert_date")]
+        [JsonProperty("next_recert_date")]
         public DateTime? NextRecertDate { get; set; }
 
-        [JsonProperty("owner_id"), JsonPropertyName("owner_id")]
+        [JsonProperty("owner_id")]
         public int OwnerId { get; set; }
 
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string Comment { get; set; } = "";
 
-        [JsonProperty("rule_id"), JsonPropertyName("rule_id")]
+        [JsonProperty("rule_id")]
         public int RuleId { get; set; }
 
-        [JsonProperty("rule_metadata_id"), JsonPropertyName("rule_metadata_id")]
+        [JsonProperty("rule_metadata_id")]
         public int RuleMetadataId { get; set; }
     }
 

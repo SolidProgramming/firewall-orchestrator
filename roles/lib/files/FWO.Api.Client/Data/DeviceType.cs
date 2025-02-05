@@ -1,26 +1,26 @@
-using System.Text.Json.Serialization;
+
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class DeviceType
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("version"), JsonPropertyName("version")]
+        [JsonProperty("version")]
         public string Version { get; set; } = "";
 
-        [JsonProperty("manufacturer"), JsonPropertyName("manufacturer")]
+        [JsonProperty("manufacturer")]
         public string Manufacturer { get; set; } = "";
 
-        [JsonProperty("isPureRoutingDevice"), JsonPropertyName("isPureRoutingDevice")]
+        [JsonProperty("isPureRoutingDevice")]
         public bool IsPureRoutingDevice { get; set; }
 
-        [JsonProperty("isManagement"), JsonPropertyName("isManagement")]
+        [JsonProperty("isManagement")]
         public bool IsManagement { get; set; }
 
         private static readonly List<int> LegacyDevTypeList =

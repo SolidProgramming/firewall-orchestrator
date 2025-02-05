@@ -1,17 +1,17 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfImplElement : WfElementBase
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("implementation_task_id"), JsonPropertyName("implementation_task_id")]
+        [JsonProperty("implementation_task_id")]
         public long ImplTaskId { get; set; }
 
-        [JsonProperty("implementation_action"), JsonPropertyName("implementation_action")]
+        [JsonProperty("implementation_action")]
         public string ImplAction { get; set; } = "create";
 
         public Cidr Cidr { get; set; } = new();

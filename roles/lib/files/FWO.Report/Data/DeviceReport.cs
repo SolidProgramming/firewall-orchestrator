@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 using FWO.Basics;
 using FWO.Api.Data;
@@ -7,19 +7,19 @@ namespace FWO.Report
 {
     public class DeviceReport // : Device
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
-        [JsonProperty("rules"), JsonPropertyName("rules")]
+        [JsonProperty("rules")]
         public Rule[]? Rules { get; set; }
 
-        [JsonProperty("changelog_rules"), JsonPropertyName("changelog_rules")]
+        [JsonProperty("changelog_rules")]
         public RuleChange[]? RuleChanges { get; set; }
 
-        [JsonProperty("rules_aggregate"), JsonPropertyName("rules_aggregate")]
+        [JsonProperty("rules_aggregate")]
         public ObjectStatistics RuleStatistics { get; set; } = new ObjectStatistics();
 
 

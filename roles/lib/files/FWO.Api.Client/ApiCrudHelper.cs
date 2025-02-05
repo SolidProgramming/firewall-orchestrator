@@ -1,41 +1,40 @@
-﻿using System.Text.Json.Serialization; 
-using Newtonsoft.Json; 
+﻿using Newtonsoft.Json; 
 
 namespace FWO.Api.Client
 {
     public class ReturnId
     {
-        [JsonProperty("newId"), JsonPropertyName("newId")]
+        [JsonProperty("newId")]
         public int NewId { get; set; }
 
-        [JsonProperty("UpdatedId"), JsonPropertyName("UpdatedId")]
+        [JsonProperty("UpdatedId")]
         public int UpdatedId { get; set; }
 
-        [JsonProperty("DeletedId"), JsonPropertyName("DeletedId")]
+        [JsonProperty("DeletedId")]
         public int DeletedId { get; set; }
 
-        [JsonProperty("affected_rows"), JsonPropertyName("affected_rows")]
+        [JsonProperty("affected_rows")]
         public int AffectedRows { get; set; }
 
-        [JsonProperty("uiuser_password_must_be_changed"), JsonPropertyName("uiuser_password_must_be_changed")]
+        [JsonProperty("uiuser_password_must_be_changed")]
         public bool PasswordMustBeChanged { get; set; }
     }
     
     public class NewReturning
     {
-        [JsonProperty("returning"), JsonPropertyName("returning")]
+        [JsonProperty("returning")]
         public ReturnId[]? ReturnIds { get; set; }
     }
 
     public class AggregateCount
     {
-        [JsonProperty("aggregate"), JsonPropertyName("aggregate")]
+        [JsonProperty("aggregate")]
         public Aggregate Aggregate {get; set;} = new Aggregate();
     }
 
     public class Aggregate
     {
-        [JsonProperty("count"), JsonPropertyName("count")]     
+        [JsonProperty("count")]     
         public int Count { get; set; }
     }
 }

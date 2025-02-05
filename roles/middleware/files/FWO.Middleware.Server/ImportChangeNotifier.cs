@@ -9,7 +9,7 @@ using FWO.Encryption;
 using FWO.Report;
 using FWO.Report.Filter;
 using Newtonsoft.Json;
-using System.Text.Json.Serialization; 
+ 
 using System.Text.RegularExpressions;
 using PuppeteerSharp.Media;
 
@@ -34,24 +34,24 @@ namespace FWO.Middleware.Server
 
 		private struct ImportToNotify
 		{
-			[JsonProperty("control_id"), JsonPropertyName("control_id")]
+			[JsonProperty("control_id")]
 			public long ControlId { get; set; }
 
-			[JsonProperty("mgm_id"), JsonPropertyName("mgm_id")]
+			[JsonProperty("mgm_id")]
 			public int MgmtId { get; set; }
 
-			[JsonProperty("management"), JsonPropertyName("management")]
+			[JsonProperty("management")]
 			public ImportManagement Mgmt { get; set; }
 
-			[JsonProperty("stop_time"), JsonPropertyName("stop_time")]
+			[JsonProperty("stop_time")]
 			public DateTime StopTime { get; set; }
 
-			[JsonProperty("security_relevant_changes_counter"), JsonPropertyName("security_relevant_changes_counter")]
+			[JsonProperty("security_relevant_changes_counter")]
 			public int RelevantChanges { get; set; }
 		};
 		private struct ImportManagement
 		{
-			[JsonProperty("mgm_name"), JsonPropertyName("mgm_name")]
+			[JsonProperty("mgm_name")]
 			public string MgmtName { get; set; }
 		}
 

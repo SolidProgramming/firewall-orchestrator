@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
@@ -14,7 +14,7 @@ namespace FWO.Api.Data
 
     public class WfStatefulObject
     {
-        [JsonProperty("state_id"), JsonPropertyName("state_id")]
+        [JsonProperty("state_id")]
         public int StateId 
         { 
             get { return stateId; } 
@@ -29,13 +29,13 @@ namespace FWO.Api.Data
             } 
         }
 
-        [JsonProperty("current_handler"), JsonPropertyName("current_handler")]
+        [JsonProperty("current_handler")]
         public UiUser? CurrentHandler { get; set; }
 
-        [JsonProperty("recent_handler"), JsonPropertyName("recent_handler")]
+        [JsonProperty("recent_handler")]
         public UiUser? RecentHandler { get; set; }
 
-        [JsonProperty("assigned_group"), JsonPropertyName("assigned_group")]
+        [JsonProperty("assigned_group")]
         public string? AssignedGroup { get; set; }
 
 

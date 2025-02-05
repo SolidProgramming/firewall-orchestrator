@@ -1,32 +1,32 @@
 ﻿using Newtonsoft.Json;
-using System.Text.Json.Serialization;
+
 
 namespace FWO.Api.Data
 {
     public class ImportCredential
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("credential_name"), JsonPropertyName("credential_name")]
+        [JsonProperty("credential_name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("is_key_pair"), JsonPropertyName("is_key_pair")]
+        [JsonProperty("is_key_pair")]
         public Boolean IsKeyPair { get; set; } = false;
 
-        [JsonProperty("user"), JsonPropertyName("user")]
+        [JsonProperty("user")]
         public string? ImportUser { get; set; }
 
-        [JsonProperty("secret"), JsonPropertyName("secret")]
+        [JsonProperty("secret")]
         public string Secret { get; set; } = "";
 
-        [JsonProperty("sshPublicKey"), JsonPropertyName("sshPublicKey")]
+        [JsonProperty("sshPublicKey")]
         public string? PublicKey { get; set; }
 
-        [JsonProperty("cloud_client_id"), JsonPropertyName("cloud_client_id")]
+        [JsonProperty("cloud_client_id")]
         public string? CloudClientId { get; set; }
 
-        [JsonProperty("cloud_client_secret"), JsonPropertyName("cloud_client_secret")]
+        [JsonProperty("cloud_client_secret")]
         public string? CloudClientSecret { get; set; }
 
         public ImportCredential()

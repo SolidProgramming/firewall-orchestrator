@@ -2,7 +2,7 @@ using RestSharp;
 using System.Text.Json;
 using FWO.Basics;
 using FWO.Api.Data;
-using System.Text.Json.Serialization;
+
 using Newtonsoft.Json;
 using FWO.Logging;
 using RestSharp.Serializers.NewtonsoftJson;
@@ -191,38 +191,38 @@ namespace FWO.Rest.Client
 
     public class CpSessionAuthInfo
     {
-        [JsonProperty("sid"), JsonPropertyName("sid")]
+        [JsonProperty("sid")]
         public string SessionId { get; set; } = "";
     }
 
     public class CpApiStatus
     {
-        [JsonProperty("code"), JsonPropertyName("code")]
+        [JsonProperty("code")]
         public int Code { get; set; }
 
-        [JsonProperty("message"), JsonPropertyName("message")]
+        [JsonProperty("message")]
         public string Message { get; set; } = "";
     }
 
     public class CpDomainHelper
     {
-        [JsonProperty("objects"), JsonPropertyName("objects")]
+        [JsonProperty("objects")]
         public List<Domain> DomainList { get; set; } = new List<Domain>();
 
-        [JsonProperty("total"), JsonPropertyName("total")]
+        [JsonProperty("total")]
         public int Total { get; set; }
 
     }
 
     public class Domain
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("uid"), JsonPropertyName("uid")]
+        [JsonProperty("uid")]
         public string Uid { get; set; } = "";
 
-        [JsonProperty("domain-type"), JsonPropertyName("domain-type")]
+        [JsonProperty("domain-type")]
         public string DomainType { get; set; } = "";
 
         // public List<Assignment> Assignments = new List<Assignment>();
@@ -230,25 +230,25 @@ namespace FWO.Rest.Client
 
     public class CpDeviceHelper
     {
-        [JsonProperty("objects"), JsonPropertyName("objects")]
+        [JsonProperty("objects")]
         public List<CpDevice> DeviceList { get; set; } = new List<CpDevice>();
     }
 
     public class CpDevice
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("uid"), JsonPropertyName("uid")]
+        [JsonProperty("uid")]
         public string Uid { get; set; } = "";
 
-        [JsonProperty("type"), JsonPropertyName("type")]
+        [JsonProperty("type")]
         public string CpDevType { get; set; } = "";
 
-        [JsonProperty("domain"), JsonPropertyName("domain")]
+        [JsonProperty("domain")]
         public Domain Domain { get; set; } = new Domain();
 
-        [JsonProperty("policy"), JsonPropertyName("policy")]
+        [JsonProperty("policy")]
         public CpPolicy Policy { get; set; } = new CpPolicy();
 
         public CpPackage Package { get; set; } = new CpPackage();
@@ -260,67 +260,67 @@ namespace FWO.Rest.Client
 
     public class DevObjectsHelper
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
     }
 
     public class CpPolicy
     {
-        [JsonProperty("access-policy-installed"), JsonPropertyName("access-policy-installed")]
+        [JsonProperty("access-policy-installed")]
         public bool AccessPolicyInstalled { get; set; }
 
-        [JsonProperty("access-policy-name"), JsonPropertyName("access-policy-name")]
+        [JsonProperty("access-policy-name")]
         public string AccessPolicyName { get; set; } = "";
     }
 
     public class CpPackage
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("uid"), JsonPropertyName("uid")]
+        [JsonProperty("uid")]
         public string Uid { get; set; } = "";
 
-        [JsonProperty("domain"), JsonPropertyName("domain")]
+        [JsonProperty("domain")]
         public Domain Domain { get; set; } = new Domain();
 
-        [JsonProperty("access-layers"), JsonPropertyName("access-layers")]
+        [JsonProperty("access-layers")]
         public List<CpAccessLayer> CpAccessLayers { get; set; } = new List<CpAccessLayer>();
     }
 
     public class CpAccessLayer
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("uid"), JsonPropertyName("uid")]
+        [JsonProperty("uid")]
         public string Uid { get; set; } = "";
 
-        [JsonProperty("type"), JsonPropertyName("type")]
+        [JsonProperty("type")]
         public string Type { get; set; } = "";
 
-        [JsonProperty("parent-layer"), JsonPropertyName("parent-layer")]
+        [JsonProperty("parent-layer")]
         public string ParentLayer { get; set; } = "";
 
-        [JsonProperty("domain"), JsonPropertyName("domain")]
+        [JsonProperty("domain")]
         public Domain Domain { get; set; } = new Domain();
 
-        [JsonProperty("firewall"), JsonPropertyName("firewall")]
+        [JsonProperty("firewall")]
         public bool IsFirewallEnabled { get; set; }
 
-        [JsonProperty("shared"), JsonPropertyName("shared")]
+        [JsonProperty("shared")]
         public bool IsShared { get; set; }
 
-        [JsonProperty("applications-and-url-filtering"), JsonPropertyName("applications-and-url-filtering")]
+        [JsonProperty("applications-and-url-filtering")]
         public bool IsApplicationsAndUrlFilteringEnabled { get; set; }
 
-        [JsonProperty("content-awareness"), JsonPropertyName("content-awareness")]
+        [JsonProperty("content-awareness")]
         public bool IsContentAwarenessEnabled { get; set; }
 
-        [JsonProperty("mobile-access"), JsonPropertyName("mobile-access")]
+        [JsonProperty("mobile-access")]
         public bool IsMobileAccessEnabled { get; set; }
 
-        [JsonProperty("implicit-cleanup-action"), JsonPropertyName("implicit-cleanup-action")]
+        [JsonProperty("implicit-cleanup-action")]
         public string ImplicitCleanupAction { get; set; } = "drop";
 
         public string LayerType { get; set; } = "";

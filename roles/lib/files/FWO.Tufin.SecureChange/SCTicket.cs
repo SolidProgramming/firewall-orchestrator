@@ -1,5 +1,5 @@
 using FWO.Api.Data;
-using System.Text.Json.Serialization; 
+ 
 using Newtonsoft.Json;
 using System.Net;
 using RestSharp;
@@ -51,13 +51,13 @@ namespace FWO.Tufin.SecureChange
 		// Todo: move to template settings?
 		private class SCPollTicketResponseStatus
 		{
-			[JsonProperty("status"), JsonPropertyName("status")]
+			[JsonProperty("status")]
 			public string Status { get; set; } = "";
 		}
 
 		private class SCPollTicketResponse
 		{
-			[JsonProperty("ticket"), JsonPropertyName("ticket")]
+			[JsonProperty("ticket")]
 			public SCPollTicketResponseStatus Ticket { get; set; } = new();
 		}
 
@@ -71,19 +71,19 @@ namespace FWO.Tufin.SecureChange
 		// 		"name": "Userxyz",
 		private class SCLookupUserResponseUser
 		{
-			[JsonProperty("id"), JsonPropertyName("id")]
+			[JsonProperty("id")]
 			public int Id { get; set; }
 		}
 
 		private class SCLookupUserResponseUsers
 		{
-			[JsonProperty("user"), JsonPropertyName("user")]
+			[JsonProperty("user")]
 			public List<SCLookupUserResponseUser> Users { get; set; } = [];
 		}
 
 		private class SCLookupUsersResponse
 		{
-			[JsonProperty("users"), JsonPropertyName("users")]
+			[JsonProperty("users")]
 			public SCLookupUserResponseUsers User { get; set; } = new();
 		}
 

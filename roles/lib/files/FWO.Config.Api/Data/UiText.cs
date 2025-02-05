@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿
 using Newtonsoft.Json;
 
 namespace FWO.Config.Api.Data
@@ -8,13 +8,13 @@ namespace FWO.Config.Api.Data
     /// </summary>
     public class UiText
     {
-        [JsonProperty("txt"), JsonPropertyName("txt")]
+        [JsonProperty("txt")]
         public string Txt { get; set; } = "";
 
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public string Id { get; set; } = "";
 
-        [JsonProperty("language"), JsonPropertyName("language")]
+        [JsonProperty("language")]
         public string Language { get; set; } = "";
     }
 }

@@ -1,5 +1,5 @@
 using System.Text;
-using System.Text.Json.Serialization;
+
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 
@@ -7,13 +7,13 @@ namespace FWO.Api.Data
 {
     public class ManagementSelect
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
-        [JsonProperty("devices"), JsonPropertyName("devices")]
+        [JsonProperty("devices")]
         public List<DeviceSelect> Devices { get; set; } = [];
 
         public ElementReference? UiReference { get; set; }
@@ -43,10 +43,10 @@ namespace FWO.Api.Data
 
     public class DeviceSelect
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
         public bool Visible { get; set; } = true;
@@ -67,13 +67,13 @@ namespace FWO.Api.Data
 
     public class DeviceFilter
     {
-        [JsonProperty("management"), JsonPropertyName("management")]
+        [JsonProperty("management")]
         public List<ManagementSelect> Managements { get; set; } = [];
 
-        [JsonProperty("visibleManagements"), JsonPropertyName("visibleManagements")]
+        [JsonProperty("visibleManagements")]
         public List<ManagementSelect> VisibleManagements { get; set; } = [];
 
-        [JsonProperty("visibleGateways"), JsonPropertyName("visibleGateways")]
+        [JsonProperty("visibleGateways")]
         public List<DeviceSelect> VisibleGateways { get; set; } = [];
 
         public DeviceFilter()

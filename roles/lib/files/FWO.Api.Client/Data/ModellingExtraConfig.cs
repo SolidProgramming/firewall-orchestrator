@@ -1,17 +1,17 @@
-using System.Text.Json.Serialization; 
+ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class ModellingExtraConfig
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("extraConfigType"), JsonPropertyName("extraConfigType")]
+        [JsonProperty("extraConfigType")]
         public string ExtraConfigType { get; set; } = "";
 
-        [JsonProperty("extraConfigText"), JsonPropertyName("extraConfigText")]
+        [JsonProperty("extraConfigText")]
         public string ExtraConfigText { get; set; } = "";
 
         public ModellingExtraConfig()

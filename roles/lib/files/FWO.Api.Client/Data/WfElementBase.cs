@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
@@ -13,43 +13,43 @@ namespace FWO.Api.Data
 
     public class WfElementBase
     {
-        [JsonProperty("ip"), JsonPropertyName("ip")]
+        [JsonProperty("ip")]
         public string? IpString { get; set; }
 
-        [JsonProperty("ip_end"), JsonPropertyName("ip_end")]
+        [JsonProperty("ip_end")]
         public string? IpEnd { get; set; }
 
-        [JsonProperty("port"), JsonPropertyName("port")]
+        [JsonProperty("port")]
         public int? Port { get; set; }
 
-        [JsonProperty("port_end"), JsonPropertyName("port_end")]
+        [JsonProperty("port_end")]
         public int? PortEnd { get; set; }
 
-        [JsonProperty("ip_proto_id"), JsonPropertyName("ip_proto_id")]
+        [JsonProperty("ip_proto_id")]
         public int? ProtoId { get; set; }
 
-        [JsonProperty("network_object_id"), JsonPropertyName("network_object_id")]
+        [JsonProperty("network_object_id")]
         public long? NetworkId { get; set; }
 
-        [JsonProperty("service_id"), JsonPropertyName("service_id")]
+        [JsonProperty("service_id")]
         public long? ServiceId { get; set; }
 
-        [JsonProperty("field"), JsonPropertyName("field")]
+        [JsonProperty("field")]
         public string Field { get; set; } = ElemFieldType.source.ToString();
 
-        [JsonProperty("user_id"), JsonPropertyName("user_id")]
+        [JsonProperty("user_id")]
         public long? UserId { get; set; }
 
-        [JsonProperty("original_nat_id"), JsonPropertyName("original_nat_id")]
+        [JsonProperty("original_nat_id")]
         public long? OriginalNatId { get; set; }
 
-        [JsonProperty("rule_uid"), JsonPropertyName("rule_uid")]
+        [JsonProperty("rule_uid")]
         public string? RuleUid { get; set; }
 
-        [JsonProperty("group_name"), JsonPropertyName("group_name")]
+        [JsonProperty("group_name")]
         public string? GroupName { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? Name { get; set; }
 
 

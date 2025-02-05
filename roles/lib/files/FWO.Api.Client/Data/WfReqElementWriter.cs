@@ -1,14 +1,14 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfReqElementWriter : WfElementBase
     {
-        [JsonProperty("request_action"), JsonPropertyName("request_action")]
+        [JsonProperty("request_action")]
         public string RequestAction { get; set; } = Data.RequestAction.create.ToString();
 
-        [JsonProperty("device_id"), JsonPropertyName("device_id")]
+        [JsonProperty("device_id")]
         public int? DeviceId { get; set; }
 
         public WfReqElementWriter()

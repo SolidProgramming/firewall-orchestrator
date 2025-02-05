@@ -4,7 +4,7 @@ using FWO.Api.Data;
 using FWO.Config.Api;
 using FWO.Middleware.Client;
 using FWO.Mail;
-using System.Text.Json.Serialization;
+
 using Newtonsoft.Json;
 
 
@@ -12,16 +12,16 @@ namespace FWO.Services
 {
     public class EmailActionParams
     {
-        [JsonProperty("to"), JsonPropertyName("to")]
+        [JsonProperty("to")]
         public EmailRecipientOption RecipientTo { get; set; } = EmailRecipientOption.Requester;
 
-        [JsonProperty("cc"), JsonPropertyName("cc")]
+        [JsonProperty("cc")]
         public EmailRecipientOption? RecipientCC { get; set; }
 
-        [JsonProperty("subject"), JsonPropertyName("subject")]
+        [JsonProperty("subject")]
         public string Subject { get; set; } = "";
 
-        [JsonProperty("body"), JsonPropertyName("body")]
+        [JsonProperty("body")]
         public string Body { get; set; } = "";
     }
 

@@ -1,58 +1,58 @@
 ﻿using Newtonsoft.Json;
-using System.Text.Json.Serialization;
+
 using FWO.Api.Data;
 
 namespace FWO.Report
 {
     public class ManagementReport
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("devices"), JsonPropertyName("devices")]
+        [JsonProperty("devices")]
         public DeviceReport[] Devices { get; set; } = [];
 
-        [JsonProperty("import"), JsonPropertyName("import")]
+        [JsonProperty("import")]
         public Import Import { get; set; } = new ();
 
         public long? RelevantImportId { get; set; }
 
-        [JsonProperty("networkObjects"), JsonPropertyName("networkObjects")]
+        [JsonProperty("networkObjects")]
         public NetworkObject[] Objects { get; set; } = [];
 
-        [JsonProperty("serviceObjects"), JsonPropertyName("serviceObjects")]
+        [JsonProperty("serviceObjects")]
         public NetworkService[] Services { get; set; } = [];
 
-        [JsonProperty("userObjects"), JsonPropertyName("userObjects")]
+        [JsonProperty("userObjects")]
         public NetworkUser[] Users { get; set; } = [];
 
-        [JsonProperty("reportNetworkObjects"), JsonPropertyName("reportNetworkObjects")]
+        [JsonProperty("reportNetworkObjects")]
         public NetworkObject[] ReportObjects { get; set; } = [];
 
-        [JsonProperty("reportServiceObjects"), JsonPropertyName("reportServiceObjects")]
+        [JsonProperty("reportServiceObjects")]
         public NetworkService[] ReportServices { get; set; } = [];
 
-        [JsonProperty("reportUserObjects"), JsonPropertyName("reportUserObjects")]
+        [JsonProperty("reportUserObjects")]
         public NetworkUser[] ReportUsers { get; set; } = [];
 
 
-        //[JsonProperty("rule_id"), JsonPropertyName("rule_id")]
+        //[JsonProperty("rule_id")]
         public List<long> ReportedRuleIds { get; set; } = [];
         public List<long> ReportedNetworkServiceIds { get; set; } = [];
 
-        [JsonProperty("objects_aggregate"), JsonPropertyName("objects_aggregate")]
+        [JsonProperty("objects_aggregate")]
         public ObjectStatistics NetworkObjectStatistics { get; set; } = new ();
 
-        [JsonProperty("services_aggregate"), JsonPropertyName("services_aggregate")]
+        [JsonProperty("services_aggregate")]
         public ObjectStatistics ServiceObjectStatistics { get; set; } = new ();
 
-        [JsonProperty("usrs_aggregate"), JsonPropertyName("usrs_aggregate")]
+        [JsonProperty("usrs_aggregate")]
         public ObjectStatistics UserObjectStatistics { get; set; } = new ();
         
-        [JsonProperty("rules_aggregate"), JsonPropertyName("rules_aggregate")]
+        [JsonProperty("rules_aggregate")]
         public ObjectStatistics RuleStatistics { get; set; } = new ();
 
         public bool Ignore { get; set; }

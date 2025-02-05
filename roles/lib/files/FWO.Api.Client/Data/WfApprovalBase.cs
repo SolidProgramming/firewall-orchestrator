@@ -1,32 +1,32 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfApprovalBase : WfStatefulObject
     {
-        [JsonProperty("date_opened"), JsonPropertyName("date_opened")]
+        [JsonProperty("date_opened")]
         public DateTime DateOpened { get; set; } = DateTime.Now;
 
-        [JsonProperty("approval_date"), JsonPropertyName("approval_date")]
+        [JsonProperty("approval_date")]
         public DateTime? ApprovalDate { get; set; }
 
-        [JsonProperty("approval_deadline"), JsonPropertyName("approval_deadline")]
+        [JsonProperty("approval_deadline")]
         public DateTime? Deadline { get; set; }
 
-        [JsonProperty("approver_group"), JsonPropertyName("approver_group")]
+        [JsonProperty("approver_group")]
         public string? ApproverGroup { get; set; }
 
-//        [JsonProperty("approver"), JsonPropertyName("approver")]
+//        [JsonProperty("approver")]
 //        public UiUser? Approver { get; set; }
 
-        [JsonProperty("approver"), JsonPropertyName("approver")]
+        [JsonProperty("approver")]
         public string? ApproverDn { get; set; } = "";
 
-        [JsonProperty("tenant_id"), JsonPropertyName("tenant_id")]
+        [JsonProperty("tenant_id")]
         public int? TenantId { get; set; }
 
-        [JsonProperty("initial_approval"), JsonPropertyName("initial_approval")]
+        [JsonProperty("initial_approval")]
         public bool InitialApproval { get; set; } = true;
 
 

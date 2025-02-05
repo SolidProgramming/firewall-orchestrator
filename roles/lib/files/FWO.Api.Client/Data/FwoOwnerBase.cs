@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
@@ -11,25 +11,25 @@ namespace FWO.Api.Data
 
     public class FwoOwnerBase
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("dn"), JsonPropertyName("dn")]
+        [JsonProperty("dn")]
         public string Dn { get; set; } = "";
 
-        [JsonProperty("group_dn"), JsonPropertyName("group_dn")]
+        [JsonProperty("group_dn")]
         public string GroupDn { get; set; } = "";
 
-        [JsonProperty("is_default"), JsonPropertyName("is_default")]
+        [JsonProperty("is_default")]
         public bool IsDefault { get; set; } = false;
 
-        [JsonProperty("tenant_id"), JsonPropertyName("tenant_id")]
+        [JsonProperty("tenant_id")]
         public int? TenantId { get; set; }
 
-        [JsonProperty("recert_interval"), JsonPropertyName("recert_interval")]
+        [JsonProperty("recert_interval")]
         public int? RecertInterval { get; set; }
 
-        [JsonProperty("app_id_external"), JsonPropertyName("app_id_external")]
+        [JsonProperty("app_id_external")]
         public string? ExtAppId { get; set; }
 
 

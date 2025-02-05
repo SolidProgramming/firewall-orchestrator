@@ -2,36 +2,36 @@
 using NetTools;
 using Newtonsoft.Json;
 using System.Net;
-using System.Text.Json.Serialization;
+
 
 namespace FWO.Api.Data
 {
     public class ComplianceNetworkZone
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; } = -1;
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("description"), JsonPropertyName("description")]
+        [JsonProperty("description")]
         public string Description { get; set; } = "";
 
-        [JsonProperty("ip_ranges", ItemConverterType = typeof(IpAddressRangeJsonTypeConverter)), JsonPropertyName("ip_ranges")]
+        [JsonProperty("ip_ranges", ItemConverterType = typeof(IpAddressRangeJsonTypeConverter))]
         public IPAddressRange[] IPRanges { get; set; } = [];
 
-        [JsonProperty("super_network_zone"), JsonPropertyName("super_network_zone")]
+        [JsonProperty("super_network_zone")]
         public ComplianceNetworkZone? Superzone { get; set; } = null;
 
-        [JsonProperty("sub_network_zones"), JsonPropertyName("sub_network_zones")]
+        [JsonProperty("sub_network_zones")]
         public ComplianceNetworkZone[] Subzones { get; set; } = [];
 
         [JsonProperty("network_zone_communication_sources", ItemConverterType = typeof(WrapperConverter<ComplianceNetworkZone>),
-            ItemConverterParameters = ["from_network_zone"]), JsonPropertyName("network_zone_communication_sources")]
+            ItemConverterParameters = ["from_network_zone"])]
         public ComplianceNetworkZone[] AllowedCommunicationSources { get; set; } = [];
 
         [JsonProperty("network_zone_communication_destinations", ItemConverterType = typeof(WrapperConverter<ComplianceNetworkZone>),
-            ItemConverterParameters = ["to_network_zone"]), JsonPropertyName("network_zone_communication_destinations")]
+            ItemConverterParameters = ["to_network_zone"])]
         public ComplianceNetworkZone[] AllowedCommunicationDestinations { get; set; } = [];
 
 

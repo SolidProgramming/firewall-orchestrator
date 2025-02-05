@@ -1,17 +1,17 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class WfReqTaskWriter : WfReqTaskBase
     {
-        [JsonProperty("elements"), JsonPropertyName("elements")]
+        [JsonProperty("elements")]
         public WfElementDataHelper Elements { get; set; } = new ();
 
-        [JsonProperty("approvals"), JsonPropertyName("approvals")]
+        [JsonProperty("approvals")]
         public WfApprovalDataHelper Approvals { get; set; } = new ();
 
-        [JsonProperty("reqtask_owners"), JsonPropertyName("reqtask_owners")]
+        [JsonProperty("reqtask_owners")]
         public WfOwnerDataHelper Owners { get; set; } = new ();
 
         public WfReqTaskWriter(WfReqTask reqtask) : base(reqtask)
@@ -33,19 +33,19 @@ namespace FWO.Api.Data
     
     public class WfElementDataHelper
     {
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<WfReqElementWriter> WfElementList { get; set; } = [];
     }
 
     public class WfApprovalDataHelper
     {
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<WfApprovalWriter> WfApprovalList { get; set; } = [];
     }
 
     public class WfOwnerDataHelper
     {
-        [JsonProperty("data"), JsonPropertyName("data")]
+        [JsonProperty("data")]
         public List<WfOwnerWriter> WfOwnerList { get; set; } = [];
     }
 }

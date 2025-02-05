@@ -1,14 +1,14 @@
-using System.Text.Json.Serialization; 
+ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
 {
     public class ModellingObject
     {
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("app_id"), JsonPropertyName("app_id")]
+        [JsonProperty("app_id")]
         public int? AppId { get; set; }
 
         public string TooltipText = "";

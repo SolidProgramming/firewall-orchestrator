@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 
@@ -12,7 +12,7 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// List of all Owners
         /// </summary>
-        [JsonProperty("owners"), JsonPropertyName("owners")]
+        [JsonProperty("owners")]
         public List<ModellingImportAppData>? Owners { get; set; }
     }
 
@@ -24,49 +24,49 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// App Name
         /// </summary>
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
         /// <summary>
         /// External Id of App
         /// </summary>
-        [JsonProperty("app_id_external"), JsonPropertyName("app_id_external")]
+        [JsonProperty("app_id_external")]
         public string ExtAppId { get; set; } = "";
 
         /// <summary>
         /// Main User (Dn)
         /// </summary>
-        [JsonProperty("main_user"), JsonPropertyName("main_user")]
+        [JsonProperty("main_user")]
         public string? MainUser { get; set; } = "";
 
         /// <summary>
         /// List of allowed modellers (Dn)
         /// </summary>
-        [JsonProperty("modellers"), JsonPropertyName("modellers")]
+        [JsonProperty("modellers")]
         public List<string>? Modellers { get; set; } = [];
 
         /// <summary>
         /// List of Ldap Groups of allowed modellers (Dn): (currently handled same as modellers)
         /// </summary>
-        [JsonProperty("modeller_groups"), JsonPropertyName("modeller_groups")]
+        [JsonProperty("modeller_groups")]
         public List<string>? ModellerGroups { get; set; } = [];
 
         /// <summary>
         /// Criticality of App
         /// </summary>
-        [JsonProperty("criticality"), JsonPropertyName("criticality")]
+        [JsonProperty("criticality")]
         public string? Criticality { get; set; }
 
         /// <summary>
         /// Source of App import
         /// </summary>
-        [JsonProperty("import_source"), JsonPropertyName("import_source")]
+        [JsonProperty("import_source")]
         public string ImportSource { get; set; } = "";
 
         /// <summary>
         /// App Servers of App
         /// </summary>
-        [JsonProperty("app_servers"), JsonPropertyName("app_servers")]
+        [JsonProperty("app_servers")]
         public List<ModellingImportAppServer> AppServers { get; set; } = [];
     }
     
@@ -78,25 +78,25 @@ namespace FWO.Middleware.Server
         /// <summary>
         /// App Server Name
         /// </summary>
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
         // /// <summary>
         // /// App Server Subnet
         // /// </summary>
-        // [JsonProperty("subnet"), JsonPropertyName("subnet")]
+        // [JsonProperty("subnet")]
         // public string Subnet { get; set; } = "";
 
         /// <summary>
         /// App Server Ip
         /// </summary>
-        [JsonProperty("ip"), JsonPropertyName("ip")]
+        [JsonProperty("ip")]
         public string Ip { get; set; } = "";
 
         /// <summary>
         /// App Server IpEnd
         /// </summary>
-        [JsonProperty("ip_end"), JsonPropertyName("ip_end")]
+        [JsonProperty("ip_end")]
         public string IpEnd { get; set; } = "";
     }
 }

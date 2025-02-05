@@ -1,77 +1,77 @@
 ﻿using Newtonsoft.Json;
-using System.Text.Json.Serialization;
+
 
 namespace FWO.Api.Data
 {
     public struct ExtMgtData
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public string? ExtId { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string? ExtName { get; set; }
     }
 
     public class Management
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("hostname"), JsonPropertyName("hostname")]
+        [JsonProperty("hostname")]
         public string Hostname { get; set; } = "";
 
-        [JsonProperty("import_credential"), JsonPropertyName("import_credential")]
+        [JsonProperty("import_credential")]
         public ImportCredential ImportCredential { get; set; } = new();
 
-        [JsonProperty("configPath"), JsonPropertyName("configPath")]
+        [JsonProperty("configPath")]
         public string? ConfigPath { get; set; } = "";
 
-        [JsonProperty("domainUid"), JsonPropertyName("domainUid")]
+        [JsonProperty("domainUid")]
         public string? DomainUid { get; set; } = "";
 
-        [JsonProperty("cloudSubscriptionId"), JsonPropertyName("cloudSubscriptionId")]
+        [JsonProperty("cloudSubscriptionId")]
         public string? CloudSubscriptionId { get; set; } = "";
 
-        [JsonProperty("cloudTenantId"), JsonPropertyName("cloudTenantId")]
+        [JsonProperty("cloudTenantId")]
         public string? CloudTenantId { get; set; } = "";
 
-        [JsonProperty("superManager"), JsonPropertyName("superManager")]
+        [JsonProperty("superManager")]
         public int? SuperManagerId { get; set; }
 
-        [JsonProperty("importerHostname"), JsonPropertyName("importerHostname")]
+        [JsonProperty("importerHostname")]
         public string ImporterHostname { get; set; } = "";
 
-        [JsonProperty("port"), JsonPropertyName("port")]
+        [JsonProperty("port")]
         public int Port { get; set; }
 
-        [JsonProperty("importDisabled"), JsonPropertyName("importDisabled")]
+        [JsonProperty("importDisabled")]
         public bool ImportDisabled { get; set; }
 
-        [JsonProperty("forceInitialImport"), JsonPropertyName("forceInitialImport")]
+        [JsonProperty("forceInitialImport")]
         public bool ForceInitialImport { get; set; }
 
-        [JsonProperty("hideInUi"), JsonPropertyName("hideInUi")]
+        [JsonProperty("hideInUi")]
         public bool HideInUi { get; set; }
 
-        [JsonProperty("comment"), JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string? Comment { get; set; }
 
-        [JsonProperty("debugLevel"), JsonPropertyName("debugLevel")]
+        [JsonProperty("debugLevel")]
         public int? DebugLevel { get; set; }
 
-        [JsonProperty("devices"), JsonPropertyName("devices")]
+        [JsonProperty("devices")]
         public Device[] Devices { get; set; } = [];
 
-        [JsonProperty("deviceType"), JsonPropertyName("deviceType")]
+        [JsonProperty("deviceType")]
         public DeviceType DeviceType { get; set; } = new();
 
-        [JsonProperty("import"), JsonPropertyName("import")]
+        [JsonProperty("import")]
         public Import Import { get; set; } = new();
 
-        [JsonProperty("extMgtData"), JsonPropertyName("extMgtData")]
+        [JsonProperty("extMgtData")]
         public string? ExtMgtData { get; set; }
 
         public long? RelevantImportId { get; set; }

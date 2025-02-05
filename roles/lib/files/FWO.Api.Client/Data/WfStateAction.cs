@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization; 
+﻿ 
 using Newtonsoft.Json;
 
 namespace FWO.Api.Data
@@ -33,31 +33,31 @@ namespace FWO.Api.Data
 
     public class WfStateAction
     {
-        [JsonProperty("id"), JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name"), JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; } = "";
 
-        [JsonProperty("action_type"), JsonPropertyName("action_type")]
+        [JsonProperty("action_type")]
         public string ActionType { get; set; } = StateActionTypes.DoNothing.ToString();
 
-        [JsonProperty("scope"), JsonPropertyName("scope")]
+        [JsonProperty("scope")]
         public string Scope { get; set; } = WfObjectScopes.None.ToString();
 
-        [JsonProperty("task_type"), JsonPropertyName("task_type")]
+        [JsonProperty("task_type")]
         public string TaskType { get; set; } = "";
 
-        [JsonProperty("phase"), JsonPropertyName("phase")]
+        [JsonProperty("phase")]
         public string Phase { get; set; } = "";
 
-        [JsonProperty("event"), JsonPropertyName("event")]
+        [JsonProperty("event")]
         public string? Event { get; set; } = StateActionEvents.None.ToString();
 
-        [JsonProperty("button_text"), JsonPropertyName("button_text")]
+        [JsonProperty("button_text")]
         public string? ButtonText { get; set; } = "";
 
-        [JsonProperty("external_parameters"), JsonPropertyName("external_parameters")]
+        [JsonProperty("external_parameters")]
         public string ExternalParams { get; set; } = "";
 
 
@@ -81,7 +81,7 @@ namespace FWO.Api.Data
 
     public class WfStateActionDataHelper
     {
-        [JsonProperty("action"), JsonPropertyName("action")]
+        [JsonProperty("action")]
         public WfStateAction Action { get; set; } = new WfStateAction();
     }
 }
