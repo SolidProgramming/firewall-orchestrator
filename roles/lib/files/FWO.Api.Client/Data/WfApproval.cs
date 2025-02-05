@@ -12,7 +12,11 @@ namespace FWO.Api.Data
         public long TaskId { get; set; }
 
         [JsonProperty("comments")]
+<<<<<<< HEAD
         public List<WfCommentDataHelper> Comments { get; set; } = [];
+=======
+        public List<WfCommentDataHelper> Comments { get; set; } = new ();
+>>>>>>> d2dde87e4ef82f0e6070820bb7b9af252b33b913
 
 
         public WfApproval()
