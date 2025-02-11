@@ -5,6 +5,8 @@ on:
   workflow_dispatch:
 
   push:
+    branches:
+    - workflow-selfhosted
     paths-ignore:
     - 'documentation/**'
     - 'design/**'
