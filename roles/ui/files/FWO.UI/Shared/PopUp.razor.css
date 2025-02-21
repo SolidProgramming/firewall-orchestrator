@@ -47,11 +47,6 @@
     max-height: 30vh;
 }
 
-.modal-dialog-padding {
-    padding: 15px;
-    align-items: normal;
-}
-
 .custom-modal-footer {
     background-color: rgba(255, 255, 255, 1);
     padding: 1em;
