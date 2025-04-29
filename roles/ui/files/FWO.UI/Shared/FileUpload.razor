@@ -61,9 +61,6 @@
     [Parameter]
     public EventCallback<(Exception, string?)> OnAddAppServerError { get; set; }
 
-    [Parameter]
-    public EventCallback OnImportSuccess { get; set; }
-
     @typeparam TImportResult
     [Parameter]
     public EventCallback<(List<string>? success, List<TImportResult>? errors)> OnAfterImportResults { get; set; }
@@ -138,16 +135,9 @@
         }
 
         (List<string>? success, List<CSVFileUploadErrorModel>? errors) = await fileUploadService.ImportUploadedData<CSVFileUploadErrorModel>(FileUploadCase.ImportAppServerFromCSV, InputFileChangeEventArgs.File.Name ?? "noName");
-
-        if(errors is null || errors.Count == 0)
-        {
-            await OnImportSuccess.InvokeAsync();
-        }
-        else
-        {
-            List<TImportResult> importErrors = errors.Cast<TImportResult>().ToList();
-            await OnAfterImportResults.InvokeAsync((success, importErrors));
-        }
+                
+        List<TImportResult> importErrors = errors.Cast<TImportResult>().ToList();
+        await OnAfterImportResults.InvokeAsync((success, importErrors));        
 
         Loading = false;
     }

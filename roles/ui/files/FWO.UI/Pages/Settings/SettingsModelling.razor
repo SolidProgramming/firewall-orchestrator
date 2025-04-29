@@ -1,4 +1,4 @@
-﻿@using System.Text.Json
+@using System.Text.Json
 @using FWO.Ui.Data
 @using FWO.Ui.Pages.NetworkModelling
 
@@ -83,7 +83,7 @@
         <div class="form-group row mt-4" data-toggle="tooltip" title="@(userConfig.PureLine("H9055"))">
             <label class="col-form-label col-sm-4">@userConfig.GetText("import_app_server"):</label>
             <div class="row col-sm-6">
-                <FileUpload SupportedFileFormats=".csv" AuthorizedRoles="@Roles.Admin" OnImportSuccess="OnAppServerImportSuccess" OnAddAppServerError="OnAddAppServerError" TImportResult="CSVFileUploadErrorModel" OnAfterImportResults="OnAfterImportResults"></FileUpload>
+                <FileUpload SupportedFileFormats=".csv" AuthorizedRoles="@Roles.Admin" OnAddAppServerError="OnAddAppServerError" TImportResult="CSVFileUploadErrorModel" OnAfterImportResults="OnAfterImportResults"></FileUpload>
             </div>
         </div>
         <hr />
@@ -393,7 +393,7 @@ else
         @if(CSVImportSuccess is not null && CSVImportSuccess.Count > 0)
         {
             <div class="mt-3">
-                <Collapse StartToggled="true" Style="success" Title="@(userConfig.GetText("success"))">
+                <Collapse StartToggled="false" Style="success" Title="@(userConfig.GetText("success"))">
                     <Table PageSize="0" TableClass="table table-bordered table-sm th-bg-secondary table-responsive overflow-auto sticky-header" TableItem="string" Items="CSVImportSuccess">
                         <Column TableItem="string" Title="@(userConfig.GetText("entrydata"))" Type="typeof(string)" Field="@(_ => new string(_))" Sortable="true" Filterable="true" />
                     </Table>
@@ -411,7 +411,7 @@ else
                     </Table>
                 </Collapse>
             </div>
-        }
+        } 
     </Body>
     <Footer>
         <div class="btn-group">
