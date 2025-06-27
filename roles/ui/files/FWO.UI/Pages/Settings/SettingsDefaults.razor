@@ -181,11 +181,14 @@
         </div>
     </form>
     <hr />
+    <div class="row" title="@(userConfig.GetText("H5705"))">
+        <b><label>@(userConfig.GetText("certStrict")):</label></b>
+    </div>
     <div class="form-group row mb-2" data-toggle="tooltip" title=""> 
         <div class="col-sm-4"></div>
         <div class="col-sm-2">
             <input id="cbxCertAll" type="checkbox" />
-            <label class="ps-1" for="cbxCertAll">@(userConfig.GetText("certAll"))</label>
+            <b><label class="ps-1" for="cbxCertAll">@(userConfig.GetText("certAll"))</label></b>
         </div>
     </div>
     <div class="form-group row" data-toggle="tooltip" title="">

@@ -2475,6 +2475,9 @@ INSERT INTO txt VALUES ('resolveNetworkAreas',  'German',   'Netzbereiche aufl&o
 INSERT INTO txt VALUES ('resolveNetworkAreas',  'English',  'Resolve Network Areas');
 
 -- certificate handling
+INSERT INTO txt VALUES ('certStrict',               'German',   'Strikte Zertifikat Behandlung');
+INSERT INTO txt VALUES ('certStrict',               'English',  'Strict certificate handling');
+
 INSERT INTO txt VALUES ('certAll',                  'German',   'Alle');
 INSERT INTO txt VALUES ('certAll',                  'English',  'All');
 
@@ -5548,6 +5551,11 @@ INSERT INTO txt VALUES ('H5704', 'German',  'In der Tabelle der Suchergebnisse k
 INSERT INTO txt VALUES ('H5704', 'English', 'In the table of search results new texts can be defined per key, existing texts can be marked for deletion by setting the "Delete" flag.
     If only a text is removed, the system text will be overwritten by an empty text! All changes get effective only by pressing the "Save" button.
 ');
+
+-- Helptext certificate handling
+INSERT INTO txt VALUES ('H5705', 'German', 'Einstellungen für strikte Zertifikat &Uuml;berpr&uuml;fung.');
+INSERT INTO txt VALUES ('H5705', 'English', 'Settings for strict certificate verification');
+
 
 INSERT INTO txt VALUES ('H6001', 'German',  'Firewall Orchestrator verf&uuml;gt &uuml;ber zwei APIs:
     <ul>
