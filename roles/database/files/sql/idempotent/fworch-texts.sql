@@ -2474,6 +2474,28 @@ INSERT INTO txt VALUES ('varianceAnalysisStartAt','English','Variance Analysis s
 INSERT INTO txt VALUES ('resolveNetworkAreas',  'German',   'Netzbereiche aufl&ouml;sen');
 INSERT INTO txt VALUES ('resolveNetworkAreas',  'English',  'Resolve Network Areas');
 
+-- certificate handling
+INSERT INTO txt VALUES ('certAll',                  'German',   'Alle');
+INSERT INTO txt VALUES ('certAll',                  'English',  'All');
+
+INSERT INTO txt VALUES ('certGraphQl',              'German',   'GraphQL');
+INSERT INTO txt VALUES ('certGraphQl',              'English',  'GraphQL');
+
+INSERT INTO txt VALUES ('certAutoDiscoveryCP',      'German',   'Autodiscovery CP');
+INSERT INTO txt VALUES ('certAutoDiscoveryCP',      'English',  'Autodiscovery CP');
+
+INSERT INTO txt VALUES ('certAutoDiscovery',        'German',   'Autodiscovery');
+INSERT INTO txt VALUES ('certAutoDiscovery',        'English',  'Autodiscovery');
+
+INSERT INTO txt VALUES ('certEmail',                'German',   'Email');
+INSERT INTO txt VALUES ('certEmail',                'English',  'Email');
+
+INSERT INTO txt VALUES ('certExtRequestHandling',   'German',   'Externe Anfragen');
+INSERT INTO txt VALUES ('certExtRequestHandling',   'English',  'External requests');
+
+INSERT INTO txt VALUES ('certMiddlewareClient',     'German',   'Middleware Client');
+INSERT INTO txt VALUES ('certMiddlewareClient',     'English',  'Middleware Client');
+
 
 -- monitoring
 INSERT INTO txt VALUES ('open_alerts',          'German', 	'Offene Alarme');

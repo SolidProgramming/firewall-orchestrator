@@ -69,7 +69,7 @@
         <div class="form-group row" data-toggle="tooltip" title="">
             <label class="col-form-label col-sm-4">@(userConfig.GetText("useCustomLogo")):</label>
             <div class="col-sm-1">
-                <input id="cbx_customLogo" type="checkbox" @bind="configData!.UseCustomLogo">
+                <input class="w-100" id="cbx_customLogo" type="checkbox" @bind="configData!.UseCustomLogo">
             </div>
             <div class="col-sm-4">
                 <CustomLogoUpload AuthorizedRoles="@Roles.Admin" SupportedFileFormats=".png,.jpg,.jpeg"></CustomLogoUpload>
@@ -180,6 +180,50 @@
             </div>
         </div>
     </form>
+    <hr />
+    <div class="form-group row mb-2" data-toggle="tooltip" title=""> 
+        <div class="col-sm-4"></div>
+        <div class="col-sm-2">
+            <input id="cbxCertAll" type="checkbox" />
+            <label class="ps-1" for="cbxCertAll">@(userConfig.GetText("certAll"))</label>
+        </div>
+    </div>
+    <div class="form-group row" data-toggle="tooltip" title="">
+        <label class="col-form-label col-sm-4">@(userConfig.GetText("certGraphQl")):</label>
+        <div class="col-sm-2">
+            <input type="checkbox" />
+        </div>
+    </div>
+    <div class="form-group row" data-toggle="tooltip" title="">
+        <label class="col-form-label col-sm-4">@(userConfig.GetText("certAutoDiscoveryCP")):</label>
+        <div class="col-sm-2">
+            <input type="checkbox" />
+        </div>
+    </div>
+    <div class="form-group row" data-toggle="tooltip" title="">
+        <label class="col-form-label col-sm-4">@(userConfig.GetText("certAutoDiscovery")):</label>
+        <div class="col-sm-2">
+            <input type="checkbox" />
+        </div>
+    </div>
+     <div class="form-group row" data-toggle="tooltip" title="">
+        <label class="col-form-label col-sm-4">@(userConfig.GetText("certEmail")):</label>
+        <div class="col-sm-2">
+            <input type="checkbox" />
+        </div>
+    </div>
+     <div class="form-group row" data-toggle="tooltip" title="">
+        <label class="col-form-label col-sm-4">@(userConfig.GetText("certExtRequestHandling")):</label>
+        <div class="col-sm-2">
+            <input type="checkbox" />
+        </div>
+    </div>
+    <div class="form-group row" data-toggle="tooltip" title="">
+        <label class="col-form-label col-sm-4">@(userConfig.GetText("certMiddlewareClient")):</label>
+        <div class="col-sm-2">
+            <input type="checkbox" />
+        </div>
+    </div>
     <hr />
     <AuthorizeView Roles="@Roles.Admin">
         <Authorized>
