@@ -5,6 +5,7 @@
 @using FWO.Services.EventMediator.Events
 @using FWO.Services.EventMediator.Interfaces
 @using FWO.Ui.Data
+
 @inject ApiConnection apiConnection
 @inject GlobalConfig globalConfig
 @inject UserConfig userConfig
@@ -184,47 +185,47 @@
     <div class="row" title="@(userConfig.GetText("H5705"))">
         <b><label>@(userConfig.GetText("certStrict")):</label></b>
     </div>
-    <div class="form-group row mb-2" data-toggle="tooltip" title=""> 
+    <div class="form-group row mb-2" data-toggle="tooltip" title="">
         <div class="col-sm-4"></div>
         <div class="col-sm-2">
-            <input id="cbxCertAll" type="checkbox" @bind-value="@configData.StrictCertHandlingAll" />
+            <input id="cbxCertAll" type="checkbox" @bind="@configData.StrictCertHandlingAll" @oninput="@ToggleStrictCertHandlingAll" />
             <b><label class="ps-1" for="cbxCertAll">@(userConfig.GetText("certAll"))</label></b>
         </div>
     </div>
     <div class="form-group row" data-toggle="tooltip" title="">
         <label class="col-form-label col-sm-4">@(userConfig.GetText("certGraphQl")):</label>
         <div class="col-sm-2">
-            <input type="checkbox" />
+            <input type="checkbox" @bind="@configData.StrictCertHandlingGraphQl" @oninput="@(e => ToggleStrictCertHandling(nameof(configData.StrictCertHandlingGraphQl), e))" />
         </div>
     </div>
     <div class="form-group row" data-toggle="tooltip" title="">
         <label class="col-form-label col-sm-4">@(userConfig.GetText("certAutoDiscoveryCP")):</label>
         <div class="col-sm-2">
-            <input type="checkbox" />
+            <input type="checkbox" @bind="@configData.StrictCertHandlingAutodiscoveryCP" @oninput="@(e => ToggleStrictCertHandling(nameof(configData.StrictCertHandlingAutodiscoveryCP), e))" />
         </div>
     </div>
     <div class="form-group row" data-toggle="tooltip" title="">
         <label class="col-form-label col-sm-4">@(userConfig.GetText("certAutoDiscovery")):</label>
         <div class="col-sm-2">
-            <input type="checkbox" />
+            <input type="checkbox" @bind="@configData.StrictCertHandlingAutodiscovery" @oninput="@(e => ToggleStrictCertHandling(nameof(configData.StrictCertHandlingAutodiscovery), e))" />
         </div>
     </div>
-     <div class="form-group row" data-toggle="tooltip" title="">
+    <div class="form-group row" data-toggle="tooltip" title="">
         <label class="col-form-label col-sm-4">@(userConfig.GetText("certEmail")):</label>
         <div class="col-sm-2">
-            <input type="checkbox" />
+            <input type="checkbox" @bind="@configData.StrictCertHandlingEmail" @oninput="@(e => ToggleStrictCertHandling(nameof(configData.StrictCertHandlingEmail), e))" />
         </div>
     </div>
-     <div class="form-group row" data-toggle="tooltip" title="">
+    <div class="form-group row" data-toggle="tooltip" title="">
         <label class="col-form-label col-sm-4">@(userConfig.GetText("certExtRequestHandling")):</label>
         <div class="col-sm-2">
-            <input type="checkbox" />
+            <input type="checkbox" @bind="@configData.StrictCertHandlingExternalRequest" @oninput="@(e => ToggleStrictCertHandling(nameof(configData.StrictCertHandlingExternalRequest), e))" />
         </div>
     </div>
     <div class="form-group row" data-toggle="tooltip" title="">
         <label class="col-form-label col-sm-4">@(userConfig.GetText("certMiddlewareClient")):</label>
         <div class="col-sm-2">
-            <input type="checkbox" />
+            <input type="checkbox" @bind="@configData.StrictCertHandlingMiddlewareClient" @oninput="@(e => ToggleStrictCertHandling(nameof(configData.StrictCertHandlingMiddlewareClient), e))" />
         </div>
     </div>
     <hr />
@@ -258,6 +259,8 @@ else
     private Language selectedLanguage = new Language();
     private DateTime autoDiscStartDate = DateTime.Today;
     private DateTime autoDiscStartTime = DateTime.Now.AddSeconds(-DateTime.Now.Second);
+
+    private bool StrictCertToggled { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -306,7 +309,7 @@ else
             return;
         }
 
-        if (!e.Success && e.Error is not null )
+        if(!e.Success && e.Error is not null)
         {
             DisplayMessageInUi(e.Error.InternalException, userConfig.GetText("change_default"), e.Error.Message ?? "", true);
             return;
@@ -316,6 +319,66 @@ else
         if(e.Success && e.Data is string && configData is not null)
         {
             configData.CustomLogoData = e.Data;
+        }
+    }
+
+    private void ToggleStrictCertHandlingAll()
+    {
+        if(configData is null)
+        {
+            return;
+        }
+
+        //Toggle value
+        configData.StrictCertHandlingAll = !configData.StrictCertHandlingAll;
+
+        configData.StrictCertHandlingGraphQl = configData.StrictCertHandlingAll;
+        configData.StrictCertHandlingAutodiscoveryCP = configData.StrictCertHandlingAll;
+        configData.StrictCertHandlingAutodiscovery = configData.StrictCertHandlingAll;
+        configData.StrictCertHandlingEmail = configData.StrictCertHandlingAll;
+        configData.StrictCertHandlingExternalRequest = configData.StrictCertHandlingAll;
+        configData.StrictCertHandlingMiddlewareClient = configData.StrictCertHandlingAll;
+    }
+
+    private void ToggleStrictCertHandling(string checkboxName, ChangeEventArgs e)
+    {
+        if(configData is null || e.Value is null)
+        {
+            return;
+        }
+
+        switch(checkboxName)
+        {
+            case nameof(configData.StrictCertHandlingGraphQl):
+                configData.StrictCertHandlingGraphQl = (bool)e.Value;
+                break;
+            case nameof(configData.StrictCertHandlingAutodiscoveryCP):
+                configData.StrictCertHandlingAutodiscoveryCP = (bool)e.Value;
+                break;
+            case nameof(configData.StrictCertHandlingAutodiscovery):
+                configData.StrictCertHandlingAutodiscovery = (bool)e.Value;
+                break;
+            case nameof(configData.StrictCertHandlingEmail):
+                configData.StrictCertHandlingEmail = (bool)e.Value;
+                break;
+            case nameof(configData.StrictCertHandlingExternalRequest):
+                configData.StrictCertHandlingExternalRequest = (bool)e.Value;
+                break;
+            case nameof(configData.StrictCertHandlingMiddlewareClient):
+                configData.StrictCertHandlingMiddlewareClient = (bool)e.Value;
+                break;
+            default:
+                break;
+        }
+
+        if(configData.StrictCertHandlingGraphQl == true && configData.StrictCertHandlingAutodiscoveryCP == true && configData.StrictCertHandlingAutodiscovery == true &&
+            configData.StrictCertHandlingEmail == true && configData.StrictCertHandlingExternalRequest == true && configData.StrictCertHandlingMiddlewareClient == true)
+        {
+            configData.StrictCertHandlingAll = true;
+        }
+        else
+        {
+            configData.StrictCertHandlingAll = false;
         }
     }
 
