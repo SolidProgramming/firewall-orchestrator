@@ -347,6 +347,8 @@ else
             return;
         }
 
+        //This switch statement preemptively updates the specific property in configData based on the checkbox name
+        //due to the checkbox state updated after the event happenes so the check would not work properly
         switch(checkboxName)
         {
             case nameof(configData.StrictCertHandlingGraphQl):
@@ -371,8 +373,8 @@ else
                 break;
         }
 
-        if(configData.StrictCertHandlingGraphQl == true && configData.StrictCertHandlingAutodiscoveryCP == true && configData.StrictCertHandlingAutodiscovery == true &&
-            configData.StrictCertHandlingEmail == true && configData.StrictCertHandlingExternalRequest == true && configData.StrictCertHandlingMiddlewareClient == true)
+        if(configData.StrictCertHandlingGraphQl && configData.StrictCertHandlingAutodiscoveryCP && configData.StrictCertHandlingAutodiscovery &&
+            configData.StrictCertHandlingEmail && configData.StrictCertHandlingExternalRequest && configData.StrictCertHandlingMiddlewareClient)
         {
             configData.StrictCertHandlingAll = true;
         }
