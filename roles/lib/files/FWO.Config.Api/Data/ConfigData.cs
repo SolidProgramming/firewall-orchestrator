@@ -378,6 +378,27 @@ namespace FWO.Config.Api.Data
 		[JsonProperty("resolveNetworkAreas"), JsonPropertyName("resolveNetworkAreas")]
 		public bool ResolveNetworkAreas { get; set; } = false;
 
+        [JsonProperty("strictCertHandlingAll"), JsonPropertyName("strictCertHandlingAll")]
+        public bool StrictCertHandlingAll { get; set; } = false;
+
+        [JsonProperty("strictCertHandlingGraphQl"), JsonPropertyName("strictCertHandlingGraphQl")]
+        public bool StrictCertHandlingGraphQl { get; set; } = false;
+
+        [JsonProperty("strictCertHandlingAutodiscoveryCP"), JsonPropertyName("strictCertHandlingAutodiscoveryCP")]
+        public bool StrictCertHandlingAutodiscoveryCP { get; set; } = false;
+
+        [JsonProperty("strictCertHandlingAutodiscovery"), JsonPropertyName("strictCertHandlingAutodiscovery")]
+        public bool StrictCertHandlingAutodiscovery { get; set; } = false;
+
+        [JsonProperty("strictCertHandlingEmail"), JsonPropertyName("strictCertHandlingEmail")]
+        public bool StrictCertHandlingEmail { get; set; } = false;
+
+        [JsonProperty("strictCertHandlingExternalRequest"), JsonPropertyName("strictCertHandlingExternalRequest")]
+        public bool StrictCertHandlingExternalRequest { get; set; } = false;
+
+        [JsonProperty("strictCertHandlingMiddlewareClient"), JsonPropertyName("strictCertHandlingMiddlewareClient")]
+        public bool StrictCertHandlingMiddlewareClient { get; set; } = false;
+
         public ConfigData(bool editable = false)
 		{
 			Editable = editable;

@@ -187,7 +187,7 @@
     <div class="form-group row mb-2" data-toggle="tooltip" title=""> 
         <div class="col-sm-4"></div>
         <div class="col-sm-2">
-            <input id="cbxCertAll" type="checkbox" />
+            <input id="cbxCertAll" type="checkbox" @bind-value="@configData.StrictCertHandlingAll" />
             <b><label class="ps-1" for="cbxCertAll">@(userConfig.GetText("certAll"))</label></b>
         </div>
     </div>
