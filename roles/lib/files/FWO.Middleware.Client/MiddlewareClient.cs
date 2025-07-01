@@ -5,20 +5,17 @@ using FWO.Data.Middleware;
 using RestSharp;
 
 namespace FWO.Middleware.Client
-{
+{    
     public class MiddlewareClient : RestApiClient, IDisposable
     {
         private bool disposed = false;
-        private readonly ConfigData? GlobalConfig;
         private static bool CheckCertificates;
 
-        public MiddlewareClient(string middlewareServerUri) : base(middlewareServerUri + "api/")
+        public MiddlewareClient(string middlewareUri) : base(middlewareUri + "api/", checkCertificates: CheckCertificates)
         { }
 
-        public MiddlewareClient(string middlewareServerUri, GlobalConfig globalConfig) : base(middlewareServerUri + "api/", checkCertificates: CheckCertificates)
+        public MiddlewareClient(GlobalConfig? GlobalConfig, string middlewareUri) : base(middlewareUri + "api/", checkCertificates: CheckCertificates)
         {
-            GlobalConfig = globalConfig;
-
             if(GlobalConfig is not null)
             {
                 CheckCertificates = GlobalConfig.StrictCertHandlingMiddlewareClient;
@@ -262,6 +259,8 @@ namespace FWO.Middleware.Client
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        
 
         ~ MiddlewareClient()
         {

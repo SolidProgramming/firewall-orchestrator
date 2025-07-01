@@ -4,13 +4,14 @@ using FWO.Config.Api;
 using FWO.Config.File;
 using FWO.Logging;
 using FWO.Middleware.Client;
+using FWO.Services.EventMediator;
+using FWO.Services.EventMediator.Interfaces;
 using FWO.Ui.Auth;
 using FWO.Ui.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
+using Microsoft.Extensions.DependencyInjection;
 using RestSharp;
-using FWO.Services.EventMediator.Interfaces;
-using FWO.Services.EventMediator;
 
 
 // Implicitly call static constructor so background lock process is started
@@ -51,26 +52,30 @@ string ApiUri = ConfigFile.ApiServerUri;
 string MiddlewareUri = ConfigFile.MiddlewareServerUri;
 string ProductVersion = ConfigFile.ProductVersion;
 
-builder.Services.AddScoped<ApiConnection>(_ => new GraphQlApiConnection(ApiUri));
-builder.Services.AddScoped<MiddlewareClient>(serviceProvider => new MiddlewareClient(MiddlewareUri, serviceProvider.GetRequiredService<GlobalConfig>()));
+builder.Services.AddScoped<ApiConnection>(sp =>
+    new GraphQlApiConnection(ApiUri) //sp.GetRequiredService<GlobalConfig>(),
+    );
+builder.Services.AddScoped(sp =>
+    new MiddlewareClient(sp.GetRequiredService<GlobalConfig>(), MiddlewareUri)
+);
 
 // Create "anonymous" (empty) jwt
-MiddlewareClient middlewareClient = new MiddlewareClient(MiddlewareUri);
+MiddlewareClient middlewareClient = new(MiddlewareUri);
 ApiConnection apiConn = new GraphQlApiConnection(ApiUri);
 
 RestResponse<string> createJWTResponse = middlewareClient.CreateInitialJWT().Result;
 bool connectionEstablished = createJWTResponse.IsSuccessful;
 int connectionAttemptsCount = 1;
-while (!connectionEstablished)
+while(!connectionEstablished)
 {
-	Log.WriteError("Middleware Server Connection",
-	$"Error while authenticating as anonymous user from UI (Attempt {connectionAttemptsCount}), "
-	+ $"Uri: {createJWTResponse.ResponseUri?.AbsoluteUri}, "
-	+ $"HttpStatus: {createJWTResponse.StatusDescription}, "
-	+ $"Error: {createJWTResponse.ErrorMessage}");
-	Thread.Sleep(500 * connectionAttemptsCount++);
-	createJWTResponse = middlewareClient.CreateInitialJWT().Result;
-	connectionEstablished = createJWTResponse.IsSuccessful;
+    Log.WriteError("Middleware Server Connection",
+    $"Error while authenticating as anonymous user from UI (Attempt {connectionAttemptsCount}), "
+    + $"Uri: {createJWTResponse.ResponseUri?.AbsoluteUri}, "
+    + $"HttpStatus: {createJWTResponse.StatusDescription}, "
+    + $"Error: {createJWTResponse.ErrorMessage}");
+    Thread.Sleep(500 * connectionAttemptsCount++);
+    createJWTResponse = middlewareClient.CreateInitialJWT().Result;
+    connectionEstablished = createJWTResponse.IsSuccessful;
 }
 
 string jwt = createJWTResponse.Data ?? throw new NullReferenceException("Received empty jwt.");
@@ -97,15 +102,15 @@ var app = builder.Build();
 
 Log.WriteInfo("Environment", $"{app.Environment.ApplicationName} runs in {app.Environment.EnvironmentName} Mode.");
 
-if (app.Environment.IsDevelopment())
+if(app.Environment.IsDevelopment())
 {
-	app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	// app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // app.UseHsts();
 }
 
 // app.UseHttpsRedirection();

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
@@ -46,6 +46,11 @@ namespace FWO.Api.Client
             Initialize(ApiServerUri);
             SetAuthHeader(jwt);
         }
+
+        //public GraphQlApiConnection(GlobalConfig? GlobalConfig, string ApiServerUri)
+        //{
+        //    Initialize(ApiServerUri);
+        //}
 
         public GraphQlApiConnection(string ApiServerUri)
         {
