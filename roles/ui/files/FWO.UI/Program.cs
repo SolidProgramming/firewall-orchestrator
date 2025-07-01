@@ -52,7 +52,7 @@ string MiddlewareUri = ConfigFile.MiddlewareServerUri;
 string ProductVersion = ConfigFile.ProductVersion;
 
 builder.Services.AddScoped<ApiConnection>(_ => new GraphQlApiConnection(ApiUri));
-builder.Services.AddScoped<MiddlewareClient>(_ => new MiddlewareClient(MiddlewareUri));
+builder.Services.AddScoped<MiddlewareClient>(serviceProvider => new MiddlewareClient(MiddlewareUri, serviceProvider.GetRequiredService<GlobalConfig>()));
 
 // Create "anonymous" (empty) jwt
 MiddlewareClient middlewareClient = new MiddlewareClient(MiddlewareUri);

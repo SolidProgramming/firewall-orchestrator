@@ -1,4 +1,6 @@
-﻿using FWO.Api.Client;
+using FWO.Api.Client;
+using FWO.Config.Api;
+using FWO.Config.Api.Data;
 using FWO.Data.Middleware;
 using RestSharp;
 
@@ -7,9 +9,21 @@ namespace FWO.Middleware.Client
     public class MiddlewareClient : RestApiClient, IDisposable
     {
         private bool disposed = false;
+        private readonly ConfigData? GlobalConfig;
+        private static bool CheckCertificates;
 
         public MiddlewareClient(string middlewareServerUri) : base(middlewareServerUri + "api/")
         { }
+
+        public MiddlewareClient(string middlewareServerUri, GlobalConfig globalConfig) : base(middlewareServerUri + "api/", checkCertificates: CheckCertificates)
+        {
+            GlobalConfig = globalConfig;
+
+            if(GlobalConfig is not null)
+            {
+                CheckCertificates = GlobalConfig.StrictCertHandlingMiddlewareClient;
+            }
+        }
 
         public async Task<RestResponse<string>> AuthenticateUser(AuthenticationTokenGetParameters parameters)
         {
