@@ -4,13 +4,14 @@ using FWO.Config.Api;
 using FWO.Config.File;
 using FWO.Logging;
 using FWO.Middleware.Client;
+using FWO.Services.EventMediator;
+using FWO.Services.EventMediator.Interfaces;
 using FWO.Ui.Auth;
 using FWO.Ui.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using RestSharp;
-using FWO.Services.EventMediator.Interfaces;
-using FWO.Services.EventMediator;
+using WebVella.BlazorTrace;
 
 
 // Implicitly call static constructor so background lock process is started
@@ -41,6 +42,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddBlazorTrace();
 
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<CircuitHandler, CircuitHandlerService>();
