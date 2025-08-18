@@ -48,15 +48,15 @@ namespace FWO.Ui.Services
 
         public static void RemoveJwtTimers(string userDn)
         {
-            if (jwtAboutToExpireTimers.TryGetValue(userDn, out Timer? aboutToExpire))
+            // Dispose timers
+            if (jwtAboutToExpireTimers.ContainsKey(userDn))
             {
-                aboutToExpire.Dispose();
+                jwtAboutToExpireTimers[userDn].Dispose();
                 jwtAboutToExpireTimers.Remove(userDn);
             }
-
-            if (jwtExpiredTimers.TryGetValue(userDn, out Timer? expired))
+            if (jwtExpiredTimers.ContainsKey(userDn))
             {
-                expired.Dispose();
+                jwtExpiredTimers[userDn].Dispose();
                 jwtExpiredTimers.Remove(userDn);
             }
         }

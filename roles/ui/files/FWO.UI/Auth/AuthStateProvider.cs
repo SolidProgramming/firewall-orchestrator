@@ -1,4 +1,4 @@
-﻿using FWO.Api.Client;
+using FWO.Api.Client;
 using FWO.Api.Client.Queries;
 using FWO.Basics;
 using FWO.Config.Api;
@@ -62,7 +62,7 @@ namespace FWO.Ui.Auth
 				{
 					throw new AuthenticationException("not_authorized");
 				}
-				
+
 				// Save jwt in session storage.
 				await sessionStorage.SetAsync("jwt", jwtString);
 
@@ -107,9 +107,11 @@ namespace FWO.Ui.Auth
 
 		public void Deauthenticate()
 		{
-			user = new ClaimsPrincipal(new ClaimsIdentity());
+            string userDn = user.FindFirstValue("x-hasura-uuid") ?? "";
+            JwtEventService.RemoveJwtTimers(userDn);
+            user = new ClaimsPrincipal(new ClaimsIdentity());
 			NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
-		}
+        }
 
 		public void ConfirmPasswordChanged()
 		{
@@ -209,7 +211,7 @@ namespace FWO.Ui.Auth
 			JwtReader jwtReader = new(jwtString);
 			if (await jwtReader.Validate())
 			{
-				ClaimsIdentity identity = new				
+				ClaimsIdentity identity = new
 				(
 					claims: jwtReader.GetClaims(),
 					authenticationType: "ldap",
