@@ -1,4 +1,4 @@
-﻿using FWO.Basics;
+using FWO.Basics;
 using FWO.Logging;
 using FWO.Api.Client;
 using FWO.Api.Client.Queries;
@@ -12,18 +12,23 @@ namespace FWO.Middleware.Server
     /// <summary>
     /// Class handling the Area IP Data Import
     /// </summary>
-    public class AreaIpDataImport(ApiConnection apiConnection, GlobalConfig globalConfig) : DataImportBase(apiConnection, globalConfig)
+    public class AreaIpDataImport(ApiConnection apiConnection) : DataImportBase(apiConnection, globalConfig)
     {
         private List<ModellingNetworkArea> existingAreas = [];
         private const string LogMessageTitle = "Import Area IP Data";
         private const string LevelFile = "Import File";
         private const string LevelArea = "Area";
 
+        private static GlobalConfig globalConfig { get; set; }
+
+
         /// <summary>
         /// Run the Area IP Data Import
         /// </summary>
         public async Task<List<string>> Run()
         {
+            globalConfig = await GlobalConfig.ConstructAsync(apiConnection, true);
+
             List<string> importfilePathAndNames = JsonSerializer.Deserialize<List<string>>(globalConfig.ImportSubnetDataPath) ?? throw new JsonException("Config Data could not be deserialized.");
             List<ModellingImportNwData> AllNwData = [];
             List<string> FailedImports = [];

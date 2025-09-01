@@ -1,4 +1,4 @@
-﻿using FWO.Api.Client;
+using FWO.Api.Client;
 using FWO.Api.Client.Queries;
 using FWO.Basics;
 using FWO.Basics.Exceptions;
@@ -24,7 +24,7 @@ namespace FWO.Middleware.Server
             GlobalConfig globalConfig = await GlobalConfig.ConstructAsync(apiConnection, true);
             return new ImportIpDataScheduler(apiConnection, globalConfig);
         }
-    
+
         private ImportIpDataScheduler(ApiConnection apiConnection, GlobalConfig globalConfig)
             : base(apiConnection, globalConfig, ConfigQueries.subscribeImportIpDataConfigChanges, SchedulerInterval.Hours, "ImportAreaIPData")
         {}
@@ -47,19 +47,19 @@ namespace FWO.Middleware.Server
         /// </summary>
         protected override async void Process(object? _, ElapsedEventArgs __)
         {
-            try
-            {
-                AreaIpDataImport import = new (apiConnection, globalConfig);
-                List<string> FailedImports = await import.Run();
-                if (FailedImports.Count > 0)
-                {
-                    throw new ProcessingFailedException($"{LogMessageTitle} failed for {string.Join(", ", FailedImports)}.");
-                }
-            }
-            catch (Exception exc)
-            {
-                await LogErrorsWithAlert(2, LogMessageTitle, GlobalConst.kImportAreaSubnetData, AlertCode.ImportAreaSubnetData, exc);
-            }
+        //    try
+        //    {
+        //        AreaIpDataImport import = new (apiConnection, globalConfig);
+        //        List<string> FailedImports = await import.Run();
+        //        if (FailedImports.Count > 0)
+        //        {
+        //            throw new ProcessingFailedException($"{LogMessageTitle} failed for {string.Join(", ", FailedImports)}.");
+        //        }
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        await LogErrorsWithAlert(2, LogMessageTitle, GlobalConst.kImportAreaSubnetData, AlertCode.ImportAreaSubnetData, exc);
+        //    }
         }
     }
 }
