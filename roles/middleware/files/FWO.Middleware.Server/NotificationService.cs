@@ -286,47 +286,44 @@ namespace FWO.Middleware.Server
         private static object ParseVariables(FwoNotification notification, ApiAction action)
         {
 
-            switch(action)
+            return action switch
             {
-                case ApiAction.Add:
-                    return new
-                    {
-                        client = notification.NotificationClient.ToString(),
-                        channel = notification.Channel.ToString(),
-                        recipientTo = notification.RecipientTo.ToString(),
-                        emailAddressTo = notification.EmailAddressTo,
-                        recipientCc = notification.RecipientCc.ToString(),
-                        emailAddressCc = notification.EmailAddressCc,
-                        subject = notification.EmailSubject,
-                        layout = notification.Layout.ToString(),
-                        deadline = notification.Deadline.ToString(),
-                        intervalBeforeDeadline = (int)notification.IntervalBeforeDeadline,
-                        offsetBeforeDeadline = notification.OffsetBeforeDeadline,
-                        intervalAfterDeadline = (int)notification.RepeatIntervalAfterDeadline,
-                        offsetAfterDeadline = notification.RepeatOffsetAfterDeadline,
-                        repetitionsAfterDeadline = notification.RepetitionsAfterDeadline,
-                    };
-                case ApiAction.Edit:
-                    return new
-                    {
-                        id = notification.Id,
-                        channel = notification.Channel.ToString(),
-                        recipientTo = notification.RecipientTo.ToString(),
-                        emailAddressTo = notification.EmailAddressTo,
-                        recipientCc = notification.RecipientCc.ToString(),
-                        emailAddressCc = notification.EmailAddressCc,
-                        subject = notification.EmailSubject,
-                        layout = notification.Layout.ToString(),
-                        deadline = notification.Deadline.ToString(),
-                        intervalBeforeDeadline = (int)notification.IntervalBeforeDeadline,
-                        offsetBeforeDeadline = notification.OffsetBeforeDeadline,
-                        intervalAfterDeadline = (int)notification.RepeatIntervalAfterDeadline,
-                        offsetAfterDeadline = notification.RepeatOffsetAfterDeadline,
-                        repetitionsAfterDeadline = notification.RepetitionsAfterDeadline
-                    };
-                default:
-                    throw new NotImplementedException($"{nameof(ApiAction)} {action} not implemented");
-            }
+                ApiAction.Add => new
+                {
+                    client = notification.NotificationClient.ToString(),
+                    channel = notification.Channel.ToString(),
+                    recipientTo = notification.RecipientTo.ToString(),
+                    emailAddressTo = notification.EmailAddressTo,
+                    recipientCc = notification.RecipientCc.ToString(),
+                    emailAddressCc = notification.EmailAddressCc,
+                    subject = notification.EmailSubject,
+                    layout = notification.Layout.ToString(),
+                    deadline = notification.Deadline.ToString(),
+                    intervalBeforeDeadline = (int)notification.IntervalBeforeDeadline,
+                    offsetBeforeDeadline = notification.OffsetBeforeDeadline,
+                    intervalAfterDeadline = (int)notification.RepeatIntervalAfterDeadline,
+                    offsetAfterDeadline = notification.RepeatOffsetAfterDeadline,
+                    repetitionsAfterDeadline = notification.RepetitionsAfterDeadline,
+                },
+                ApiAction.Edit => new
+                {
+                    id = notification.Id,
+                    channel = notification.Channel.ToString(),
+                    recipientTo = notification.RecipientTo.ToString(),
+                    emailAddressTo = notification.EmailAddressTo,
+                    recipientCc = notification.RecipientCc.ToString(),
+                    emailAddressCc = notification.EmailAddressCc,
+                    subject = notification.EmailSubject,
+                    layout = notification.Layout.ToString(),
+                    deadline = notification.Deadline.ToString(),
+                    intervalBeforeDeadline = (int)notification.IntervalBeforeDeadline,
+                    offsetBeforeDeadline = notification.OffsetBeforeDeadline,
+                    intervalAfterDeadline = (int)notification.RepeatIntervalAfterDeadline,
+                    offsetAfterDeadline = notification.RepeatOffsetAfterDeadline,
+                    repetitionsAfterDeadline = notification.RepetitionsAfterDeadline
+                },
+                _ => throw new NotImplementedException($"{nameof(ApiAction)} {action} not implemented"),
+            };
         }
 
         private enum ApiAction
