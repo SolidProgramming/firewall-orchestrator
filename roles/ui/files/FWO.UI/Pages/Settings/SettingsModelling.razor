@@ -24,7 +24,7 @@
 {
     <form onsubmit="return false">
         <button type="button" class="btn btn-sm btn-dark ms-5" data-toggle="tooltip" title="@(userConfig.PureLine("H5602"))"
-        @onclick="PredefServices">
+                @onclick="PredefServices">
             @(userConfig.GetText("predef_services"))
         </button>
         <hr />
@@ -93,7 +93,7 @@
         <hr />
         <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H5620"))">
             <label class="col-form-label col-sm-4">@userConfig.GetText("common_areas"):</label>
-            <CommonAreaSelection CommonAreas="CommonAreas" CommAreasToDelete="CommAreasToDelete" SearchCommonArea="SearchCommonArea"/>
+            <CommonAreaSelection CommonAreas="CommonAreas" CommAreasToDelete="CommAreasToDelete" SearchCommonArea="SearchCommonArea" />
         </div>
         <hr />
         <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H5637"))">
@@ -115,12 +115,12 @@
         <hr />
         <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H5655"))">
             <label class="col-form-label col-sm-4">@userConfig.GetText("special_user_areas"):</label>
-            <CommonAreaSelection CommonAreas="SpecUserAreas" CommAreasToDelete="SpecUserAreasToDelete" SearchCommonArea="SearchSpecUserArea"/>
+            <CommonAreaSelection CommonAreas="SpecUserAreas" CommAreasToDelete="SpecUserAreasToDelete" SearchCommonArea="SearchSpecUserArea" />
         </div>
         <hr />
         <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H5659"))">
             <label class="col-form-label col-sm-4">@userConfig.GetText("updatable_obj_areas"):</label>
-            <CommonAreaSelection CommonAreas="UpdObjAreas" CommAreasToDelete="UpdObjAreasToDelete" SearchCommonArea="SearchUpdObjArea"/>
+            <CommonAreaSelection CommonAreas="UpdObjAreas" CommAreasToDelete="UpdObjAreasToDelete" SearchCommonArea="SearchUpdObjArea" />
         </div>
         <hr />
         <div class="form-group row">
@@ -164,7 +164,7 @@
             </div>
             <div class="row col-sm-4" data-toggle="tooltip" title="@(userConfig.PureLine("H5635"))">
                 <label class="col-form-label col-sm-5">@userConfig.GetText("app_zone_pattern"):</label>
-                <input disabled="@(!configData.CreateAppZones)" type="text" class="col-sm-4" @bind="namingConvention.AppZone" />               
+                <input disabled="@(!configData.CreateAppZones)" type="text" class="col-sm-4" @bind="namingConvention.AppZone" />
             </div>
         </div>
         <div class="form-group row mt-2">
@@ -284,7 +284,7 @@
             <label class="col-form-label col-sm-4">@(userConfig.GetText("modReqEmailReceiver")):</label>
             <div class="col-sm-3">
                 <Dropdown ElementType="EmailRecipientOption" @bind-SelectedElement="configData!.ModReqEmailReceiver"
-                        ElementToString="@(o => userConfig.GetText(o.ToString()))" Elements="EmailRecipientGroups.GetModellingOptions()">
+                          ElementToString="@(o => userConfig.GetText(o.ToString()))" Elements="EmailRecipientGroups.GetModellingOptions()">
                     <ElementTemplate Context="opt">
                         @(userConfig.GetText(opt.ToString()))
                     </ElementTemplate>
@@ -316,7 +316,7 @@
             <label class="col-form-label col-sm-4">@(userConfig.GetText("modDecommEmailReceiver")):</label>
             <div class="col-sm-3">
                 <Dropdown ElementType="EmailRecipientOption" @bind-SelectedElement="configData!.ModDecommEmailReceiver"
-                        ElementToString="@(o => userConfig.GetText(o.ToString()))" Elements="EmailRecipientGroups.GetModellingOptions()">
+                          ElementToString="@(o => userConfig.GetText(o.ToString()))" Elements="EmailRecipientGroups.GetModellingOptions()">
                     <ElementTemplate Context="opt">
                         @(userConfig.GetText(opt.ToString()))
                     </ElementTemplate>
@@ -375,8 +375,10 @@
                 <input type="text" class="col-sm-4" @bind="configData!.ModModelledMarkerLocation" />
             </div>
             <div class="row col-sm-3" data-toggle="tooltip" title="@(userConfig.PureLine("H5650"))">
-                 <button type="button" class="col-sm-6 btn btn-sm btn-primary" @onclick="VarianceOptions" 
-                    @onclick:preventDefault>@(userConfig.GetText("rule_recognition_options"))</button>
+                <button type="button" class="col-sm-6 btn btn-sm btn-primary" @onclick="VarianceOptions"
+                        @onclick:preventDefault>
+                    @(userConfig.GetText("rule_recognition_options"))
+                </button>
             </div>
         </div>
         <div class="form-group row mt-2">
@@ -416,6 +418,40 @@
             <textarea class="col-sm-7 mt-2" rows="4" name="text" @bind="configData!.ModRecertText"></textarea>
         </div>
         <hr />
+        <div class="form-group row" data-toggle="tooltip" title="">
+            <label for="cbx_rec_check_active" class="col-form-label col-sm-4">Benachrichtigung bei unbeantworteten Schnittstellenanfragen:</label>
+            <div class="col-sm-2">
+                <input id="cbx_rec_check_active" type="checkbox" class="w-100" />
+            </div>
+        </div>
+        <div class="form-group row mt-2" data-toggle="tooltip" title="">
+            <label class="col-form-label col-sm-4">Startzeitpunkt:</label>
+            <input type="time" step="60" class="col-sm-2" />
+            <input type="date" class="col-sm-2" />
+        </div>
+        <div class="form-group row mt-2" data-toggle="tooltip" title="">
+            <label class="col-form-label col-sm-4">Wiederholungen:</label>
+            <div class="col-sm-8">
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <input type="number" min="1" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-sm-4">
+                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(x => x.OfferedForRecert())">
+                            <ElementTemplate Context="interval">
+                                @(userConfig.GetText(interval.ToString()))
+                            </ElementTemplate>
+                        </Dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row mt-2" data-toggle="tooltip" title="">
+            <label class="col-form-label col-sm-4">Maximale Anzahl Benachrichtigungen:</label>
+            <div class="col-sm-3">
+                <input type="number" min="1" class="col-sm-2" />
+            </div>
+        </div>
     </form>
     <AuthorizeView Roles="@Roles.Admin">
         <Authorized>
@@ -429,16 +465,16 @@
     <br>
     <p>@(userConfig.GetText("U5303"))</p>
 
-    <VarianceOptionsSelection @bind-Display="varOptMode" @bind-ConfigValue="ruleRecognitionOption"/>
+    <VarianceOptionsSelection @bind-Display="varOptMode" @bind-ConfigValue="ruleRecognitionOption" />
 }
 else
 {
-    <Loading/>
+    <Loading />
 }
 <PredefServices @bind-Display="predefServices" />
 <SearchNwObject @bind-Display="searchCommonArea" ObjectList="CommonAreas.ConvertAll(x => x.Area)" Add="AddCommonArea" CommonAreaMode="true" />
-<SearchNwObject @bind-Display="searchSpecUserArea" ObjectList="SpecUserAreas.ConvertAll(x => x.Area)" Add="AddSpecUserArea" SpecUserMode="true"/>
-<SearchNwObject @bind-Display="searchUpdObjArea" ObjectList="UpdObjAreas.ConvertAll(x => x.Area)" Add="AddUpdObjArea" UpdObjMode="true"/>
+<SearchNwObject @bind-Display="searchSpecUserArea" ObjectList="SpecUserAreas.ConvertAll(x => x.Area)" Add="AddSpecUserArea" SpecUserMode="true" />
+<SearchNwObject @bind-Display="searchUpdObjArea" ObjectList="UpdObjAreas.ConvertAll(x => x.Area)" Add="AddUpdObjArea" UpdObjMode="true" />
 <PopUp Title="@(userConfig.GetText("appserver_import"))" Show="@ShowCSVImportPopUp" Size=PopupSize.Large OnClose="() => ShowCSVImportPopUp = false">
     <Body>
         @if(Appserver is not null && Appserver.Count > 0)
@@ -451,7 +487,7 @@ else
                 </Collapse>
             </div>
         }
-       @if(CSVImportErrors is not null && CSVImportErrors.Count > 0)
+        @if(CSVImportErrors is not null && CSVImportErrors.Count > 0)
         {
             <div class="mt-1">
                 <Collapse StartToggled="false" Style="danger" Title="@(userConfig.GetText("errors"))">
@@ -568,10 +604,10 @@ else
             SubnetDataPaths = JsonSerializer.Deserialize<List<string>>(configData.ImportSubnetDataPath) ?? new();
             ExtraConfigs = JsonSerializer.Deserialize<List<string>>(configData.ModExtraConfigs) ?? new();
             namingConvention = JsonSerializer.Deserialize<ModellingNamingConvention>(configData.ModNamingConvention) ?? new();
-            if (configData.ModAppServerTypes != "")
+            if(configData.ModAppServerTypes != "")
             {
                 appServerTypes = JsonSerializer.Deserialize<List<AppServerType>>(configData.ModAppServerTypes) ?? new();
-                if (appServerTypes.Count > 0)
+                if(appServerTypes.Count > 0)
                 {
                     appServerDefaultTypeName = appServerTypes.FirstOrDefault(x => x.Id == 0)?.Name ?? "";
                 }
@@ -598,7 +634,7 @@ else
             EventMediator.Subscribe<FileUploadEvent>(nameof(FileUploadService.ReadFileToBytes), _ => OnFileUploadEvent(_.EventArgs));
             EventMediator.Subscribe<AppServerImportEvent>(nameof(FileUploadService.ImportAppServersFromCSV), _ => OnCSVAppServerImportEvent(_.EventArgs));
         }
-        catch (Exception exception)
+        catch(Exception exception)
         {
             DisplayMessageInUi(exception, userConfig.GetText("read_config"), userConfig.GetText("E5301"), false);
         }
@@ -607,12 +643,12 @@ else
     private List<CommonArea> RefreshAreas(string configItem)
     {
         List<CommonArea> areas = [];
-        if (configData != null && configItem != "")
+        if(configData != null && configItem != "")
         {
-             foreach (var areaInfo in JsonSerializer.Deserialize<List<CommonAreaConfig>>(configItem) ?? [])
+            foreach(var areaInfo in JsonSerializer.Deserialize<List<CommonAreaConfig>>(configItem) ?? [])
             {
                 ModellingNwGroup? area = allAreas.FirstOrDefault(a => a.Id == areaInfo.AreaId);
-                if (area != null)
+                if(area != null)
                 {
                     areas.Add(new() { Area = new() { Content = area }, UseInSrc = areaInfo.UseInSrc, UseInDst = areaInfo.UseInDst });
                 }
@@ -641,7 +677,7 @@ else
 
     private void AddExtraConfig()
     {
-        if (actExtraConfig != "")
+        if(actExtraConfig != "")
         {
             ExtraConfigsToAdd.Add(actExtraConfig);
             actExtraConfig = "";
@@ -650,7 +686,7 @@ else
 
     private void AddPath()
     {
-        if (actPath != "")
+        if(actPath != "")
         {
             PathsToAdd.Add(actPath);
             actPath = "";
@@ -659,7 +695,7 @@ else
 
     private void AddPathSubnet()
     {
-        if (!string.IsNullOrWhiteSpace(SubnetActPath))
+        if(!string.IsNullOrWhiteSpace(SubnetActPath))
         {
             PathsToAddSubnet.Add(SubnetActPath);
             SubnetActPath = "";
@@ -668,9 +704,9 @@ else
 
     private void AddAppServerType()
     {
-        if (actAppServerType.Id > 0 && actAppServerType.Name != ""
-            && ( appServerTypesToAdd.FirstOrDefault(a => a.Id == actAppServerType.Id) == null )
-            && ( appServerTypes.FirstOrDefault(a => a.Id == actAppServerType.Id) == null ))
+        if(actAppServerType.Id > 0 && actAppServerType.Name != ""
+            && (appServerTypesToAdd.FirstOrDefault(a => a.Id == actAppServerType.Id) == null)
+            && (appServerTypes.FirstOrDefault(a => a.Id == actAppServerType.Id) == null))
         {
             appServerTypesToAdd.Add(actAppServerType);
             actAppServerType = new();
@@ -712,7 +748,7 @@ else
     {
         try
         {
-            if (configData != null)
+            if(configData != null)
             {
                 PrepareConfigData();
                 await globalConfig.WriteToDatabase(configData, apiConnection);
@@ -736,7 +772,7 @@ else
                 throw new ArgumentException("Data saved before loaded. This should be impossible.");
             }
         }
-        catch (Exception exception)
+        catch(Exception exception)
         {
             DisplayMessageInUi(exception, userConfig.GetText("modelling_settings"), "", true);
         }
@@ -761,11 +797,11 @@ else
 
     private void PrepareAppDataPaths()
     {
-        foreach (var path in PathsToDelete)
+        foreach(var path in PathsToDelete)
         {
             appDataPaths.Remove(path);
         }
-        foreach (var path in PathsToAdd)
+        foreach(var path in PathsToAdd)
         {
             appDataPaths.Add(path);
         }
@@ -774,11 +810,11 @@ else
 
     private void PrepareSubnetDataPaths()
     {
-        foreach (string path in PathsToDeleteSubnet)
+        foreach(string path in PathsToDeleteSubnet)
         {
             SubnetDataPaths.Remove(path);
         }
-        foreach (string path in PathsToAddSubnet)
+        foreach(string path in PathsToAddSubnet)
         {
             SubnetDataPaths.Add(path);
         }
@@ -788,10 +824,10 @@ else
     private string PrepareAreas(List<CommonArea> areas, List<CommonArea> areasToDelete)
     {
         List<CommonAreaConfig> commAreaConfigItems = areas.ConvertAll(x => x.ToConfigItem());
-        foreach (var area in areasToDelete)
+        foreach(var area in areasToDelete)
         {
             CommonAreaConfig? existingItem = commAreaConfigItems.FirstOrDefault(x => x.AreaId == area.Area.Content.Id);
-            if (existingItem != null)
+            if(existingItem != null)
             {
                 commAreaConfigItems.Remove(existingItem);
             }
@@ -802,7 +838,7 @@ else
     private void PrepareAppServerTypes()
     {
         AppServerType? defaultType = appServerTypes.FirstOrDefault(x => x.Id == 0);
-        if (defaultType != null)
+        if(defaultType != null)
         {
             defaultType.Name = appServerDefaultTypeName;
         }
@@ -810,11 +846,11 @@ else
         {
             appServerTypes.Add(new() { Id = 0, Name = appServerDefaultTypeName });
         }
-        foreach (var appServerType in appServerTypesToDelete)
+        foreach(var appServerType in appServerTypesToDelete)
         {
             appServerTypes.Remove(appServerType);
         }
-        foreach (var appServerType in appServerTypesToAdd)
+        foreach(var appServerType in appServerTypesToAdd)
         {
             appServerTypes.Add(appServerType);
         }
@@ -823,11 +859,11 @@ else
 
     private void PrepareExtraConfigs()
     {
-        foreach (var config in ExtraConfigsToDelete)
+        foreach(var config in ExtraConfigsToDelete)
         {
             ExtraConfigs.Remove(config);
         }
-        foreach (var config in ExtraConfigsToAdd)
+        foreach(var config in ExtraConfigsToAdd)
         {
             ExtraConfigs.Add(config);
         }
