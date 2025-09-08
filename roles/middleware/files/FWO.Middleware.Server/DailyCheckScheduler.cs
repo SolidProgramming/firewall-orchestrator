@@ -5,8 +5,12 @@ using FWO.Config.Api;
 using FWO.Config.Api.Data;
 using FWO.Data;
 using FWO.Data.Middleware;
+using FWO.Data.Workflow;
 using FWO.Logging;
+using FWO.Middleware.Client;
 using FWO.Recert;
+using FWO.Services;
+using System.Reactive.Subjects;
 using System.Timers;
 
 namespace FWO.Middleware.Server
@@ -32,10 +36,12 @@ namespace FWO.Middleware.Server
         {
             if(globalConfig.RecRefreshStartup)
             {
-                #pragma warning disable CS4014
+#pragma warning disable CS4014
                 RefreshRecert(); // no need to wait
-                #pragma warning restore CS4014
+#pragma warning restore CS4014
             }
+
+            CheckUnansweredInterfaceRequests();
         }
 
         /// <summary>
@@ -62,6 +68,7 @@ namespace FWO.Middleware.Server
                     await RefreshRecert();
                 }
                 await CheckRecerts();
+                await CheckUnansweredInterfaceRequests();
             }
             catch(Exception exc)
             {
@@ -79,7 +86,7 @@ namespace FWO.Middleware.Server
         {
             if(globalConfig.RecCheckActive)
             {
-                RecertCheck recertCheck = new (apiConnection, globalConfig);
+                RecertCheck recertCheck = new(apiConnection, globalConfig);
                 int emailsSent = await recertCheck.CheckRecertifications();
                 Log.WriteDebug(LogMessageTitle, $"Recert Check: Sent {emailsSent} emails.");
                 await AddLogEntry(0, globalConfig.GetText("daily_recert_check"), emailsSent + globalConfig.GetText("emails_sent"), GlobalConst.kDailyCheck);
@@ -106,7 +113,7 @@ namespace FWO.Middleware.Server
         {
             DemoDataFlags demoDataFlags = await CheckDemoDataExisting();
 
-            if (demoDataFlags.AnyFlagSet())
+            if(demoDataFlags.AnyFlagSet())
             {
                 string description = globalConfig.GetText("sample_data_found_in") + (demoDataFlags.SampleManagementExisting ? globalConfig.GetText("managements") + " " : "") +
                                                         (demoDataFlags.SampleCredentialExisting ? globalConfig.GetText("import_credential") + " " : "") +
@@ -131,7 +138,7 @@ namespace FWO.Middleware.Server
             List<Tenant> tenants = await apiConnection.SendQueryAsync<List<Tenant>>(AuthQueries.getTenants);
             bool sampleGroupExisting = false;
             List<Ldap> connectedLdaps = apiConnection.SendQueryAsync<List<Ldap>>(AuthQueries.getLdapConnections).Result;
-            foreach (Ldap currentLdap in connectedLdaps.Where(l => l.IsInternal() && l.HasGroupHandling()))
+            foreach(Ldap currentLdap in connectedLdaps.Where(l => l.IsInternal() && l.HasGroupHandling()))
             {
                 List<GroupGetReturnParameters> groups = await currentLdap.GetAllInternalGroups();
                 sampleGroupExisting |= groups.Exists(g => new DistName(g.GroupDn).Group.EndsWith(GlobalConst.k_demo));
@@ -154,24 +161,24 @@ namespace FWO.Middleware.Server
             List<ImportStatus> importStati = await apiConnection.SendQueryAsync<List<ImportStatus>>(MonitorQueries.getImportStatus);
             int importIssues = 0;
             object jsonData;
-            foreach (ImportStatus imp in importStati.Where(x => !x.ImportDisabled))
+            foreach(ImportStatus imp in importStati.Where(x => !x.ImportDisabled))
             {
-                if (imp.LastIncompleteImport != null && imp.LastIncompleteImport.Length > 0) // import running
+                if(imp.LastIncompleteImport != null && imp.LastIncompleteImport.Length > 0) // import running
                 {
-                    if (imp.LastIncompleteImport[0].StartTime < DateTime.Now.AddHours(-globalConfig.MaxImportDuration))  // too long
+                    if(imp.LastIncompleteImport[0].StartTime < DateTime.Now.AddHours(-globalConfig.MaxImportDuration))  // too long
                     {
                         jsonData = imp.LastIncompleteImport;
                         await SetAlert(globalConfig.GetText("import"), globalConfig.GetText("E7011"), GlobalConst.kDailyCheck, AlertCode.ImportRunningTooLong, new() { MgmtId = imp.MgmId, JsonData = jsonData });
                         importIssues++;
                     }
                 }
-                else if (imp.LastImport == null || imp.LastImport.Length == 0) // no import at all
+                else if(imp.LastImport == null || imp.LastImport.Length == 0) // no import at all
                 {
                     jsonData = imp;
                     await SetAlert(globalConfig.GetText("import"), globalConfig.GetText("E7012"), GlobalConst.kDailyCheck, AlertCode.NoImport, new() { MgmtId = imp.MgmId, JsonData = jsonData });
                     importIssues++;
                 }
-                else if (imp.LastImportAttempt != null && imp.LastImportAttempt < DateTime.Now.AddHours(-globalConfig.MaxImportInterval))
+                else if(imp.LastImportAttempt != null && imp.LastImportAttempt < DateTime.Now.AddHours(-globalConfig.MaxImportInterval))
                 // too long ago (not working for legacy devices as LastImportAttempt is not written)
                 {
                     jsonData = imp;
@@ -181,6 +188,44 @@ namespace FWO.Middleware.Server
             }
             await AddLogEntry(importIssues != 0 ? 1 : 0, globalConfig.GetText("daily_importer_check"),
                 importIssues != 0 ? importIssues + globalConfig.GetText("import_issues_found") : globalConfig.GetText("no_import_issues_found"), GlobalConst.kDailyCheck);
+        }
+
+        public async Task CheckUnansweredInterfaceRequests()
+        {
+            int fromState = 48;
+            int toState = 50;
+
+            //Get Tickets in state "Requested" (49)
+            List<WfTicket>? unansweredTickets = await apiConnection.SendQueryAsync<List<WfTicket>>(RequestQueries.getTickets, new { fromState, toState });
+
+            //Tickets older than 7 days that are still unanswered
+            List<WfTicket> filteredTickets = [.. unansweredTickets.Where(_ => _.CreationDate <= DateTime.Now.AddDays(-7))];
+
+            List<FwoOwner>? owners = await apiConnection.SendQueryAsync<List<FwoOwner>>(OwnerQueries.getOwners);
+            List<UserGroup> OwnerGroups = await MiddlewareServerServices.GetInternalGroups(apiConnection);
+
+            NotificationService notificationService = await NotificationService.CreateAsync(NotificationClient.InterfaceRequest, globalConfig, apiConnection, OwnerGroups);
+
+            FwoNotification notification = new()
+            {
+                Id = 1,
+                NotificationClient = NotificationClient.InterfaceRequest,
+                Channel = NotificationChannel.Email,
+                RecipientTo = EmailRecipientOption.FallbackToMainResponsibleIfOwnerGroupEmpty,
+                EmailAddressTo = "test.test@test.de",
+                RecipientCc = EmailRecipientOption.None,
+                EmailAddressCc = EmailRecipientOption.None.ToString(),
+                EmailSubject = "unanswered_interface_requests",
+                Layout = NotificationLayout.SimpleText,
+                Deadline = NotificationDeadline.None,
+                IntervalBeforeDeadline = SchedulerInterval.Never,
+                OffsetBeforeDeadline = 0,
+                RepeatIntervalAfterDeadline = SchedulerInterval.Never,
+                RepeatOffsetAfterDeadline = 0,
+                RepetitionsAfterDeadline = 0
+            };
+
+            await notificationService.AddNotification(notification);
         }
     }
 }

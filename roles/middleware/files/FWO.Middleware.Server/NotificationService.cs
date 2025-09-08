@@ -56,7 +56,7 @@ namespace FWO.Middleware.Server
         public async Task<int> SendNotifications(FwoOwner owner, string content, ReportBase? report = null)
         {
             int emailsSent = 0;
-            foreach (var notification in Notifications.Where(n => (n.OwnerId == null || n.OwnerId == owner.Id) && IsTimeToSend(owner, n)))
+            foreach(var notification in Notifications.Where(n => (n.OwnerId == null || n.OwnerId == owner.Id) && IsTimeToSend(owner, n)))
             {
                 // Later: Handle other channels here when implemented
                 await SendEmail(notification, content, owner, report);
@@ -68,12 +68,12 @@ namespace FWO.Middleware.Server
 
         private static bool IsTimeToSend(FwoOwner owner, FwoNotification notification)
         {
-            if (notification.Deadline == NotificationDeadline.None)
+            if(notification.Deadline == NotificationDeadline.None)
             {
                 return true;
             }
             DateTime deadline = GetDeadlineDate(notification.Deadline, owner);
-            if (deadline >= DateTime.Now)
+            if(deadline >= DateTime.Now)
             {
                 var notifDate = notification.IntervalBeforeDeadline switch
                 {
@@ -89,7 +89,7 @@ namespace FWO.Middleware.Server
             {
                 var nextNotifDate = deadline.Date;
                 int counter = 0;
-                while (nextNotifDate < DateTime.Now.Date && counter++ <= notification.RepetitionsAfterDeadline)
+                while(nextNotifDate < DateTime.Now.Date && counter++ <= notification.RepetitionsAfterDeadline)
                 {
                     nextNotifDate = notification.RepeatIntervalAfterDeadline switch
                     {
@@ -107,7 +107,7 @@ namespace FWO.Middleware.Server
 
         private static DateTime GetDeadlineDate(NotificationDeadline deadline, FwoOwner owner)
         {
-            if (deadline == NotificationDeadline.RecertDate && owner.NextRecertDate != null)
+            if(deadline == NotificationDeadline.RecertDate && owner.NextRecertDate != null)
             {
                 return (DateTime)owner.NextRecertDate;
             }
@@ -140,9 +140,9 @@ namespace FWO.Middleware.Server
             string subject = notification.EmailSubject;
             string body = content;
             FormFile? attachment = null;
-            if (report != null)
+            if(report != null)
             {
-                switch (notification.Layout)
+                switch(notification.Layout)
                 {
                     case NotificationLayout.HtmlInBody:
                         body += report.ExportToHtml();
@@ -151,7 +151,7 @@ namespace FWO.Middleware.Server
                         string html = report.ExportToHtml();
                         string? pdfData = await report.ToPdf(html);
 
-                        if (string.IsNullOrWhiteSpace(pdfData))
+                        if(string.IsNullOrWhiteSpace(pdfData))
                             throw new ProcessingFailedException("No Pdf generated.");
 
                         attachment = CreateAttachment(pdfData, GlobalConst.kPdf, subject);
@@ -170,7 +170,7 @@ namespace FWO.Middleware.Server
                 }
             }
             MailData mailData = new(await CollectRecipients(notification, owner), subject) { Body = body, Cc = await CollectRecipients(notification, owner, true) };
-            if (attachment != null)
+            if(attachment != null)
             {
                 mailData.Attachments = new FormFileCollection() { attachment };
             }
@@ -179,14 +179,14 @@ namespace FWO.Middleware.Server
 
         private static FormFile? CreateAttachment(string? content, string fileFormat, string subject)
         {
-            if (content != null)
+            if(content != null)
             {
                 string fileName = ConstructFileName(subject, fileFormat);
 
                 MemoryStream memoryStream;
                 string contentType;
 
-                if (fileFormat == GlobalConst.kPdf)
+                if(fileFormat == GlobalConst.kPdf)
                 {
                     memoryStream = new(Convert.FromBase64String(content));
                     contentType = "application/octet-stream";
@@ -213,7 +213,7 @@ namespace FWO.Middleware.Server
                 Regex regex = new(@"\s", RegexOptions.None, TimeSpan.FromMilliseconds(500));
                 return $"{regex.Replace(input, "")}_{DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH-mm-ssK")}.{fileFormat}";
             }
-            catch (RegexMatchTimeoutException)
+            catch(RegexMatchTimeoutException)
             {
                 Log.WriteWarning("Construct File Name", "Timeout when constructing file name. Taking input.");
                 return input;
@@ -222,7 +222,7 @@ namespace FWO.Middleware.Server
 
         private async Task<List<string>> CollectRecipients(FwoNotification notification, FwoOwner owner, bool cc = false)
         {
-            if (GlobalConfig.UseDummyEmailAddress)
+            if(GlobalConfig.UseDummyEmailAddress)
             {
                 return [GlobalConfig.DummyEmailAddress];
             }
@@ -230,6 +230,110 @@ namespace FWO.Middleware.Server
             await emailHelper.Init();
             return emailHelper.GetRecipients(cc ? notification.RecipientCc : notification.RecipientTo, null, owner, null,
                 EmailHelper.SplitAddresses(cc ? notification.EmailAddressCc : notification.EmailAddressTo));
+        }
+
+        /// <summary>
+        /// Add new notification.
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <returns></returns>
+        public async Task AddNotification(FwoNotification notification)
+        {
+            object? variables = ParseVariables(notification, ApiAction.Add);
+
+            ReturnId[]? returnIds = (await ApiConnection.SendQueryAsync<ReturnIdWrapper>(NotificationQueries.addNotification, variables)).ReturnIds;
+
+            if(returnIds != null && returnIds.Length > 0)
+            {
+                //on success
+            }
+        }
+
+        /// <summary>
+        /// Edit existing notification. Notification ID must be set.
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">Throws ArgumentException if ID is not set.</exception>
+        public async Task EditNotification(FwoNotification notification)
+        {
+            if(notification.Id <= 0)
+            {
+                throw new ArgumentException("Notification ID not set.");
+            }
+
+            object? variables = ParseVariables(notification, ApiAction.Edit);
+
+            await ApiConnection.SendQueryAsync<ReturnIdWrapper>(NotificationQueries.updateNotification, variables);
+        }
+
+        /// <summary>
+        /// Delete existing notification by ID. Notification ID must be set.
+        /// </summary>
+        /// <param name="notificationId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">Throws ArgumentException if ID is not set.</exception>
+        public async Task DeleteNotification(int notificationId)
+        {
+            if(notificationId <= 0)
+            {
+                throw new ArgumentException("Notification ID not set.");
+            }
+
+            await ApiConnection.SendQueryAsync<ReturnIdWrapper>(NotificationQueries.deleteNotification, new { id = notificationId });
+        }
+
+        private static object ParseVariables(FwoNotification notification, ApiAction action)
+        {
+
+            switch(action)
+            {
+                case ApiAction.Add:
+                    return new
+                    {
+                        client = notification.NotificationClient.ToString(),
+                        channel = notification.Channel.ToString(),
+                        recipientTo = notification.RecipientTo.ToString(),
+                        emailAddressTo = notification.EmailAddressTo,
+                        recipientCc = notification.RecipientCc.ToString(),
+                        emailAddressCc = notification.EmailAddressCc,
+                        subject = notification.EmailSubject,
+                        layout = notification.Layout.ToString(),
+                        deadline = notification.Deadline.ToString(),
+                        intervalBeforeDeadline = (int)notification.IntervalBeforeDeadline,
+                        offsetBeforeDeadline = notification.OffsetBeforeDeadline,
+                        intervalAfterDeadline = (int)notification.RepeatIntervalAfterDeadline,
+                        offsetAfterDeadline = notification.RepeatOffsetAfterDeadline,
+                        repetitionsAfterDeadline = notification.RepetitionsAfterDeadline,
+                    };
+                case ApiAction.Edit:
+                    return new
+                    {
+                        id = notification.Id,
+                        channel = notification.Channel.ToString(),
+                        recipientTo = notification.RecipientTo.ToString(),
+                        emailAddressTo = notification.EmailAddressTo,
+                        recipientCc = notification.RecipientCc.ToString(),
+                        emailAddressCc = notification.EmailAddressCc,
+                        subject = notification.EmailSubject,
+                        layout = notification.Layout.ToString(),
+                        deadline = notification.Deadline.ToString(),
+                        intervalBeforeDeadline = (int)notification.IntervalBeforeDeadline,
+                        offsetBeforeDeadline = notification.OffsetBeforeDeadline,
+                        intervalAfterDeadline = (int)notification.RepeatIntervalAfterDeadline,
+                        offsetAfterDeadline = notification.RepeatOffsetAfterDeadline,
+                        repetitionsAfterDeadline = notification.RepetitionsAfterDeadline
+                    };
+                default:
+                    throw new NotImplementedException($"{nameof(ApiAction)} {action} not implemented");
+            }
+        }
+
+        private enum ApiAction
+        {
+            Add,
+            Edit,
+            Delete
         }
     }
 }

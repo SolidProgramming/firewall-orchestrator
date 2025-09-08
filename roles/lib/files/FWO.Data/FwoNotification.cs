@@ -8,7 +8,8 @@ namespace FWO.Data
         None = 0,
         Recertification = 1,
         ImportChange = 2,
-        Compliance = 3
+        Compliance = 3,
+        InterfaceRequest = 4
     }
 
     public enum NotificationChannel
