@@ -22,6 +22,6 @@ namespace FWO.Config.Api.Data
         public SchedulerInterval SchedulerInterval { get; set; } = SchedulerInterval.Weeks;
 
         [JsonProperty("unanswered_interface_notifications_notificationmaximum"), JsonPropertyName("unanswered_interface_notifications_notificationmaximum")]
-        public int NotificationsMaximum { get; set; } = 3;
+        public int NotificationsMaximum { get; set; } = 0;
     }
 }

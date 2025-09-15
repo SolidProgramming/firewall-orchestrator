@@ -2541,11 +2541,11 @@ INSERT INTO txt VALUES ('edit_notification',    'English', 	'Edit Notification')
 INSERT INTO txt VALUES ('delete_notification',  'German', 	'Benachrichtigung l&ouml;schen');
 INSERT INTO txt VALUES ('delete_notification',  'English', 	'Delete Notification');
 INSERT INTO txt VALUES ('activate_unanswered_interface_notifications',  'German', 	'Benachrichtigung bei unbeantworteten Schnittstellenanfragen');
-INSERT INTO txt VALUES ('activate_unanswered_interface_notifications',  'English', 	'Notification for unanswered interface requests');
+INSERT INTO txt VALUES ('activate_unanswered_interface_notifications',  'English', 	'Reminder for unanswered interface requests');
 INSERT INTO txt VALUES ('unanswered_interface_notifications_start',  'German', 	'Startzeitpunkt');
 INSERT INTO txt VALUES ('unanswered_interface_notifications_start',  'English', 'Start time');
-INSERT INTO txt VALUES ('unanswered_interface_notifications_repetitions',  'German',  'Wiederholungen');
-INSERT INTO txt VALUES ('unanswered_interface_notifications_repetitions',  'English', 'Repetitions');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_repetitions',  'German',  'Intervall');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_repetitions',  'English', 'Interval');
 INSERT INTO txt VALUES ('unanswered_interface_notifications_max',  'German',  'Maximale Anzahl Benachrichtigungen');
 INSERT INTO txt VALUES ('unanswered_interface_notifications_max',  'English', 'Maximum number of notifications');
 
@@ -7035,6 +7035,6 @@ INSERT INTO txt VALUES ('H9091', 'German',  'Legt eine Bezugszeit fest, ab dem d
 INSERT INTO txt VALUES ('H9091', 'English', 'Sets a reference time from which the intervals for notifications will start.');
 INSERT INTO txt VALUES ('H9092', 'German',  'Abstand f&uuml;r den Versand von Benachrichtigungen.');
 INSERT INTO txt VALUES ('H9092', 'English', 'Interval for sending notifications.');
-INSERT INTO txt VALUES ('H9093', 'German',  'Setzt die Anzahl an Benachrichtigungen pro Schnittstellenanfrage. Wenn dieser Wert erreicht ist werden keine Benachrichtigungen mehr versendet.');
-INSERT INTO txt VALUES ('H9093', 'English', 'Sets the number of notifications per interface request. Once this value is reached, no further notifications will be sent.');
+INSERT INTO txt VALUES ('H9093', 'German',  'Setzt die Anzahl an Benachrichtigungen pro Schnittstellenanfrage. Wenn dieser Wert erreicht ist werden keine Benachrichtigungen mehr versendet. Ein Wert von 0 = unendlich.');
+INSERT INTO txt VALUES ('H9093', 'English', 'Sets the number of notifications per interface request. Once this value is reached, no further notifications will be sent. A value of 0 = infinite.');
 
