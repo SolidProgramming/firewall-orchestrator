@@ -295,6 +295,44 @@
                 <input id="cbx_email_requester_in_cc" type="checkbox" @bind="configData!.ModReqEmailRequesterInCc">
             </div>
         </div>
+        <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H9090"))">
+            <label for="cbx_interfacenotification_active" class="col-form-label col-sm-4">@(userConfig.GetText("activate_unanswered_interface_notifications")):</label>
+            <div class="col-sm-2">
+                <input id="cbx_interfacenotification_active" type="checkbox" class="w-100" @bind="UnansweredInterfaceRequestNotificationSettings.Active" />
+            </div>
+        </div>
+        <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9091"))">
+            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_start")):</label>
+            <input type="time" class="col-sm-2" @bind="UnansweredInterfaceRequestNotificationSettings.StartTime" />
+            <input type="date" class="col-sm-2 ms-2" @bind="UnansweredInterfaceRequestNotificationSettings.StartDate" />
+        </div>
+        <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9092"))">
+            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_repetitions")):</label>
+            <div class="col-sm-8 m-0 p-0">
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <input type="number" min="1" class="form-control form-control-sm" @bind="UnansweredInterfaceRequestNotificationSettings.Interval" />
+                    </div>
+                    <div class="col-sm-2">
+                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(_ => _.OfferedForUnansweredInterfaceNotifications())"
+                                  @bind-SelectedElement="UnansweredInterfaceRequestNotificationSettings.SchedulerInterval">
+                            <ElementTemplate Context="interval">
+                                @(userConfig.GetText(interval.ToString()))
+                            </ElementTemplate>
+                        </Dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9093"))">
+            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_max")):</label>
+            <div class="col-sm-1 m-0 p-0">
+                <div class="input-group input-group-sm">
+                    <input type="number" min="0" class="form-control" @bind="UnansweredInterfaceRequestNotificationSettings.NotificationsMaximum" />
+                    <span class="input-group-text" aria-hidden="true">&times;</span>
+                </div>
+            </div>
+        </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H5623"))">
             <label class="col-form-label col-sm-4">@(userConfig.GetText("modReqEmailSubject")):</label>
             <input type="text" class="col-sm-6" @bind="configData!.ModReqEmailSubject" />
@@ -416,45 +454,6 @@
         <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H5658"))">
             <label class="col-form-label col-sm-4">@(userConfig.GetText("modRecertText")):</label>
             <textarea class="col-sm-7 mt-2" rows="4" name="text" @bind="configData!.ModRecertText"></textarea>
-        </div>
-        <hr />
-        <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H9090"))">
-            <label for="cbx_interfacenotification_active" class="col-form-label col-sm-4">@(userConfig.GetText("activate_unanswered_interface_notifications")):</label>
-            <div class="col-sm-2">
-                <input id="cbx_interfacenotification_active" type="checkbox" class="w-100" @bind="UnansweredInterfaceRequestNotificationSettings.Active" />
-            </div>
-        </div>
-        <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9091"))">
-            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_start")):</label>
-            <input type="time" class="col-sm-2" @bind="UnansweredInterfaceRequestNotificationSettings.StartTime" />
-            <input type="date" class="col-sm-2 ms-2" @bind="UnansweredInterfaceRequestNotificationSettings.StartDate" />
-        </div>
-        <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9092"))">
-            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_repetitions")):</label>
-            <div class="col-sm-8 m-0 p-0">
-                <div class="form-group row">
-                    <div class="col-sm-2">
-                        <input type="number" min="1" class="form-control form-control-sm" @bind="UnansweredInterfaceRequestNotificationSettings.Interval" />
-                    </div>
-                    <div class="col-sm-2">
-                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(_ => _.OfferedForUnansweredInterfaceNotifications())"
-                            @bind-SelectedElement="UnansweredInterfaceRequestNotificationSettings.SchedulerInterval">
-                            <ElementTemplate Context="interval">
-                                @(userConfig.GetText(interval.ToString()))
-                            </ElementTemplate>
-                        </Dropdown>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9093"))">
-            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_max")):</label>
-            <div class="col-sm-1 m-0 p-0">
-                <div class="input-group input-group-sm">
-                    <input type="number" min="1" class="form-control" @bind="UnansweredInterfaceRequestNotificationSettings.NotificationsMaximum" />
-                    <span class="input-group-text" aria-hidden="true">&times;</span>
-                </div>
-            </div>
         </div>
     </form>
     <AuthorizeView Roles="@Roles.Admin">
