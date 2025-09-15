@@ -802,6 +802,7 @@ else
         configData!.VarianceAnalysisStartAt = varAnalysisDate.Date.Add(varAnalysisTime.TimeOfDay);
         configData!.OwnerLdapId = selectedLdap.Id;
         configData!.RuleRecognitionOption = JsonSerializer.Serialize(ruleRecognitionOption);
+        configData.UnansweredInterfaceRequestNotificationSettings = JsonSerializer.Serialize(UnansweredInterfaceRequestNotificationSettings);
     }
 
     private void PrepareAppDataPaths()
