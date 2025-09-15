@@ -7031,4 +7031,10 @@ INSERT INTO txt VALUES ('H9081', 'German',  'Sonderkonfigurationen sind speziell
 INSERT INTO txt VALUES ('H9081', 'English', 'Extra configurations are special recommendations for implementation, e.g. NAT. Possible types are defined by the administrator.');
 INSERT INTO txt VALUES ('H9090', 'German',  'Aktiviert die automatische Benachrichtigung bei unbeantworteten Schnittstellenanfragen.');
 INSERT INTO txt VALUES ('H9090', 'English', 'Enables automatic notification for unanswered interface requests.');
+INSERT INTO txt VALUES ('H9091', 'German',  'Legt eine Bezugszeit fest, ab dem die Intervalle f&uuml;r die Benachrichtigungen gestartet werden.');
+INSERT INTO txt VALUES ('H9091', 'English', 'Sets a reference time from which the intervals for notifications will start.');
+INSERT INTO txt VALUES ('H9092', 'German',  'Abstand f&uuml;r den Versand von Benachrichtigungen.');
+INSERT INTO txt VALUES ('H9092', 'English', 'Interval for sending notifications.');
+INSERT INTO txt VALUES ('H9093', 'German',  'Setzt die Anzahl an Benachrichtigungen pro Schnittstellenanfrage. Wenn dieser Wert erreicht ist werden keine Benachrichtigungen mehr versendet.');
+INSERT INTO txt VALUES ('H9093', 'English', 'Sets the number of notifications per interface request. Once this value is reached, no further notifications will be sent.');
 
