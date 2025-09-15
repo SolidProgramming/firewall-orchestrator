@@ -406,6 +406,9 @@ namespace FWO.Config.Api.Data
         [JsonProperty("resolveNetworkAreas"), JsonPropertyName("resolveNetworkAreas")]
         public bool ResolveNetworkAreas { get; set; } = false;
 
+        [JsonProperty("unansweredInterfaceRequestNotificationSettings"), JsonPropertyName("unansweredInterfaceRequestNotificationSettings")]
+        public string UnansweredInterfaceRequestNotificationSettings { get; set; } = System.Text.Json.JsonSerializer.Serialize(new UnansweredInterfaceRequestNotificationSettings());
+
         public ConfigData(bool editable = false)
         {
             Editable = editable;

@@ -419,25 +419,26 @@
         </div>
         <hr />
         <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H9090"))">
-            <label for="cbx_rec_check_active" class="col-form-label col-sm-4">@(userConfig.GetText("activate_unanswered_interface_notifications")):</label>
+            <label for="cbx_interfacenotification_active" class="col-form-label col-sm-4">@(userConfig.GetText("activate_unanswered_interface_notifications")):</label>
             <div class="col-sm-2">
-                <input id="cbx_rec_check_active" type="checkbox" class="w-100" />
+                <input id="cbx_interfacenotification_active" type="checkbox" class="w-100" @bind="UnansweredInterfaceRequestNotificationSettings.Active" />
             </div>
         </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9091"))">
             <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_start")):</label>
-            <input type="time" step="60" class="col-sm-2" />
-            <input type="date" class="col-sm-2 ms-2" />
+            <input type="time" class="col-sm-2" @bind="UnansweredInterfaceRequestNotificationSettings.StartTime" />
+            <input type="date" class="col-sm-2 ms-2" @bind="UnansweredInterfaceRequestNotificationSettings.StartDate" />
         </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9092"))">
             <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_repetitions")):</label>
             <div class="col-sm-8 m-0 p-0">
                 <div class="form-group row">
                     <div class="col-sm-2">
-                        <input type="number" min="1" class="form-control form-control-sm" />
+                        <input type="number" min="1" class="form-control form-control-sm" @bind="UnansweredInterfaceRequestNotificationSettings.Interval" />
                     </div>
                     <div class="col-sm-2">
-                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(_ => _.OfferedForUnansweredInterfaceNotifications())">
+                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(_ => _.OfferedForUnansweredInterfaceNotifications())"
+                            @bind-SelectedElement="UnansweredInterfaceRequestNotificationSettings.SchedulerInterval">
                             <ElementTemplate Context="interval">
                                 @(userConfig.GetText(interval.ToString()))
                             </ElementTemplate>
@@ -448,8 +449,11 @@
         </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="@(userConfig.PureLine("H9093"))">
             <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_max")):</label>
-            <div class="col-sm-3 m-0 p-0">
-                <input type="number" min="1" class="col-sm-2" />
+            <div class="col-sm-1 m-0 p-0">
+                <div class="input-group input-group-sm">
+                    <input type="number" min="1" class="form-control" @bind="UnansweredInterfaceRequestNotificationSettings.NotificationsMaximum" />
+                    <span class="input-group-text" aria-hidden="true">&times;</span>
+                </div>
             </div>
         </div>
     </form>
@@ -560,6 +564,7 @@ else
     private List<UiLdapConnection> connectedLdaps = [];
     private UiLdapConnection selectedLdap = new();
     private RuleRecognitionOption ruleRecognitionOption = new();
+    private UnansweredInterfaceRequestNotificationSettings UnansweredInterfaceRequestNotificationSettings = new();
 
     private bool initComplete = false;
     private bool varOptMode = false;
@@ -620,6 +625,10 @@ else
             appDataDate = appDataTime = configData.ImportAppDataStartAt;
             subnetDataDate = subnetDataTime = configData.ImportSubnetDataStartAt;
             varAnalysisDate = varAnalysisTime = configData.VarianceAnalysisStartAt;
+
+            UnansweredInterfaceRequestNotificationSettings = string.IsNullOrEmpty(configData.UnansweredInterfaceRequestNotificationSettings)
+                ? new()
+                : JsonSerializer.Deserialize<UnansweredInterfaceRequestNotificationSettings>(configData.UnansweredInterfaceRequestNotificationSettings) ?? throw new JsonException($"Config data of {nameof(configData.UnansweredInterfaceRequestNotificationSettings)} could not be parsed.");
 
             // get all ldap connections for dropdown
             connectedLdaps = await apiConnection.SendQueryAsync<List<UiLdapConnection>>(AuthQueries.getAllLdapConnections);
