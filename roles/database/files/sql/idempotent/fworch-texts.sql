@@ -2540,6 +2540,14 @@ INSERT INTO txt VALUES ('edit_notification',    'German', 	'Benachrichtigung bea
 INSERT INTO txt VALUES ('edit_notification',    'English', 	'Edit Notification');
 INSERT INTO txt VALUES ('delete_notification',  'German', 	'Benachrichtigung l&ouml;schen');
 INSERT INTO txt VALUES ('delete_notification',  'English', 	'Delete Notification');
+INSERT INTO txt VALUES ('activate_unanswered_interface_notifications',  'German', 	'Benachrichtigung bei unbeantworteten Schnittstellenanfragen');
+INSERT INTO txt VALUES ('activate_unanswered_interface_notifications',  'English', 	'Notification for unanswered interface requests');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_start',  'German', 	'Startzeitpunkt');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_start',  'English', 'Start time');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_repetitions',  'German',  'Wiederholungen');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_repetitions',  'English', 'Repetitions');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_max',  'German',  'Maximale Anzahl Benachrichtigungen');
+INSERT INTO txt VALUES ('unanswered_interface_notifications_max',  'English', 'Maximum number of notifications');
 
 -- monitoring
 INSERT INTO txt VALUES ('open_alerts',          'German', 	'Offene Alarme');
@@ -5642,11 +5650,11 @@ INSERT INTO txt VALUES ('H5660', 'English', 'Receiver of decommission emails: Se
 INSERT INTO txt VALUES ('H5661', 'German',  'Titel der Stilllegungsbenachrichtigung: Betreff der Email-Benachrichtigung an die betroffenen Eigent&uuml;mer. Platzhalter @@INTERFACE_NAME@@ werden mit dem Namen der zu l&ouml;schenden Schnittstelle ersetzt.');
 INSERT INTO txt VALUES ('H5661', 'English', 'Subject of decommission emails: Subject of the email to the addressed owners. Placeholders @@INTERFACE_NAME@@ will be replaced by the name of the interface to be decommissioned.');
 INSERT INTO txt VALUES ('H5662', 'German',  'Text der Stilllegungsbenachrichtigung: Text der Email-Benachrichtigung an die Nutzer der Schnittstelle, gefolgt von der Liste der betroffenen Verbindungen. Es k&ouml;nnen folgende Platzhalter genutzt werden:
-    @@INTERFACE_NAME@@ wird durch den Namen der stillzulegenden Schnittstelle ersetzt, @@NEW_INTERFACE_NAME@@ mit dem Namen der vorgeschlagenen Ersatzschnittstelle, @@NEW_INTERFACE_LINK@@ mit einem Link auf diese, 
+    @@INTERFACE_NAME@@ wird durch den Namen der stillzulegenden Schnittstelle ersetzt, @@NEW_INTERFACE_NAME@@ mit dem Namen der vorgeschlagenen Ersatzschnittstelle, @@NEW_INTERFACE_LINK@@ mit einem Link auf diese,
 	@@REASON@@ mit dem Begr&uuml;ndungstext, der im Stillegungsformular eingegeben wurde, @@USER_NAME@@ mit dem Nutzer, der die Stillegung veranlasst hat.
 ');
 INSERT INTO txt VALUES ('H5662', 'English', 'Body of decommission emails: Text of the email notification to the addressed owners, followed by a list of the affected connections. Some placeholders can be used:
-    @@INTERFACE_NAME@@ will be replaced by the name of the interface to be decommissioned, @@NEW_INTERFACE_NAME@@ by the name of the proposed new interface, @@NEW_INTERFACE_LINK@@ by a link to this interface, 
+    @@INTERFACE_NAME@@ will be replaced by the name of the interface to be decommissioned, @@NEW_INTERFACE_NAME@@ by the name of the proposed new interface, @@NEW_INTERFACE_LINK@@ by a link to this interface,
 	@@REASON@@ by the reason text filled in the decommission form, @@USER_NAME@@ by the user initiating the decommissioning.
 ');
 
@@ -7021,3 +7029,6 @@ INSERT INTO txt VALUES ('H9080', 'English', 'For the Communication Profile the r
 ');
 INSERT INTO txt VALUES ('H9081', 'German',  'Sonderkonfigurationen sind spezielle Anweisungen zur Implementierung, z.B. NAT. Die m&ouml;glichen Typen werden vom Administrator vorgegeben.');
 INSERT INTO txt VALUES ('H9081', 'English', 'Extra configurations are special recommendations for implementation, e.g. NAT. Possible types are defined by the administrator.');
+INSERT INTO txt VALUES ('H9090', 'German',  'Aktiviert die automatische Benachrichtigung bei unbeantworteten Schnittstellenanfragen.');
+INSERT INTO txt VALUES ('H9090', 'English', 'Enables automatic notification for unanswered interface requests.');
+

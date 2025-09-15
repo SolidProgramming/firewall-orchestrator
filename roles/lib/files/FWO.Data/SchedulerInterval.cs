@@ -49,5 +49,15 @@ namespace FWO.Data
                 _ => false,
             };
         }
+
+        public static bool OfferedForUnansweredInterfaceNotifications(this SchedulerInterval schedulerInterval)
+        {
+            return schedulerInterval switch
+            {
+                SchedulerInterval.Days or 
+                SchedulerInterval.Weeks => true,
+                _ => false,
+            };
+        }
     }
 }

@@ -418,26 +418,26 @@
             <textarea class="col-sm-7 mt-2" rows="4" name="text" @bind="configData!.ModRecertText"></textarea>
         </div>
         <hr />
-        <div class="form-group row" data-toggle="tooltip" title="">
-            <label for="cbx_rec_check_active" class="col-form-label col-sm-4">Benachrichtigung bei unbeantworteten Schnittstellenanfragen:</label>
+        <div class="form-group row" data-toggle="tooltip" title="@(userConfig.PureLine("H9090"))">
+            <label for="cbx_rec_check_active" class="col-form-label col-sm-4">@(userConfig.GetText("activate_unanswered_interface_notifications")):</label>
             <div class="col-sm-2">
                 <input id="cbx_rec_check_active" type="checkbox" class="w-100" />
             </div>
         </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="">
-            <label class="col-form-label col-sm-4">Startzeitpunkt:</label>
+            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_start")):</label>
             <input type="time" step="60" class="col-sm-2" />
-            <input type="date" class="col-sm-2" />
+            <input type="date" class="col-sm-2 ms-2" />
         </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="">
-            <label class="col-form-label col-sm-4">Wiederholungen:</label>
-            <div class="col-sm-8">
+            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_repetitions")):</label>
+            <div class="col-sm-8 m-0 p-0">
                 <div class="form-group row">
                     <div class="col-sm-2">
                         <input type="number" min="1" class="form-control form-control-sm" />
                     </div>
-                    <div class="col-sm-4">
-                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(x => x.OfferedForRecert())">
+                    <div class="col-sm-2">
+                        <Dropdown ElementType="SchedulerInterval" Elements="Enum.GetValues(typeof(SchedulerInterval)).Cast<SchedulerInterval>().Where(_ => _.OfferedForUnansweredInterfaceNotifications())">
                             <ElementTemplate Context="interval">
                                 @(userConfig.GetText(interval.ToString()))
                             </ElementTemplate>
@@ -447,8 +447,8 @@
             </div>
         </div>
         <div class="form-group row mt-2" data-toggle="tooltip" title="">
-            <label class="col-form-label col-sm-4">Maximale Anzahl Benachrichtigungen:</label>
-            <div class="col-sm-3">
+            <label class="col-form-label col-sm-4">@(userConfig.GetText("unanswered_interface_notifications_max")):</label>
+            <div class="col-sm-3 m-0 p-0">
                 <input type="number" min="1" class="col-sm-2" />
             </div>
         </div>
