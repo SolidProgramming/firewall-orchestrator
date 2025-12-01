@@ -7,3 +7,5 @@ ansible_venv/
 **/__pycache__/
 **/*.pyc
 .vscode/launch.json
+.github/copilot-instructions.md
+.github/instructions/*.instructions.md
