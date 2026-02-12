@@ -24,7 +24,7 @@ curl --request POST \
     --data '{"Username": "user1_demo", "Password": "cactus1"}'
     </code></pre>
     <small class="small-helptext">@userConfig.GetText("response")</small>
-    <pre class="code-block" data-lang="json"><code >
+    <pre class="code-block" data-lang="json"><code>
 {
     "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
     "refreshToken": "a7f3c8b9e2d1...",
@@ -83,7 +83,7 @@ curl --request POST \
 Refresh token is required
     </code></pre>
     <br>
-    <h5>@userConfig.GetText("invalid_refresh_token"):</h5>    
+    <h5>@userConfig.GetText("invalid_refresh_token"):</h5>
     <br />
     <pre class="code-block" data-lang="bash"><code>
 curl --request POST \
@@ -112,7 +112,7 @@ curl --request POST \
         @userConfig.GetText("response") (200 OK):
     </small>
     <pre class="code-block" data-lang="text"><code>
-(Empty response body indicating success)
+(@userConfig.GetText("empty_response"))
     </code></pre>
     <br>
     <h5>@userConfig.GetText("missing_refresh_token"):</h5>
