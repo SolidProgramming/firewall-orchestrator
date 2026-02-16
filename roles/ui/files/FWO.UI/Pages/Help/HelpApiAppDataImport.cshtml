@@ -14,8 +14,9 @@
 <div class="p-2">
     <h3>@userConfig.GetText("import_app_data")</h3>
     @(Html.Raw(userConfig.GetText("H6921")))
-
-    <pre>
+    
+    <pre class="code-block" data-lang="json">
+<code>
 {
   "owners": [
     {
@@ -31,11 +32,11 @@
       "app_servers": [
         {
           "name": "AppServer1",
-          "ip": "1.0.0.1",
+          "ip": "1.0.0.1"
         },
         {
           "name": "AppServer2",
-          "ip": "10.1.0.117",
+          "ip": "10.1.0.117"
         }
       ]
     },
@@ -52,12 +53,13 @@
       "app_servers": [
         {
           "name": "AppServer3",
-          "ip": "10.12.66.213",
+          "ip": "10.12.66.213"
         }
       ]
     }
   ]
 }
+</code>
     </pre>
 
     @(Html.Raw(userConfig.GetText("H6922")))
