@@ -4,7 +4,8 @@ using FWO.Data.Modelling;
 using FWO.Data.Workflow;
 using FWO.Api.Client;
 using FWO.Api.Client.Queries;
-using FWO.Services;
+using FWO.Services.Modelling;
+using FWO.Services.Workflow;
 
 
 namespace FWO.Ui.Services
@@ -80,7 +81,7 @@ namespace FWO.Ui.Services
             foreach (var conn in connections)
             {
                 await ExtractUsedInterface(conn);
-                conn.SyncState(dummyAppRoleId);
+                conn.SyncState(dummyAppRoleId, userConfig.ModRolloutRemovedAppServers);
             }
 
             if (userConfig.VarianceAnalysisSync)
@@ -181,7 +182,7 @@ namespace FWO.Ui.Services
 
         public List<ModellingConnection> GetConnectionsToRequest()
         {
-            return [.. Connections.Where(x => x.IsRelevantForVarianceAnalysis(dummyAppRoleId)).OrderByDescending(y => y.IsCommonService)];
+            return [.. Connections.Where(x => x.IsRelevantForVarianceAnalysis(dummyAppRoleId, userConfig.ModRolloutRemovedAppServers)).OrderByDescending(y => y.IsCommonService)];
         }
 
         public bool HasModellingIssues(ModellingConnection conn)

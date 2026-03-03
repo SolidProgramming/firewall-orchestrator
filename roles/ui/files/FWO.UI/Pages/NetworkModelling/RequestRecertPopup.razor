@@ -6,6 +6,7 @@
 @using FWO.Recert
 @using FWO.Report
 @using FWO.Services.RuleTreeBuilder
+@using FWO.Services.Workflow
 @using FWO.Ui.Pages.Reporting
 @using Newtonsoft.Json
 @using RestSharp
@@ -58,7 +59,7 @@
                     <br>
                     @(userConfig.GetText("U9028"))
                     <br><br>
-                    <ConnectionTable Connections="ModellingErrors" @bind-AppHandler="AppHandler" Readonly="true"/>
+                    <ConnectionTable Connections="ModellingErrors" @bind-AppHandler="AppHandler" Readonly="true" PopupMode="true"/>
                 }
             }
             @if(ImplementationError)
@@ -71,13 +72,13 @@
                 {
                     <br>
                     <h5>@(userConfig.GetText("connections_not_implemented"))</h5>
-                    <ConnectionTable Connections="VarianceResult.ConnsNotImplemented" @bind-AppHandler="AppHandler" Readonly="true"/>
+                    <ConnectionTable Connections="VarianceResult.ConnsNotImplemented" @bind-AppHandler="AppHandler" Readonly="true" PopupMode="true"/>
                 }
                 @if(VarianceResult.RuleDifferences.Count > 0)
                 {
                     <br>
                     <h5>@(userConfig.GetText("connections_with_diffs"))</h5>
-                    <ConnectionTable Connections="VarianceResult.RuleDifferences.Select(d => d.ModelledConnection).ToList()" @bind-AppHandler="AppHandler" Readonly="true"/>
+                    <ConnectionTable Connections="VarianceResult.RuleDifferences.Select(d => d.ModelledConnection).ToList()" @bind-AppHandler="AppHandler" Readonly="true" PopupMode="true"/>
                 }
                 @if(RulesFromDeletedConns.Count > 0)
                 {
@@ -288,9 +289,17 @@
             {
                 RecertHandler recertHandler = new(apiConnection, userConfig);
                 FwoOwner recertifiedOwner = await recertHandler.RecertifyOwnerWithRules(AppHandler.Application, VarianceResult.GetAllOkRules(), null);
-                await ModellingHandlerBase.LogChange(ModellingTypes.ChangeType.Recertify, ModellingTypes.ModObjectType.CommunicationProfile, 0,
-                    $"Recertified Application: {AppHandler.Application.Name} with {VarianceResult.GetAllOkRules().Count.ToString()} rules",
-                    apiConnection, userConfig, AppHandler.Application.Id, DisplayMessageInUi);
+                await ModellingHandlerBase.LogChange(new LogChangeRequest
+                {
+                    ChangeType = ModellingTypes.ChangeType.Recertify,
+                    ObjectType = ModellingTypes.ModObjectType.CommunicationProfile,
+                    ObjectId = 0,
+                    Text = $"Recertified Application: {AppHandler.Application.Name} with {VarianceResult.GetAllOkRules().Count.ToString()} rules",
+                    ApiConnection = apiConnection,
+                    UserConfig = userConfig,
+                    ApplicationId = AppHandler.Application.Id,
+                    DisplayMessageInUi = DisplayMessageInUi
+                });
                 await GenerateAndSaveReport(recertifiedOwner);
                 RefreshParent(recertifiedOwner);
 

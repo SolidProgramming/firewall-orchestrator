@@ -9,6 +9,7 @@ using FWO.Data.Modelling;
 using FWO.Logging;
 using FWO.Recert;
 using FWO.Services;
+using FWO.Services.Modelling;
 using Novell.Directory.Ldap;
 using System.Data;
 using System.Linq;
@@ -58,14 +59,18 @@ namespace FWO.Middleware.Server
             userConfig.AutoReplaceAppServer = globalConfig.AutoReplaceAppServer;
             await InitLdap();
             List<string> failedImports = [];
+            var ownerChangeTracker = new OwnerChangeImportTracker(apiConnection);
+
             foreach (var importfilePathAndName in importfilePathAndNames)
             {
                 if (!RunImportScript(importfilePathAndName + ".py", globalConfig.ImportAppDataScriptArgs))
                 {
                     Log.WriteInfo(LogMessageTitle, $"Script {importfilePathAndName}.py failed but trying to import from existing file.");
                 }
-                await ImportSingleSource(importfilePathAndName + ".json", failedImports);
+                await ImportSingleSource(importfilePathAndName + ".json", failedImports, ownerChangeTracker);
             }
+
+            await ownerChangeTracker.CompleteImport(failedImports.Count == 0);        
             return failedImports;
         }
 
@@ -86,7 +91,7 @@ namespace FWO.Middleware.Server
             ownerResponsibleTypeById = responsibleTypes.ToDictionary(type => type.Id, type => type);
         }
 
-        private async Task ImportSingleSource(string importfileName, List<string> failedImports)
+        private async Task ImportSingleSource(string importfileName, List<string> failedImports, OwnerChangeImportTracker ownerChangeTracker)
         {
             try
             {
@@ -95,7 +100,7 @@ namespace FWO.Middleware.Server
                 if (importedOwnerData != null && importedOwnerData.Owners != null)
                 {
                     importedApps = importedOwnerData.Owners;
-                    await ImportApps(importfileName);
+                    await ImportApps(importfileName, ownerChangeTracker);
                 }
             }
             catch (Exception exc)
@@ -107,57 +112,53 @@ namespace FWO.Middleware.Server
             }
         }
 
-        private async Task ImportApps(string importfileName)
+        private async Task ImportApps(string importfileName, OwnerChangeImportTracker ownerChangeTracker)
         {
             int successCounter = 0;
             int failCounter = 0;
             int deleteCounter = 0;
             int deleteFailCounter = 0;
 
+            if(!IsOwnerGroupConfigured())
+            {
+                return;
+            }
+
+            existingApps = await apiConnection.SendQueryAsync<List<FwoOwner>>(OwnerQueries.getOwners);
+            foreach (var incomingApp in importedApps)
+            {
+                if (await SaveApp(incomingApp, ownerChangeTracker))
+                {
+                    ++successCounter;
+                }
+                else
+                {
+                    ++failCounter;
+                }
+            }
+            string? importSource = importedApps.FirstOrDefault()?.ImportSource;
+            if (importSource != null)
+            {
+                (deleteCounter, deleteFailCounter) = await DeactivateMissingApps(importSource, existingApps, importedApps, ownerChangeTracker);               
+            }
+            string messageText = $"Imported from {importfileName}: {successCounter} apps, {failCounter} failed. Deactivated {deleteCounter} apps, {deleteFailCounter} failed.";
+            Log.WriteInfo(LogMessageTitle, messageText);
+            await AddLogEntry(0, LevelFile, messageText);
+
+        }
+
+        private bool IsOwnerGroupConfigured()
+        {
             if (!(globalConfig.OwnerLdapGroupNames.Contains(Placeholder.AppId) ||
                 globalConfig.OwnerLdapGroupNames.Contains(Placeholder.ExternalAppId)))
             {
                 Log.WriteWarning(LogMessageTitle, $"Owner group pattern does not contain any of the placeholders {Placeholder.AppId} or {Placeholder.ExternalAppId}.");
+                return false;
             }
-            else
-            {
-                existingApps = await apiConnection.SendQueryAsync<List<FwoOwner>>(OwnerQueries.getOwners);
-                foreach (var incomingApp in importedApps)
-                {
-                    if (await SaveApp(incomingApp))
-                    {
-                        ++successCounter;
-                    }
-                    else
-                    {
-                        ++failCounter;
-                    }
-                }
-                string? importSource = importedApps.FirstOrDefault()?.ImportSource;
-                if (importSource != null)
-                {
-                    foreach (var existingApp in existingApps.Where(x => x.ImportSource == importSource && x.Active))
-                    {
-                        if (importedApps.FirstOrDefault(x => x.ExtAppId == existingApp.ExtAppId) == null)
-                        {
-                            if (await DeactivateApp(existingApp))
-                            {
-                                ++deleteCounter;
-                            }
-                            else
-                            {
-                                ++deleteFailCounter;
-                            }
-                        }
-                    }
-                }
-                string messageText = $"Imported from {importfileName}: {successCounter} apps, {failCounter} failed. Deactivated {deleteCounter} apps, {deleteFailCounter} failed.";
-                Log.WriteInfo(LogMessageTitle, messageText);
-                await AddLogEntry(0, LevelFile, messageText);
-            }
+            return true;
         }
 
-        private async Task<bool> SaveApp(ModellingImportAppData incomingApp)
+        private async Task<bool> SaveApp(ModellingImportAppData incomingApp, OwnerChangeImportTracker ownerChangeTracker)
         {
             try
             {
@@ -168,11 +169,16 @@ namespace FWO.Middleware.Server
                 if (existingApp == null)
                 {
                     appId = await NewApp(incomingApp, userGroupDn);
+                    await ownerChangeTracker.AddOwnerChange(null, appId, ChangelogActionType.INSERT, incomingApp.ImportSource);
                 }
                 else
                 {
                     appId = existingApp.Id;
                     await UpdateApp(incomingApp, existingApp, userGroupDn);
+                    if (!existingApp.Active)
+                    {
+                        await ownerChangeTracker.AddOwnerChange(appId, appId, ChangelogActionType.CHANGE, incomingApp.ImportSource);
+                    }
                 }
                 if (incomingApp.MainUser != null && incomingApp.MainUser != "")
                 {
@@ -242,11 +248,32 @@ namespace FWO.Middleware.Server
             await ImportAppServers(incomingApp, existingApp.Id);
         }
 
-        private async Task<bool> DeactivateApp(FwoOwner app)
+        private async Task<(int deleted, int failed)> DeactivateMissingApps(string importSource, IEnumerable<FwoOwner> existingApps, List<ModellingImportAppData> importedApps, OwnerChangeImportTracker ownerChangeTracker)
+        {
+            int deletedCounter = 0, deleteFailCounter = 0;
+            foreach (var existingApp in existingApps.Where(x => x.ImportSource == importSource && x.Active))
+            {
+                if (importedApps.FirstOrDefault(x => x.ExtAppId == existingApp.ExtAppId) == null)
+                {
+                    if (await DeactivateApp(existingApp, ownerChangeTracker))
+                    {
+                        ++deletedCounter;
+                    }
+                    else
+                    {
+                        ++deleteFailCounter;
+                    }
+                }
+            }
+            return (deletedCounter, deleteFailCounter);           
+        }
+
+        private async Task<bool> DeactivateApp(FwoOwner app, OwnerChangeImportTracker ownerChangeTracker)
         {
             try
             {
                 await apiConnection.SendQueryAsync<ReturnIdWrapper>(OwnerQueries.deactivateOwner, new { id = app.Id });
+                await ownerChangeTracker.AddOwnerChange(app.Id, null, ChangelogActionType.DELETE, app.ImportSource);
             }
             catch (Exception exc)
             {
@@ -705,8 +732,18 @@ namespace FWO.Middleware.Server
                 if (returnIds != null && returnIds.Length > 0)
                 {
                     ModellingAppServer newModAppServer = new(incomingAppServer.ToModellingAppServer()) { Id = returnIds[0].NewIdLong, ImportSource = impSource, AppId = appID };
-                    await ModellingHandlerBase.LogChange(ModellingTypes.ChangeType.Insert, ModellingTypes.ModObjectType.AppServer, newModAppServer.Id,
-                        $"New App Server: {newModAppServer.Display()}", apiConnection, userConfig, newModAppServer.AppId, DefaultInit.DoNothing, null, newModAppServer.ImportSource);
+                    await ModellingHandlerBase.LogChange(new LogChangeRequest
+                    {
+                        ChangeType = ModellingTypes.ChangeType.Insert,
+                        ObjectType = ModellingTypes.ModObjectType.AppServer,
+                        ObjectId = newModAppServer.Id,
+                        Text = $"New App Server: {newModAppServer.Display()}",
+                        ApiConnection = apiConnection,
+                        UserConfig = userConfig,
+                        ApplicationId = newModAppServer.AppId,
+                        DisplayMessageInUi = DefaultInit.DoNothing,
+                        ChangeSource = newModAppServer.ImportSource
+                    });
                     await AppServerHelper.DeactivateOtherSources(apiConnection, userConfig, newModAppServer);
                 }
             }
@@ -730,8 +767,18 @@ namespace FWO.Middleware.Server
                     deleted = false
                 };
                 await apiConnection.SendQueryAsync<ReturnIdWrapper>(ModellingQueries.setAppServerDeletedState, Variables);
-                await ModellingHandlerBase.LogChange(ModellingTypes.ChangeType.Reactivate, ModellingTypes.ModObjectType.AppServer, appServer.Id,
-                    $"Reactivate App Server: {appServer.Display()}", apiConnection, userConfig, appServer.AppId, DefaultInit.DoNothing, null, appServer.ImportSource);
+                await ModellingHandlerBase.LogChange(new LogChangeRequest
+                {
+                    ChangeType = ModellingTypes.ChangeType.Reactivate,
+                    ObjectType = ModellingTypes.ModObjectType.AppServer,
+                    ObjectId = appServer.Id,
+                    Text = $"Reactivate App Server: {appServer.Display()}",
+                    ApiConnection = apiConnection,
+                    UserConfig = userConfig,
+                    ApplicationId = appServer.AppId,
+                    DisplayMessageInUi = DefaultInit.DoNothing,
+                    ChangeSource = appServer.ImportSource
+                });
                 await AppServerHelper.DeactivateOtherSources(apiConnection, userConfig, appServer);
             }
             catch (Exception exc)
@@ -754,8 +801,18 @@ namespace FWO.Middleware.Server
                     customType = 0
                 };
                 await apiConnection.SendQueryAsync<ReturnIdWrapper>(ModellingQueries.setAppServerType, Variables);
-                await ModellingHandlerBase.LogChange(ModellingTypes.ChangeType.Update, ModellingTypes.ModObjectType.AppServer, appServer.Id,
-                    $"Update App Server Type: {appServer.Display()}", apiConnection, userConfig, appServer.AppId, DefaultInit.DoNothing, null, appServer.ImportSource);
+                await ModellingHandlerBase.LogChange(new LogChangeRequest
+                {
+                    ChangeType = ModellingTypes.ChangeType.Update,
+                    ObjectType = ModellingTypes.ModObjectType.AppServer,
+                    ObjectId = appServer.Id,
+                    Text = $"Update App Server Type: {appServer.Display()}",
+                    ApiConnection = apiConnection,
+                    UserConfig = userConfig,
+                    ApplicationId = appServer.AppId,
+                    DisplayMessageInUi = DefaultInit.DoNothing,
+                    ChangeSource = appServer.ImportSource
+                });
             }
             catch (Exception exc)
             {
@@ -779,8 +836,18 @@ namespace FWO.Middleware.Server
                         id = appServer.Id,
                     };
                     await apiConnection.SendQueryAsync<ReturnId>(ModellingQueries.setAppServerName, Variables);
-                    await ModellingHandlerBase.LogChange(ModellingTypes.ChangeType.Update, ModellingTypes.ModObjectType.AppServer, appServer.Id,
-                        $"Update App Server Name: {appServer.Display()}", apiConnection, userConfig, appServer.AppId, DefaultInit.DoNothing, null, appServer.ImportSource);
+                    await ModellingHandlerBase.LogChange(new LogChangeRequest
+                    {
+                        ChangeType = ModellingTypes.ChangeType.Update,
+                        ObjectType = ModellingTypes.ModObjectType.AppServer,
+                        ObjectId = appServer.Id,
+                        Text = $"Update App Server Name: {appServer.Display()}",
+                        ApiConnection = apiConnection,
+                        UserConfig = userConfig,
+                        ApplicationId = appServer.AppId,
+                        DisplayMessageInUi = DefaultInit.DoNothing,
+                        ChangeSource = appServer.ImportSource
+                    });
                     Log.WriteWarning(LogMessageTitle, $"Name of App Server changed from {appServer.Name} changed to {newName}");
                 }
                 catch (Exception exc)
@@ -804,8 +871,18 @@ namespace FWO.Middleware.Server
                     deleted = true
                 };
                 await apiConnection.SendQueryAsync<ReturnIdWrapper>(ModellingQueries.setAppServerDeletedState, Variables);
-                await ModellingHandlerBase.LogChange(ModellingTypes.ChangeType.Update, ModellingTypes.ModObjectType.AppServer, appServer.Id,
-                    $"Deactivate App Server: {appServer.Display()}", apiConnection, userConfig, appServer.AppId, DefaultInit.DoNothing, null, appServer.ImportSource);
+                await ModellingHandlerBase.LogChange(new LogChangeRequest
+                {
+                    ChangeType = ModellingTypes.ChangeType.Update,
+                    ObjectType = ModellingTypes.ModObjectType.AppServer,
+                    ObjectId = appServer.Id,
+                    Text = $"Deactivate App Server: {appServer.Display()}",
+                    ApiConnection = apiConnection,
+                    UserConfig = userConfig,
+                    ApplicationId = appServer.AppId,
+                    DisplayMessageInUi = DefaultInit.DoNothing,
+                    ChangeSource = appServer.ImportSource
+                });
                 await AppServerHelper.ReactivateOtherSource(apiConnection, userConfig, appServer);
             }
             catch (Exception exc)
@@ -834,26 +911,7 @@ namespace FWO.Middleware.Server
 
         private async Task AddLogEntry(int severity, string level, string description)
         {
-            try
-            {
-                var Variables = new
-                {
-                    user = 0,
-                    source = GlobalConst.kImportAppData,
-                    severity = severity,
-                    suspectedCause = level,
-                    description = description
-                };
-                ReturnId[]? returnIds = (await apiConnection.SendQueryAsync<ReturnIdWrapper>(MonitorQueries.addDataImportLogEntry, Variables)).ReturnIds;
-                if (returnIds == null)
-                {
-                    Log.WriteError("Write Log", "Log could not be written to database");
-                }
-            }
-            catch (Exception exc)
-            {
-                Log.WriteError("Write Log", $"Could not write log: ", exc);
-            }
+            await AddLogEntry(GlobalConst.kImportAppData, severity, level, description);
         }
     }
 }
