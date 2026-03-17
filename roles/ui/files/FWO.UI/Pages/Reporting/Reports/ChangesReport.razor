@@ -1,8 +1,8 @@
-﻿@using FWO.Ui.Display
+@using FWO.Ui.Display
 @using FWO.Config.Api
 @using FWO.Report
 @using FWO.Report.Filter
-@using System.Diagnostics
+@using SoPro.FancyTable.Components
 
 @inject UserConfig userConfig
 
@@ -11,264 +11,42 @@
     @if (management.RuleChanges != null && management.RuleChanges.Any() && ruleChangeDisplayHtml != null && SelectedRuleChanges != null)
     {
         <Collapse Title="@management.Name" Style="@("primary")" StartToggled="false">
-            <Table SelectedItems="SelectedRuleChanges"
-                RowClickAction="@(async rule =>{rule.RulebaseName = management.Name ?? ""; if (!SelectedRuleChanges.Remove(rule)) SelectedRuleChanges.Add(rule); await SelectedRuleChangesChanged.InvokeAsync(SelectedRuleChanges);})"
-                Items="management.RuleChanges" TableItem="RuleChange"
-                style="font-size:small" PageSize="RulesPerPage" ShowSearchBar="false" ColumnReorder="true" TableClass="table table-bordered table-sm th-bg-secondary table-responsive overflow-auto sticky-header">                                
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("change_time"))" Field="@(rChange => rChange.ChangeImport.Time)" Sortable="true" Filterable="true" Hideable="true" />
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("change_type"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayChangeAction(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("name"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayName(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("source_zone"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplaySourceZone(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("source"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplaySource(context, OutputLocation.report, SelectedReportType))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("destination_zone"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayDestinationZone(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("destination"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayDestination(context, OutputLocation.report, SelectedReportType))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("services"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayServices(context, OutputLocation.report, SelectedReportType))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("action"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayAction(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("track"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayTrack(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("enabled"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayEnabled(context, OutputLocation.report))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("enforcing_devices"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayEnforcingGateways(context, OutputLocation.report, SelectedReportType))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("uid"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayUid(context))
-                                    </div>
-                                </Template>
-                            </Column>
-
-                            <Column TableItem="RuleChange" Title="@(userConfig.GetText("comment"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayComment(context))
-                                    </div>
-                                </Template>
-                            </Column>
-
-                            @*<DetailTemplate TableItem="RuleChange">
-                                <div>test</div>
-                            </DetailTemplate>*@
-
-                            <Pager ShowPageNumber="true" ShowTotalCount="true" />                                                            
-            </Table>
+            <div style="font-size:small">
+                <FancyTable TItem="RuleChange" Items="management.RuleChanges" Columns="GetRuleChangeColumns(management.Name ?? string.Empty)" RowClassSelector="@(rulechange => IsRuleSelected(rulechange) ?"bg-secondary" : "")"></FancyTable>
+            </div>
 
             @if (IncludeObjectsInReportChanges && management.ObjectChanges != null && management.ObjectChanges.Any())
-                {
-                    <Table 
-                    Items="management.ObjectChanges" TableItem="ObjectChange"
-                    style="font-size:small" PageSize="RulesPerPage" ShowSearchBar="false" ColumnReorder="true" TableClass="table table-bordered table-sm th-bg-secondary table-responsive overflow-auto sticky-header">
-                        <Column TableItem="ObjectChange" Title="@(userConfig.GetText("change_time"))" Field="@(oChange => oChange.ChangeImport.Time)" Sortable="true" Filterable="true" Hideable="true" />
-                        <Column TableItem="ObjectChange" Title="@(userConfig.GetText("change_type"))" Hideable="true">
-                            <Template>
-                                <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayChangeAction(context))
-                                </div>
-                            </Template>
-                        </Column>
-                        <Column TableItem="ObjectChange" Title="@(userConfig.GetText("name"))" Hideable="true">
-                            <Template>
-                                <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayName(context))
-                                </div>
-                            </Template>
-                        </Column>
-                    <Column TableItem="ObjectChange" Title="@(userConfig.GetText("type"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayObjectType(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Column TableItem="ObjectChange" Title="@(userConfig.GetText("ip_address"))" Hideable="true">
-                            <Template>
-                                <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayObjectIP(context))
-                                </div>
-                            </Template>
-                        </Column>
-                    <Column TableItem="ObjectChange" Title="@(userConfig.GetText("members"))" Hideable="true">
-                            <Template>
-                                <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayObjectMemberNames(context))
-                                </div>
-                            </Template>
-                        </Column>                        
-                        <Column TableItem="ObjectChange" Title="@(userConfig.GetText("uid"))" Hideable="true">
-                            <Template>
-                                <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayUid(context))
-                                </div>
-                            </Template>
-                        </Column>
-                        <Column TableItem="ObjectChange" Title="@(userConfig.GetText("comment"))" Hideable="true">
-                            <Template>
-                                <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayComment(context))
-                                </div>
-                            </Template>
-                        </Column>
-                        <Pager ShowPageNumber="true" ShowTotalCount="true" />
-                    </Table>
-                }
-            @if (IncludeObjectsInReportChanges && management.ServiceChanges != null && management.ServiceChanges.Any())
-                {
-                    <Table Items="management.ServiceChanges" TableItem="ServiceChange"
-                    style="font-size:small" PageSize="RulesPerPage" ShowSearchBar="false" ColumnReorder="true" TableClass="table table-bordered table-sm th-bg-secondary table-responsive overflow-auto sticky-header">
-                        <Column TableItem="ServiceChange" Title="@(userConfig.GetText("change_time"))" Field="@(oChange => oChange.ChangeImport.Time)" Sortable="true" Filterable="true" Hideable="true" />
-                        <Column TableItem="ServiceChange" Title="@(userConfig.GetText("change_type"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayChangeAction(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                        <Column TableItem="ServiceChange" Title="@(userConfig.GetText("name"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayName(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                    <Column TableItem="ServiceChange" Title="@(userConfig.GetText("type"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayServiceType(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Column TableItem="ServiceChange" Title="@(userConfig.GetText("protocol"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayServiceProtocol(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Column TableItem="ServiceChange" Title="@(userConfig.GetText("port"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayServicePort(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Column TableItem="ServiceChange" Title="@(userConfig.GetText("members"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                    @((MarkupString)ruleChangeDisplayHtml.DisplayServiceMemberNames(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                        <Column TableItem="ServiceChange" Title="@(userConfig.GetText("uid"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayUid(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                        <Column TableItem="ServiceChange" Title="@(userConfig.GetText("comment"))" Hideable="true">
-                                <Template>
-                                    <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                        @((MarkupString)ruleChangeDisplayHtml.DisplayComment(context))
-                                    </div>
-                                </Template>
-                            </Column>
-                            <Pager ShowPageNumber="true" ShowTotalCount="true" />
-                        </Table>
-                }
-            @if (IncludeObjectsInReportChanges && management.UserChanges != null && management.UserChanges.Any())
             {
-                <Table Items="management.UserChanges" TableItem="UserChange"
-                       style="font-size:small" PageSize="RulesPerPage" ShowSearchBar="false" ColumnReorder="true" TableClass="table table-bordered table-sm th-bg-secondary table-responsive overflow-auto sticky-header">
-                    <Column TableItem="UserChange" Title="@(userConfig.GetText("change_time"))" Field="@(oChange => oChange.ChangeImport.Time)" Sortable="true" Filterable="true" Hideable="true" />
-                    <Column TableItem="UserChange" Title="@(userConfig.GetText("change_type"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayChangeAction(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Column TableItem="UserChange" Title="@(userConfig.GetText("name"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayName(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Column TableItem="UserChange" Title="@(userConfig.GetText("comment"))" Hideable="true">
-                        <Template>
-                            <div style="@ruleChangeDisplayHtml.DisplayStyle(context)">
-                                @((MarkupString)ruleChangeDisplayHtml.DisplayComment(context))
-                            </div>
-                        </Template>
-                    </Column>
-                    <Pager ShowPageNumber="true" ShowTotalCount="true" />
-                </Table>
+                <div style="font-size:small">
+                    <FancyTable TItem="ObjectChange" Items="management.ObjectChanges" Columns="GetObjectChangeColumns()">
+                        <ToolbarTemplate>
+                            <div></div>
+                        </ToolbarTemplate>
+                    </FancyTable>
+                </div>
             }
 
+            @if (IncludeObjectsInReportChanges && management.ServiceChanges != null && management.ServiceChanges.Any())
+            {
+                <div style="font-size:small">
+                    <FancyTable TItem="ServiceChange" Items="management.ServiceChanges" Columns="GetServiceChangeColumns()">
+                        <ToolbarTemplate>
+                            <div></div>
+                        </ToolbarTemplate>
+                    </FancyTable>
+                </div>
+            }
 
+            @if (IncludeObjectsInReportChanges && management.UserChanges != null && management.UserChanges.Any())
+            {
+                <div style="font-size:small">
+                    <FancyTable TItem="UserChange" Items="management.UserChanges" Columns="GetUserChangeColumns()">
+                        <ToolbarTemplate>
+                            <div></div>
+                        </ToolbarTemplate>
+                    </FancyTable>
+                </div>
+            }
         </Collapse>
     }
 }
@@ -285,7 +63,7 @@
     public int RulesPerPage { get; set; }
 
     [Parameter]
-    public List<ManagementReport> Managements { get; set; } = new ();
+    public List<ManagementReport> Managements { get; set; } = new();
 
     [Parameter]
     public ReportType SelectedReportType { get; set; }
@@ -300,7 +78,135 @@
 
     protected override void OnInitialized()
     {
-        
         ruleChangeDisplayHtml = new RuleChangeDisplayHtml(userConfig);
     }
+
+    private async Task ToggleRuleSelectionAsync(RuleChange rule, string managementName)
+    {
+        if (SelectedRuleChanges == null)
+        {
+            return;
+        }
+
+        rule.RulebaseName = managementName;
+        if (!SelectedRuleChanges.Remove(rule))
+        {
+            SelectedRuleChanges.Add(rule);
+        }
+
+        await SelectedRuleChangesChanged.InvokeAsync(SelectedRuleChanges);
+    }
+
+    private bool IsRuleSelected(RuleChange rule)
+        => SelectedRuleChanges?.Contains(rule) ?? false;
+
+    private IReadOnlyList<FancyColumn<RuleChange>> GetRuleChangeColumns(string managementName)
+    {
+        return
+        [
+            new FancyColumn<RuleChange>
+            {
+                Key = "select",
+                Title = userConfig.GetText("select"),
+                Searchable = false,
+                CellTemplate = rule => @<input type="checkbox" checked="@IsRuleSelected(rule)" @onchange="async _ => await ToggleRuleSelectionAsync(rule, managementName)" />
+            },
+            new FancyColumn<RuleChange>
+            {
+                Key = "change_time",
+                Title = userConfig.GetText("change_time"),
+                Sortable = true,
+                ValueSelector = rule => rule.ChangeImport.Time,
+                SortValueSelector = rule => rule.ChangeImport.Time
+            },
+            new FancyColumn<RuleChange> { Key = "change_type", Title = userConfig.GetText("change_type"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayChangeAction(rule)) },
+            new FancyColumn<RuleChange> { Key = "name", Title = userConfig.GetText("name"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayName(rule)) },
+            new FancyColumn<RuleChange> { Key = "source_zone", Title = userConfig.GetText("source_zone"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplaySourceZone(rule)) },
+            new FancyColumn<RuleChange> { Key = "source", Title = userConfig.GetText("source"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplaySource(rule, OutputLocation.report, SelectedReportType)) },
+            new FancyColumn<RuleChange> { Key = "destination_zone", Title = userConfig.GetText("destination_zone"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayDestinationZone(rule)) },
+            new FancyColumn<RuleChange> { Key = "destination", Title = userConfig.GetText("destination"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayDestination(rule, OutputLocation.report, SelectedReportType)) },
+            new FancyColumn<RuleChange> { Key = "services", Title = userConfig.GetText("services"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayServices(rule, OutputLocation.report, SelectedReportType)) },
+            new FancyColumn<RuleChange> { Key = "action", Title = userConfig.GetText("action"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayAction(rule)) },
+            new FancyColumn<RuleChange> { Key = "track", Title = userConfig.GetText("track"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayTrack(rule)) },
+            new FancyColumn<RuleChange> { Key = "enabled", Title = userConfig.GetText("enabled"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayEnabled(rule, OutputLocation.report)) },
+            new FancyColumn<RuleChange> { Key = "enforcing_devices", Title = userConfig.GetText("enforcing_devices"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayEnforcingGateways(rule, OutputLocation.report, SelectedReportType)) },
+            new FancyColumn<RuleChange> { Key = "uid", Title = userConfig.GetText("uid"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayUid(rule)), SearchTextSelector = rule => rule.NewRule.Uid },
+            new FancyColumn<RuleChange> { Key = "comment", Title = userConfig.GetText("comment"), Hideable = true, CellTemplate = CreateRuleChangeCellTemplate(rule => ruleChangeDisplayHtml!.DisplayComment(rule)), SearchTextSelector = rule => rule.NewRule.Comment }
+        ];
+    }
+
+    private IReadOnlyList<FancyColumn<ObjectChange>> GetObjectChangeColumns()
+    {
+        return
+        [
+            new FancyColumn<ObjectChange>
+            {
+                Key = "change_time",
+                Title = userConfig.GetText("change_time"),
+                Sortable = true,
+                ValueSelector = change => change.ChangeImport.Time,
+                SortValueSelector = change => change.ChangeImport.Time
+            },
+            new FancyColumn<ObjectChange> { Key = "change_type", Title = userConfig.GetText("change_type"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayChangeAction(change)) },
+            new FancyColumn<ObjectChange> { Key = "name", Title = userConfig.GetText("name"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayName(change)) },
+            new FancyColumn<ObjectChange> { Key = "type", Title = userConfig.GetText("type"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayObjectType(change)) },
+            new FancyColumn<ObjectChange> { Key = "ip_address", Title = userConfig.GetText("ip_address"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayObjectIP(change)) },
+            new FancyColumn<ObjectChange> { Key = "members", Title = userConfig.GetText("members"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayObjectMemberNames(change)) },
+            new FancyColumn<ObjectChange> { Key = "uid", Title = userConfig.GetText("uid"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayUid(change)) },
+            new FancyColumn<ObjectChange> { Key = "comment", Title = userConfig.GetText("comment"), Hideable = true, CellTemplate = CreateObjectChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayComment(change)) }
+        ];
+    }
+
+    private IReadOnlyList<FancyColumn<ServiceChange>> GetServiceChangeColumns()
+    {
+        return
+        [
+            new FancyColumn<ServiceChange>
+            {
+                Key = "change_time",
+                Title = userConfig.GetText("change_time"),
+                Sortable = true,
+                ValueSelector = change => change.ChangeImport.Time,
+                SortValueSelector = change => change.ChangeImport.Time
+            },
+            new FancyColumn<ServiceChange> { Key = "change_type", Title = userConfig.GetText("change_type"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayChangeAction(change)) },
+            new FancyColumn<ServiceChange> { Key = "name", Title = userConfig.GetText("name"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayName(change)) },
+            new FancyColumn<ServiceChange> { Key = "type", Title = userConfig.GetText("type"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayServiceType(change)) },
+            new FancyColumn<ServiceChange> { Key = "protocol", Title = userConfig.GetText("protocol"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayServiceProtocol(change)) },
+            new FancyColumn<ServiceChange> { Key = "port", Title = userConfig.GetText("port"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayServicePort(change)) },
+            new FancyColumn<ServiceChange> { Key = "members", Title = userConfig.GetText("members"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayServiceMemberNames(change)) },
+            new FancyColumn<ServiceChange> { Key = "uid", Title = userConfig.GetText("uid"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayUid(change)) },
+            new FancyColumn<ServiceChange> { Key = "comment", Title = userConfig.GetText("comment"), Hideable = true, CellTemplate = CreateServiceChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayComment(change)) }
+        ];
+    }
+
+    private IReadOnlyList<FancyColumn<UserChange>> GetUserChangeColumns()
+    {
+        return
+        [
+            new FancyColumn<UserChange>
+            {
+                Key = "change_time",
+                Title = userConfig.GetText("change_time"),
+                Sortable = true,
+                ValueSelector = change => change.ChangeImport.Time,
+                SortValueSelector = change => change.ChangeImport.Time
+            },
+            new FancyColumn<UserChange> { Key = "change_type", Title = userConfig.GetText("change_type"), Hideable = true, CellTemplate = CreateUserChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayChangeAction(change)) },
+            new FancyColumn<UserChange> { Key = "name", Title = userConfig.GetText("name"), Hideable = true, CellTemplate = CreateUserChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayName(change)) },
+            new FancyColumn<UserChange> { Key = "comment", Title = userConfig.GetText("comment"), Hideable = true, CellTemplate = CreateUserChangeCellTemplate(change => ruleChangeDisplayHtml!.DisplayComment(change)) }
+        ];
+    }
+
+    private RenderFragment<RuleChange> CreateRuleChangeCellTemplate(Func<RuleChange, string> formatter)
+        => change => @<div style="@ruleChangeDisplayHtml!.DisplayStyle(change)">@((MarkupString)formatter(change))</div>;
+
+    private RenderFragment<ObjectChange> CreateObjectChangeCellTemplate(Func<ObjectChange, string> formatter)
+        => change => @<div style="@ruleChangeDisplayHtml!.DisplayStyle(change)">@((MarkupString)formatter(change))</div>;
+
+    private RenderFragment<ServiceChange> CreateServiceChangeCellTemplate(Func<ServiceChange, string> formatter)
+        => change => @<div style="@ruleChangeDisplayHtml!.DisplayStyle(change)">@((MarkupString)formatter(change))</div>;
+
+    private RenderFragment<UserChange> CreateUserChangeCellTemplate(Func<UserChange, string> formatter)
+        => change => @<div style="@ruleChangeDisplayHtml!.DisplayStyle(change)">@((MarkupString)formatter(change))</div>;
 }

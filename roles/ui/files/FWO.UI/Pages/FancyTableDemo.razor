@@ -1,0 +1,179 @@
+@page "/fancy-table-demo"
+
+<div class="d-flex">
+    <div class="p-3 col">
+        <h5>Default Toolbar</h5>
+        <FancyTable TItem="PersonRow"
+                    Items="PeopleRows"
+                    Columns="PeopleColumns"
+                    SearchPlaceholder="Search name or city..." />
+    </div>
+
+    <div class="p-3 col">
+        <h5>Custom Toolbar (via ToolbarTemplate)</h5>
+        <FancyTable TItem="ProductRow"
+                    Items="ProductRows"
+                    Columns="ProductColumns">
+            <ToolbarTemplate>
+                <div class="d-flex">
+                    <button class="btn btn-sm btn-info mx-1">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <input class="form-control form-control-md" placeholder="Custom search UI" />
+                </div>
+            </ToolbarTemplate>
+        </FancyTable>
+    </div>
+
+    <div class="p-3 col">
+        <h5>Custom Table header + row css classes & CellTemplates</h5>
+        <FancyTable TItem="PersonRow"
+                    Items="PeopleRows"
+                    Columns="StyledPeopleColumns"
+                    RowClassSelector="GetPersonRowClass" />
+    </div>
+</div>
+
+@code {
+    private IReadOnlyList<PersonRow> PeopleRows =
+    [
+        new("Alice", "Berlin", 31),
+        new("Bob", "Hamburg", 27),
+        new("Carol", "Munich", 36),
+        new("David", "Cologne", 29)
+    ];
+
+    private IReadOnlyList<FancyColumn<PersonRow>> PeopleColumns =>
+    [
+        new FancyColumn<PersonRow>
+        {
+            Key = "name",
+            Title = "Name",
+            Sortable = true,
+            Searchable = true,
+            ValueSelector = person => person.Name,
+            SortValueSelector = person => person.Name
+        },
+        new FancyColumn<PersonRow>
+        {
+            Key = "city",
+            Title = "City",
+            Sortable = true,
+            Searchable = true,
+            Hideable = true,
+            ValueSelector = person => person.City,
+            SortValueSelector = person => person.City
+        },
+        new FancyColumn<PersonRow>
+        {
+            Key = "age",
+            Title = "Age",
+            Sortable = true,
+            Searchable = false,
+            ValueSelector = person => person.Age,
+            SortValueSelector = person => person.Age
+        }
+    ];
+
+    private IReadOnlyList<ProductRow> ProductRows =
+    [
+        new("SW-1001", "Switch", 149.99m, 42, "NetWare Ltd"),
+        new("FW-2300", "Firewall", 899.00m, 5, "SecureCore AG"),
+        new("AP-550", "Access Point", 219.50m, 18, "WaveLink"),
+        new("RTR-910", "Router", 399.00m, 9, "RouteStack Inc")
+    ];
+
+    private IReadOnlyList<FancyColumn<ProductRow>> ProductColumns =>
+    [
+        new FancyColumn<ProductRow>
+        {
+            Key = "sku",
+            Title = "SKU",
+            Sortable = true,
+            Searchable = true,
+            ValueSelector = product => product.Sku,
+            SortValueSelector = product => product.Sku,
+        },
+        new FancyColumn<ProductRow>
+        {
+            Key = "category",
+            Title = "Category",
+            Sortable = true,
+            Searchable = true,
+            Hideable = true,
+            ValueSelector = product => product.Category,
+            SortValueSelector = product => product.Category
+        },
+        new FancyColumn<ProductRow>
+        {
+            Key = "price",
+            Title = "Price",
+            Sortable = true,
+            Searchable = false,
+            ValueSelector = product => product.Price.ToString("C2"),
+            SortValueSelector = product => product.Price
+        },
+        new FancyColumn<ProductRow>
+        {
+            Key = "stock",
+            Title = "In Stock",
+            Sortable = true,
+            Searchable = false,
+            ValueSelector = product => product.Stock,
+            SortValueSelector = product => product.Stock
+        },
+        new FancyColumn<ProductRow>
+        {
+            Key = "supplier",
+            Title = "Supplier",
+            Sortable = true,
+            Searchable = true,
+            Hideable = true,
+            ValueSelector = product => product.Supplier,
+            SortValueSelector = product => product.Supplier
+        }
+    ];
+
+    private IReadOnlyList<FancyColumn<PersonRow>> StyledPeopleColumns =>
+    [
+        new FancyColumn<PersonRow>
+        {
+            Key = "styled-name",
+            Title = "Name",
+            Sortable = true,
+            Searchable = true,
+            HeaderClass = "text-bg-dark",
+            CellClass = "fw-semibold text-primary",
+            ValueSelector = person => person.Name,
+            SortValueSelector = person => person.Name
+        },
+        new FancyColumn<PersonRow>
+        {
+            Key = "styled-city",
+            Title = "City",
+            Sortable = true,
+            Searchable = true,
+            HeaderClass = "text-bg-secondary",
+            CellClass = "fst-italic",
+            ValueSelector = person => person.City,
+            SortValueSelector = person => person.City
+        },
+        new FancyColumn<PersonRow>
+        {
+            Key = "styled-age",
+            Title = "Age",
+            Sortable = true,
+            Searchable = false,
+            Hideable = true,
+            HeaderClass = "text-bg-info",
+            CellClass = "text-center",
+            SortValueSelector = person => person.Age,
+            CellTemplate = person => @<span class="badge text-bg-info-subtle border border-info text-info-emphasis">@person.Age yrs</span>
+        }
+    ];
+
+    private string? GetPersonRowClass(PersonRow person) => person.Age >= 35 ? "bg-warning" : null;
+
+    private sealed record PersonRow(string Name, string City, int Age);
+    private sealed record ProductRow(string Sku, string Category, decimal Price, int Stock, string Supplier);
+}

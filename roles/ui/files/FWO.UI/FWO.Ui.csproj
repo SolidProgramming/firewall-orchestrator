@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\SoPro.FancyTable\SoPro.FancyTable.csproj" />
 		<ProjectReference Include="..\..\..\lib\files\FWO.Basics\FWO.Basics.csproj" />
 		<ProjectReference Include="..\..\..\lib\files\FWO.Config.Api\FWO.Config.Api.csproj" />
 		<ProjectReference Include="..\..\..\lib\files\FWO.Report.Filter\FWO.Report.Filter.csproj" />
