@@ -75,6 +75,8 @@ namespace FWO.Middleware.Server.Jobs
             {
                 if (reportSchedule.Active)
                 {
+                    await GenerateReport(reportSchedule, dateTimeNowRounded, ct);
+
                     // Add schedule interval as long as schedule time is smaller than current time
                     while (RoundDown(reportSchedule.StartTime, CheckScheduleInterval) < dateTimeNowRounded)
                     {
@@ -186,9 +188,9 @@ namespace FWO.Middleware.Server.Jobs
             List<Ldap> connectedLdaps = await apiConnectionScheduler.SendQueryAsync<List<Ldap>>(AuthQueries.getLdapConnections);
             AuthManager authManager = new(jwtWriter, connectedLdaps, apiConnectionScheduler, tokenLifetimeProvider);
             string jwt = await authManager.AuthorizeUserAsync(reportSchedule.ScheduleOwningUser, validatePassword: false);
-            ApiConnection apiConnectionUserContext = new GraphQlApiConnection(apiServerUri, jwt);
-            GlobalConfig globalConfig = await GlobalConfig.ConstructAsync(jwt);
-            UserConfig userConfig = await UserConfig.ConstructAsync(globalConfig, apiConnectionUserContext, reportSchedule.ScheduleOwningUser.DbId);
+            using ApiConnection apiConnectionUserContext = new GraphQlApiConnection(apiServerUri, jwt);
+            using GlobalConfig globalConfig = await GlobalConfig.ConstructAsync(jwt);
+            using UserConfig userConfig = await UserConfig.ConstructAsync(globalConfig, apiConnectionUserContext, reportSchedule.ScheduleOwningUser.DbId);
 
             ReportType reportType = (ReportType)reportSchedule.Template.ReportParams.ReportType;
             if (reportType.IsModellingReport() || reportType.IsWorkflowReport())

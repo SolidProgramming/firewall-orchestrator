@@ -292,6 +292,7 @@ namespace FWO.Config.Api
 
         public void Dispose()
         {
+            //GC.Collect();
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

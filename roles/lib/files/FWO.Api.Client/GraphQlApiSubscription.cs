@@ -176,6 +176,7 @@ namespace FWO.Api.Client
                 _subscription?.Dispose();
                 _subscription = null;
                 OnUpdate = null;
+                base.Dispose();
             }
         }
     }
