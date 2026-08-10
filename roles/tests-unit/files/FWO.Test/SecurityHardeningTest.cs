@@ -3,6 +3,7 @@ using FWO.Basics;
 using FWO.Data;
 using FWO.Data.Workflow;
 using FWO.Middleware.Server;
+using FWO.Ui.Services;
 using GraphQL;
 using GraphQL.Client.Http;
 using NUnit.Framework;
@@ -69,6 +70,36 @@ namespace FWO.Test
             Assert.That(rendered, Does.Contain("&lt;img src=x&gt;"));
             Assert.That(rendered, Does.Contain("&lt;script&gt;alert(1)&lt;/script&gt;"));
             Assert.That(rendered, Does.Not.Contain("<script>"));
+        }
+
+        [Test]
+        public void HelpPageHtmlSanitizer_PreservesInternalHelpLinks_ButEncodesScripts()
+        {
+            const string localizedHtml = """
+                Intro <a href="/help/monitoring/open_alerts">Open Alerts</a>
+                <script>alert('xss')</script>
+                <a href="javascript:alert('xss')">bad</a>
+                """;
+
+            string sanitized = HelpPageHtmlSanitizer.SanitizeLocalizedHtml(localizedHtml);
+
+            Assert.That(sanitized, Does.Contain("""<a href="/help/monitoring/open_alerts">Open Alerts</a>"""));
+            Assert.That(sanitized, Does.Not.Contain("<script>"));
+            Assert.That(sanitized, Does.Contain("&lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;"));
+            Assert.That(sanitized, Does.Not.Contain("""<a href="javascript:alert('xss')">bad</a>"""));
+            Assert.That(sanitized, Does.Contain("&lt;a href=&quot;javascript:alert(&#x27;xss&#x27;)&quot;&gt;bad&lt;/a&gt;"));
+        }
+
+        [Test]
+        public void HelpMonitoringPage_UsesHelpPageHtmlSanitizer_ForLocalizedHtml()
+        {
+            string pagePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory,
+                "..", "..", "..", "..", "..", "..", "ui", "files", "FWO.UI", "Pages", "Help", "HelpMonitoring.cshtml"));
+
+            string pageMarkup = File.ReadAllText(pagePath);
+
+            Assert.That(pageMarkup, Does.Contain("HelpPageHtmlSanitizer.SanitizeLocalizedHtml"));
+            Assert.That(pageMarkup, Does.Not.Contain("Html.Raw(userConfig.GetText(\"H7011\"))"));
         }
 
         [Test]

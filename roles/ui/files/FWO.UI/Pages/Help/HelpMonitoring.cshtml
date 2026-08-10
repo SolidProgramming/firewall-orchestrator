@@ -9,6 +9,7 @@
     }
 }
 @using FWO.Config.Api
+@using FWO.Ui.Services
 @inject UserConfig userConfig
 
 <div class="p-2">
@@ -17,25 +18,25 @@
     <br><br>
     <ul>
         <li>
-            @(Html.Raw(userConfig.GetText("H7017")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7017"))))
         </li>
         <li>
-            @(Html.Raw(userConfig.GetText("H7011")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7011"))))
         </li>
         <li>
-            @(Html.Raw(userConfig.GetText("H7012")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7012"))))
         </li>
         <li>
-            @(Html.Raw(userConfig.GetText("H7013")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7013"))))
         </li>
         <li>
-            @(Html.Raw(userConfig.GetText("H7015")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7015"))))
         </li>
         <li>
-            @(Html.Raw(userConfig.GetText("H7016")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7016"))))
         </li>
         <li>
-            @(Html.Raw(userConfig.GetText("H7014")))
+            @(Html.Raw(HelpPageHtmlSanitizer.SanitizeLocalizedHtml(userConfig.GetText("H7014"))))
         </li>
     </ul>
 </div>
